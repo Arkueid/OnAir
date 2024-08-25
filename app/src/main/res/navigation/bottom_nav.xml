@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/bottom_nav"
+    app:startDestination="@id/fragmentHome">
+
+    <fragment
+        android:id="@+id/fragmentHome"
+        android:name="com.arkueid.onair.presentation.home.ui.HomeFragment" />
+
+    <fragment
+        android:id="@+id/fragmentCalendar"
+        android:name="com.arkueid.onair.presentation.weekly.ui.WeeklyFragment" />
+
+    <fragment
+        android:id="@+id/fragmentFollowing"
+        android:name="com.arkueid.onair.presentation.following.ui.FollowingFragment" />
+
+    <fragment
+        android:id="@+id/fragmentSettings"
+        android:name="com.arkueid.onair.presentation.settings.ui.SettingsFragment" />
+
+</navigation>
