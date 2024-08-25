@@ -5,7 +5,17 @@
 
 ---
 
-技术点：
+A simple anime streaming app.
+
+## Features
+
+* Anime search & recommendation
+* Weekly anime update schedule
+* Anime starring
+* Settings
+
+## Technologies Used
+
 * `Hilt`
 * `Flow`
 * MVVM，Clean Architecture
@@ -14,7 +24,7 @@
 
 </div>
 
-## 图片图标资源来源
+## Sources
 
 * [汉仪字体](https://www.hanyi.com.cn/home)
 * [PixAI](https://pixai.art/)
