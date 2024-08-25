@@ -1,4 +1,4 @@
-package com.arkueid.onair.presentation.home.ui
+package com.arkueid.onair.ui.home
 
 import android.os.Bundle
 import android.view.LayoutInflater

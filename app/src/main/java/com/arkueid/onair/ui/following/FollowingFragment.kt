@@ -1,4 +1,4 @@
-package com.arkueid.onair.presentation.following.ui
+package com.arkueid.onair.ui.following
 
 import android.os.Bundle
 import android.view.LayoutInflater

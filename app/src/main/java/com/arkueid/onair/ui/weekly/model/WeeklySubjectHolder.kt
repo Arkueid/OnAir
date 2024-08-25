@@ -1,4 +1,4 @@
-package com.arkueid.onair.presentation.weekly.model
+package com.arkueid.onair.ui.weekly.model
 
 import java.io.Serializable
 

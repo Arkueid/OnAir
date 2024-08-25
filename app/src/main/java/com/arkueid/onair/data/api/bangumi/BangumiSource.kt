@@ -1,8 +1,8 @@
 package com.arkueid.onair.data.api.bangumi
 
 import com.arkueid.onair.data.repository.DataSource
-import com.arkueid.onair.presentation.weekly.model.WeeklyDataHolder
-import com.arkueid.onair.presentation.weekly.model.WeeklySubjectHolder
+import com.arkueid.onair.ui.weekly.model.WeeklyDataHolder
+import com.arkueid.onair.ui.weekly.model.WeeklySubjectHolder
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import okhttp3.OkHttpClient

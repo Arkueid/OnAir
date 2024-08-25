@@ -6,18 +6,18 @@
 
     <fragment
         android:id="@+id/fragmentHome"
-        android:name="com.arkueid.onair.presentation.home.ui.HomeFragment" />
+        android:name="com.arkueid.onair.ui.home.HomeFragment" />
 
     <fragment
         android:id="@+id/fragmentCalendar"
-        android:name="com.arkueid.onair.presentation.weekly.ui.WeeklyFragment" />
+        android:name="com.arkueid.onair.ui.weekly.WeeklyFragment" />
 
     <fragment
         android:id="@+id/fragmentFollowing"
-        android:name="com.arkueid.onair.presentation.following.ui.FollowingFragment" />
+        android:name="com.arkueid.onair.ui.following.FollowingFragment" />
 
     <fragment
         android:id="@+id/fragmentSettings"
-        android:name="com.arkueid.onair.presentation.settings.ui.SettingsFragment" />
+        android:name="com.arkueid.onair.ui.settings.SettingsFragment" />
 
 </navigation>

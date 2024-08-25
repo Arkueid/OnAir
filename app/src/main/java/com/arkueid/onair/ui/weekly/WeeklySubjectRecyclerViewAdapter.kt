@@ -1,10 +1,10 @@
-package com.arkueid.onair.presentation.weekly.ui
+package com.arkueid.onair.ui.weekly
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.arkueid.onair.databinding.ItemWeeklySubjectBinding
-import com.arkueid.onair.presentation.weekly.model.WeeklySubjectHolder
+import com.arkueid.onair.ui.weekly.model.WeeklySubjectHolder
 import com.bumptech.glide.Glide
 
 

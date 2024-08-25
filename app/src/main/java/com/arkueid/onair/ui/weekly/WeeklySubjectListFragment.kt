@@ -1,4 +1,4 @@
-package com.arkueid.onair.presentation.weekly.ui
+package com.arkueid.onair.ui.weekly
 
 import android.annotation.SuppressLint
 import android.os.Bundle

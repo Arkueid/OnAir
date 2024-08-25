@@ -1,4 +1,4 @@
-package com.arkueid.onair.presentation.weekly.ui
+package com.arkueid.onair.ui.weekly
 
 import android.util.Log
 import androidx.lifecycle.LiveData
@@ -6,10 +6,8 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.arkueid.onair.data.repository.WeeklyRepository
-import com.arkueid.onair.presentation.weekly.model.WeeklyDataHolder
-import com.arkueid.onair.presentation.weekly.model.WeeklySubjectHolder
+import com.arkueid.onair.ui.weekly.model.WeeklyDataHolder
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.launch

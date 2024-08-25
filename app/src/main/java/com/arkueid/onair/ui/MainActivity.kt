@@ -1,4 +1,4 @@
-package com.arkueid.onair.presentation
+package com.arkueid.onair.ui
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity

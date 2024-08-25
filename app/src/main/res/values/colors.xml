@@ -9,4 +9,5 @@
     <color name="white">#FFFFFFFF</color>
     <color name="pink">#F48FB1</color>
     <color name="theme_blue">#90CAF9</color>
+    <color name="inputBackground">#0D000000</color>
 </resources>

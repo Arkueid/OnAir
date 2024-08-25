@@ -1,4 +1,4 @@
-package com.arkueid.onair.presentation.weekly.ui
+package com.arkueid.onair.ui.weekly
 
 import androidx.fragment.app.Fragment
 import androidx.viewpager2.adapter.FragmentStateAdapter

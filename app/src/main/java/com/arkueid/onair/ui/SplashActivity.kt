@@ -1,4 +1,4 @@
-package com.arkueid.onair.presentation
+package com.arkueid.onair.ui
 
 import android.annotation.SuppressLint
 import android.app.ActivityOptions

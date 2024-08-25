@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android"
+    android:color="@color/pink">
+    <item>
+        <shape android:shape="rectangle">
+            <solid android:color="@color/inputBackground" />
+            <corners android:radius="10dp" />
+        </shape>
+    </item>
+    <item android:drawable="?attr/selectableItemBackground" />
+</layer-list>

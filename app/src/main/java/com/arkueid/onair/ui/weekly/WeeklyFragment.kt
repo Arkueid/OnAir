@@ -1,17 +1,13 @@
-package com.arkueid.onair.presentation.weekly.ui
+package com.arkueid.onair.ui.weekly
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
 import com.arkueid.onair.databinding.FragmentWeeklyBinding
 import com.arkueid.onair.event.weekly.WeeklySubjectEvent
-import com.arkueid.onair.utils.ToastUtils
 import com.google.android.material.tabs.TabLayoutMediator
 import dagger.hilt.android.AndroidEntryPoint
 import org.greenrobot.eventbus.EventBus
@@ -73,8 +69,10 @@ class WeeklyFragment : Fragment() {
         binding.refreshLayout.setEnableLoadMore(false)
         binding.refreshLayout.setEnableOverScrollDrag(true)
 
+        // first loading
         if (savedInstanceState == null) {
             view.post {
+                binding.initialLoading.visibility = View.VISIBLE
                 viewModel.getWeeklySubjects()
             }
         }
