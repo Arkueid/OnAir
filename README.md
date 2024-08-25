@@ -13,19 +13,31 @@ A simple anime streaming app.
 * Weekly anime update schedule
 * Anime starring
 * Settings
+* Anime watching
 
 ## Technologies Used
 
 * `Hilt`
 * `Flow`
-* MVVM，Clean Architecture
+* MVVM, Clean Architecture
 
-<div align="center">
-
-</div>
-
-## Sources
+## Image and font sources
 
 * [汉仪字体](https://www.hanyi.com.cn/home)
 * [PixAI](https://pixai.art/)
 * [Google Material Design Icons](https://fonts.google.com/icons)
+
+
+[//]: # (## Anime sources)
+
+[//]: # ()
+
+[//]: # (* [bangumi]&#40;https://bgm.tv/&#41;)
+
+[//]: # (* [mikan]&#40;https://mikanime.tv/&#41;)
+
+
+
+
+
+

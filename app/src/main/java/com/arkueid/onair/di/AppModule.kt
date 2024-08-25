@@ -15,7 +15,7 @@ import java.util.ResourceBundle
 import javax.inject.Named
 import javax.inject.Singleton
 
-private val interceptor = Interceptor { chain ->
+private val requestHeaderInterceptor = Interceptor { chain ->
     val request = chain.request()
     request.newBuilder()
         .addHeader(
@@ -32,7 +32,7 @@ object AppModule {
 
     private val okHttpClient: OkHttpClient by lazy {
         OkHttpClient.Builder()
-            .addInterceptor(interceptor)
+            .addInterceptor(requestHeaderInterceptor)
             .build()
     }
 

@@ -62,7 +62,7 @@ dependencies {
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
 
-    // network
+    // retrofit
     implementation("com.squareup.retrofit2:retrofit:2.11.0")
     implementation("com.squareup.retrofit2:converter-gson:2.11.0")
 
@@ -73,9 +73,9 @@ dependencies {
     implementation("com.github.bumptech.glide:glide:4.16.0")
 
     // smart refresh layout
-    implementation("io.github.scwang90:refresh-layout-kernel:2.1.0")     //核心必须依赖
-    implementation("io.github.scwang90:refresh-header-classics:2.1.0")    //经典刷新头
-    implementation("io.github.scwang90:refresh-footer-classics:2.1.0")    //经典加载
+    implementation("io.github.scwang90:refresh-layout-kernel:2.1.0")
+    implementation("io.github.scwang90:refresh-header-classics:2.1.0")
+    implementation("io.github.scwang90:refresh-footer-classics:2.1.0")
 
     // eventbus
     implementation("org.greenrobot:eventbus:3.3.1")

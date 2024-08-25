@@ -19,6 +19,7 @@ class MikanSource(private val okHttpClient: OkHttpClient) : DataSource {
         private const val BASE_URL = "https://mikanime.tv/"
     }
 
+    // scraping weekly anime update info from html
     override fun getWeeklyData(): Flow<WeeklyDataHolder> {
         return flow {
             val html = Request.Builder().url(BASE_URL).get().build().let {
