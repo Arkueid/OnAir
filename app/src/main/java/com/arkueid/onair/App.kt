@@ -2,6 +2,7 @@ package com.arkueid.onair
 
 import android.app.Application
 import com.arkueid.onair.utils.ToastUtils
+import com.tencent.mmkv.MMKV
 import dagger.hilt.android.HiltAndroidApp
 
 
@@ -11,5 +12,7 @@ class App : Application() {
         super.onCreate()
 
         ToastUtils.init(this)
+
+        MMKV.initialize(this)
     }
 }

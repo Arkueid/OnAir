@@ -3,14 +3,6 @@
     <style name="Theme.OnAir" parent="Theme.AppCompat.DayNight.NoActionBar">
         <item name="android:statusBarColor">@android:color/transparent</item>
         <item name="android:windowLightStatusBar">true</item>
-    </style>
-
-    <style name="Theme.OnAir.Splash" parent="Theme.OnAir">
-        <item name="android:windowBackground">@drawable/splash_background</item>
-
-        <!--         full screen-->
-        <item name="android:windowFullscreen">true</item>
-        <item name="windowNoTitle">true</item>
-        <item name="windowActionBar">false</item>
+        <item name="android:colorPrimary">@color/pink</item>
     </style>
 </resources>

@@ -41,20 +41,11 @@ class WeeklyFragment : Fragment() {
 
         viewModel = ViewModelProvider(this)[WeeklyViewModel::class.java]
 
-        viewModel.weeklySubjects.observe(viewLifecycleOwner) {
-            EventBus.getDefault().postSticky(WeeklySubjectEvent(it))
-        }
-
         adapter = WeeklyPagerAdapter(this)
 
         binding.weeklyViewPager.adapter = adapter
 
-        viewModel.weeklySubjects.observe(viewLifecycleOwner) {
-            EventBus.getDefault().postSticky(WeeklySubjectEvent(it))
-        }
-
         viewModel.loadingState.observe(viewLifecycleOwner) {
-            binding.initialLoading.visibility = View.INVISIBLE
             binding.refreshLayout.finishRefresh(it)
         }
 
@@ -70,10 +61,9 @@ class WeeklyFragment : Fragment() {
         binding.refreshLayout.setEnableOverScrollDrag(true)
 
         // first loading
-        if (savedInstanceState == null) {
+        if (savedInstanceState == null || !viewModel.loadingState.value!!) {
             view.post {
-                binding.initialLoading.visibility = View.VISIBLE
-                viewModel.getWeeklySubjects()
+                binding.refreshLayout.autoRefresh(0, 200, 1f, false)
             }
         }
     }

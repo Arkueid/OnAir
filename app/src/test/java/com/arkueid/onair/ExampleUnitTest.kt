@@ -1,5 +1,7 @@
 package com.arkueid.onair
 
+import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.runBlocking
 import org.junit.Test
 
 import org.junit.Assert.*
@@ -18,7 +20,17 @@ class ExampleUnitTest {
 
     @Test
     fun dayOfWeek() {
-        val dayOfWeek = LocalDate.now().dayOfWeek
-        println(dayOfWeek)
+        val flow = flow<Int> {
+            repeat(10) {
+                emit(it)
+            }
+        }
+
+        runBlocking {
+            flow.collect {
+                println("$it")
+            }
+            println("finished")
+        }
     }
 }

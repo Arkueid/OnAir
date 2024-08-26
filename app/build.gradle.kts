@@ -82,6 +82,9 @@ dependencies {
 
     // jsoup
     implementation("org.jsoup:jsoup:1.18.1")
+
+    // mmkv
+    implementation("com.tencent:mmkv:1.3.9")
 }
 
 // Allow references to generated code
