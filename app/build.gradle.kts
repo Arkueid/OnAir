@@ -85,6 +85,9 @@ dependencies {
 
     // mmkv
     implementation("com.tencent:mmkv:1.3.9")
+
+    // banner
+    implementation("io.github.youth5201314:banner:2.2.3")
 }
 
 // Allow references to generated code

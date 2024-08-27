@@ -20,17 +20,6 @@ class ExampleUnitTest {
 
     @Test
     fun dayOfWeek() {
-        val flow = flow<Int> {
-            repeat(10) {
-                emit(it)
-            }
-        }
-
-        runBlocking {
-            flow.collect {
-                println("$it")
-            }
-            println("finished")
-        }
+        println(1 in 0..9)
     }
 }

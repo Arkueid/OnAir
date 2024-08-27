@@ -2,4 +2,12 @@
 <resources>
     <dimen name="weekdayTabSize">40dp</dimen>
     <dimen name="searchViewSize">40dp</dimen>
+    <!--    纵向模块列表宽高-->
+    <dimen name="tallModuleItemWidth">80dp</dimen>
+    <dimen name="tallModuleItemHeight">120dp</dimen>
+    <!--    横向模块列表宽高-->
+    <dimen name="wideModuleItemWidth">120dp</dimen>
+    <dimen name="wideModuleItemHeight">80dp</dimen>
+<!--    首页轮播图模块高度-->
+    <dimen name="bannerModuleListHeight">160dp</dimen>
 </resources>

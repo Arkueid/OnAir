@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_margin="3dp">
+
+    <androidx.constraintlayout.utils.widget.ImageFilterView
+        android:id="@+id/cover"
+        android:layout_width="@dimen/wideModuleItemWidth"
+        android:layout_height="@dimen/wideModuleItemHeight"
+        android:scaleType="centerCrop"
+        android:src="@color/pink"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:round="5dp" />
+
+    <TextView
+        android:id="@+id/title"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="@drawable/cover_text"
+        android:ellipsize="end"
+        android:gravity="bottom"
+        android:padding="10dp"
+        android:singleLine="true"
+        android:text="Hello World!"
+        android:textColor="@color/white"
+        android:textSize="12sp"
+        app:layout_constraintBottom_toBottomOf="@id/cover"
+        app:layout_constraintLeft_toLeftOf="@id/cover"
+        app:layout_constraintRight_toRightOf="@id/cover"
+        app:layout_constraintTop_toTopOf="@id/cover" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

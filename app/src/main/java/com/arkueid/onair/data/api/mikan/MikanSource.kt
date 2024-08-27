@@ -11,6 +11,7 @@ import okhttp3.OkHttpClient
 import okhttp3.Request
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Element
+import java.time.LocalDate
 
 
 class MikanSource(private val okHttpClient: OkHttpClient) : DataSource {
@@ -31,12 +32,13 @@ class MikanSource(private val okHttpClient: OkHttpClient) : DataSource {
 
     private fun parseWeeklyData(html: String): WeeklyDataHolder {
         val doc = Jsoup.parse(html)
-        return WeeklyDataHolder(doc.select(".m-home-week-item")
-            .take(7)
-            .reversed()
-            .mapIndexed { index, elemByWeekDay ->
-                parseWeeklySubject(index, elemByWeekDay)
-            })
+        return WeeklyDataHolder(
+            doc.select(".m-home-week-item")
+                .take(7)
+                .sortedBy { text2DayOfWeek(it.select(".title span").text()) }
+                .mapIndexed { index, elemByWeekDay ->
+                    parseWeeklySubject(index, elemByWeekDay)
+                })
     }
 
     private fun parseWeeklySubject(index: Int, element: Element): List<WeeklySubjectHolder> {
@@ -46,6 +48,20 @@ class MikanSource(private val okHttpClient: OkHttpClient) : DataSource {
                 it.select(".b-lazy").attr("data-src").let { "$BASE_URL$it" },
                 index + 1
             )
+        }
+    }
+
+    private fun text2DayOfWeek(text: String): Int {
+        return when (text) {
+            "星期一" -> 1
+            "星期二" -> 2
+            "星期三" -> 3
+            "星期四" -> 4
+            "星期五" -> 5
+            "星期六" -> 6
+            "星期日" -> 7
+            else -> throw IllegalArgumentException("Unknown day of week: $text")
+
         }
     }
 }

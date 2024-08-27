@@ -57,9 +57,6 @@ class WeeklyFragment : Fragment() {
             viewModel.getWeeklySubjects()
         }
 
-        binding.refreshLayout.setEnableLoadMore(false)
-        binding.refreshLayout.setEnableOverScrollDrag(true)
-
         // first loading
         if (savedInstanceState == null || !viewModel.loadingState.value!!) {
             view.post {
