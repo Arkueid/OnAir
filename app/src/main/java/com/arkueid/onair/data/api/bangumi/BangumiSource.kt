@@ -1,8 +1,9 @@
 package com.arkueid.onair.data.api.bangumi
 
 import com.arkueid.onair.data.repository.DataSource
-import com.arkueid.onair.ui.weekly.model.WeeklyDataHolder
-import com.arkueid.onair.ui.weekly.model.WeeklySubjectHolder
+import com.arkueid.onair.domain.entity.ModuleDataHolder
+import com.arkueid.onair.domain.entity.WeeklyData
+import com.arkueid.onair.domain.entity.WeeklySubject
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import okhttp3.OkHttpClient
@@ -20,21 +21,23 @@ class BangumiSource(private val okHttpClient: OkHttpClient) : DataSource {
             .create(ApiService::class.java)
     }
 
-    override fun getWeeklyData(): Flow<WeeklyDataHolder> {
+    override fun getWeeklyData(): Flow<WeeklyData> {
         return flow {
-            WeeklyDataHolder(
-                apiService.getWeekly().map { responseItem ->
-                    responseItem.items.map { subject ->
-                        WeeklySubjectHolder(
-                            subject.name_cn.ifEmpty { subject.name },
-                            subject.images.common,
-                            subject.air_weekday
-                        )
-                    }
+            apiService.getWeekly().map { responseItem ->
+                responseItem.items.map { subject ->
+                    WeeklySubject(
+                        subject.name_cn.ifEmpty { subject.name },
+                        subject.images.common,
+                        subject.air_weekday
+                    )
                 }
-            ).let {
+            }.let {
                 emit(it)
             }
         }
+    }
+
+    override fun getModuleData(): Flow<ModuleDataHolder> {
+        TODO("Not yet implemented")
     }
 }

@@ -7,8 +7,8 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.RecyclerView
 import com.arkueid.onair.R
 import com.arkueid.onair.databinding.ModuleItemNormalBinding
-import com.arkueid.onair.ui.home.model.Module
-import com.arkueid.onair.ui.home.model.ModuleItem
+import com.arkueid.onair.domain.entity.Module
+import com.arkueid.onair.domain.entity.ModuleItem
 import com.bumptech.glide.Glide
 
 /**

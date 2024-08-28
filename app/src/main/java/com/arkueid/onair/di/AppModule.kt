@@ -1,10 +1,11 @@
 package com.arkueid.onair.di
 
+import com.arkueid.onair.data.TestDataSource
 import com.arkueid.onair.data.api.bangumi.BangumiSource
 import com.arkueid.onair.data.api.mikan.MikanSource
 import com.arkueid.onair.data.repository.DataSource
-import com.arkueid.onair.data.repository.WeeklyRepository
-import com.arkueid.onair.data.repository.WeeklyRepositoryImpl
+import com.arkueid.onair.data.repository.Repository
+import com.arkueid.onair.data.repository.RepositoryImpl
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -52,7 +53,14 @@ object AppModule {
 
     @Singleton
     @Provides
-    fun provideWeeklyRepository(@Named("mikan") dataSource: DataSource): WeeklyRepository {
-        return WeeklyRepositoryImpl(dataSource)
+    @Named("test")
+    fun provideTestDataSource(): DataSource {
+        return TestDataSource(okHttpClient)
+    }
+
+    @Singleton
+    @Provides
+    fun provideRepository(@Named("test") dataSource: DataSource): Repository {
+        return RepositoryImpl(dataSource)
     }
 }

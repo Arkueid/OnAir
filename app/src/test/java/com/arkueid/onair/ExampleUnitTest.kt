@@ -1,11 +1,14 @@
 package com.arkueid.onair
 
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.withContext
 import org.junit.Test
-
-import org.junit.Assert.*
-import java.time.LocalDate
 
 /**
  * Example local unit test, which will execute on the development machine (host).
@@ -14,12 +17,28 @@ import java.time.LocalDate
  */
 class ExampleUnitTest {
     @Test
-    fun addition_isCorrect() {
-        assertEquals(4, 2 + 2)
+    fun stateTest() {
+        val flow = flow {
+            var data = 0
+            while (true) {
+                emit(requestData())
+            }
+        }
+
+        runBlocking {
+            flow.collect { data ->
+                println("bind $data")
+            }
+        }
     }
 
-    @Test
-    fun dayOfWeek() {
-        println(1 in 0..9)
+    private var data = 0
+
+    private suspend fun requestData(): Int {
+        withContext(Dispatchers.IO) {
+            data += 1
+            delay(100)
+        }
+        return data
     }
 }

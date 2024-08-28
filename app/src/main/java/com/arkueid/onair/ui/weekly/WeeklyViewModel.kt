@@ -1,54 +1,33 @@
 package com.arkueid.onair.ui.weekly
 
-import android.util.Log
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.arkueid.onair.data.repository.WeeklyRepository
-import com.arkueid.onair.event.weekly.WeeklySubjectEvent
-import com.arkueid.onair.ui.weekly.model.WeeklyDataHolder
+import com.arkueid.onair.data.repository.Repository
+import com.arkueid.onair.utils.Result
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.flow.catch
-import kotlinx.coroutines.launch
-import org.greenrobot.eventbus.EventBus
+import kotlinx.coroutines.flow.transform
 import javax.inject.Inject
 
 @HiltViewModel
-class WeeklyViewModel @Inject constructor(private val weeklyRepository: WeeklyRepository) :
+class WeeklyViewModel @Inject constructor(private val repository: Repository) :
     ViewModel() {
 
     companion object {
         private const val TAG = "WeeklyViewModel"
     }
 
-    // is there any task running
-    private var loading = false
-
-    private val _loadingSuccess = MutableLiveData(false)
-    val loadingState: LiveData<Boolean> = _loadingSuccess
+    val weeklySubjects = repository.getWeekly()
+        .transform {
+            emit(Result.success(it))
+        }
+        .catch {
+            emit(Result.failure(it, emptyList()))
+        }
 
     fun getWeeklySubjects() {
-        // keep single task running
-        if (loading) return
 
-        loading = true
-        var success = true
-        viewModelScope.launch {
-            weeklyRepository.getWeekly()
-                .catch {
-                    success = false
-                    Log.e(TAG, "getWeeklySubjects: ")
-                    it.printStackTrace()
-                }
-                .collect { data ->
-                    EventBus.getDefault().removeStickyEvent(WeeklySubjectEvent::class.java)
-                    EventBus.getDefault().postSticky(WeeklySubjectEvent(data))
-                    _loadingSuccess.value = success
-                }
-            loading = false
-        }
     }
 
     override fun onCleared() {

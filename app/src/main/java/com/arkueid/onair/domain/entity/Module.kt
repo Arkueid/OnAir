@@ -1,4 +1,4 @@
-package com.arkueid.onair.ui.home.model
+package com.arkueid.onair.domain.entity
 
 /**
  * @author: Arkueid
@@ -16,11 +16,13 @@ class Module(
     companion object {
         // module style
         const val BANNER = 0
+
         // grid style
         // grid style is applied only when the module has 6 or more items
         const val SQUARE_GRID = 1
         const val TALL_RECTANGLE_GRID = 2
         const val WIDE_RECTANGLE_GRID = 3
+
         // list style
         const val SQUARE_LIST = 4
         const val TALL_RECTANGLE_LIST = 5

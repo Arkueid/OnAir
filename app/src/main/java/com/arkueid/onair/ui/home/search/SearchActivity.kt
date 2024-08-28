@@ -44,7 +44,6 @@ class SearchActivity : AppCompatActivity(), OnClickListener {
         when (v!!.id) {
             R.id.backButton -> {
                 onBackPressedDispatcher.onBackPressed()
-                overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
             }
 
             R.id.searchButton -> {
@@ -56,5 +55,10 @@ class SearchActivity : AppCompatActivity(), OnClickListener {
 
             R.id.clearHistory -> viewModel.clearSearchHistory()
         }
+    }
+
+    override fun finish() {
+        super.finish()
+        overridePendingTransition(android.R.anim.fade_in, R.anim.slide_out_bottom)
     }
 }

@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/subjectRecyclerView"
     android:layout_width="match_parent"
+    android:scrollbars="none"
     android:layout_height="match_parent"
     tools:listitem="@layout/item_weekly_subject" />
 

@@ -29,6 +29,14 @@
         app:tabSelectedTextAppearance="@color/pink"
         app:tabTextColor="@color/weekday_tab_color" />
 
+    <ProgressBar
+        android:id="@+id/initProgressBar"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/weekdayTabSize"
+        android:indeterminateTint="@color/pink"
+        app:layout_constraintTop_toTopOf="@id/refreshLayout" />
+
+
     <com.scwang.smart.refresh.layout.SmartRefreshLayout
         android:id="@+id/refreshLayout"
         android:layout_width="match_parent"

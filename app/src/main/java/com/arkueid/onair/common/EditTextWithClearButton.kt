@@ -1,6 +1,7 @@
 package com.arkueid.onair.common
 
 import android.content.Context
+import android.graphics.drawable.Drawable
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.AttributeSet
@@ -8,8 +9,11 @@ import android.view.MotionEvent
 import android.view.View
 import android.view.View.OnFocusChangeListener
 import android.view.View.OnTouchListener
+import android.widget.Toast
 import androidx.appcompat.widget.AppCompatEditText
+import androidx.core.content.res.ResourcesCompat
 import com.arkueid.onair.R
+import com.arkueid.onair.utils.ToastUtils
 
 class EditTextWithClearButton(context: Context, attributeSet: AttributeSet?, defStyle: Int) :
     AppCompatEditText(context, attributeSet, defStyle), TextWatcher, OnTouchListener,
@@ -18,6 +22,8 @@ class EditTextWithClearButton(context: Context, attributeSet: AttributeSet?, def
     constructor(context: Context, attributeSet: AttributeSet?) : this(context, attributeSet, 0)
     constructor(context: Context) : this(context, null)
 
+    private var drawableRight: Drawable?
+
     init {
         // make sure keyboard can be shown on user click
         isFocusableInTouchMode = true
@@ -25,6 +31,8 @@ class EditTextWithClearButton(context: Context, attributeSet: AttributeSet?, def
         setOnTouchListener(this)
         addTextChangedListener(this)
         onFocusChangeListener = this
+        drawableRight =
+            ResourcesCompat.getDrawable(resources, R.drawable.round_cancel_24, context.theme)
     }
 
     override fun onTouch(v: View?, event: MotionEvent?): Boolean {
@@ -48,10 +56,10 @@ class EditTextWithClearButton(context: Context, attributeSet: AttributeSet?, def
         lengthAfter: Int
     ) {
         if (text?.length == 0) {
-            setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0)
+            showClearButton(false)
         } else {
             if (hasFocus()) {
-                setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.round_cancel_24, 0)
+                showClearButton(true)
             }
         }
     }
@@ -60,11 +68,20 @@ class EditTextWithClearButton(context: Context, attributeSet: AttributeSet?, def
     override fun onFocusChange(v: View?, hasFocus: Boolean) {
         if (hasFocus) {
             if (text!!.isNotEmpty()) {
-                setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.round_cancel_24, 0)
+                showClearButton(true)
             }
         } else {
-            setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.round_cancel_24, 0)
+            showClearButton(false)
         }
+    }
+
+    private fun showClearButton(show: Boolean) {
+        setCompoundDrawablesWithIntrinsicBounds(
+            compoundDrawables[0],
+            compoundDrawables[1],
+            if (show) drawableRight else null,
+            compoundDrawables[3]
+        )
     }
 
 }

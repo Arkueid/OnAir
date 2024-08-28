@@ -8,6 +8,6 @@ class WeeklyPagerAdapter(fragment: Fragment) :
     override fun getItemCount(): Int = 7
 
     override fun createFragment(position: Int): Fragment {
-        return WeeklySubjectListFragment.newInstance(position)
+        return WeeklySubjectFragment.newInstance(position)
     }
 }

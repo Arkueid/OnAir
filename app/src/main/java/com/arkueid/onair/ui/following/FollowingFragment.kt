@@ -8,6 +8,10 @@ import androidx.fragment.app.Fragment
 import com.arkueid.onair.databinding.FragmentFollowingBinding
 
 class FollowingFragment : Fragment() {
+    companion object {
+        const val TAG = "FollowingFragment"
+    }
+
     private lateinit var binding: FragmentFollowingBinding
     override fun onCreateView(
         inflater: LayoutInflater,

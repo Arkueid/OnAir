@@ -4,10 +4,9 @@ import com.arkueid.onair.domain.entity.ModuleDataHolder
 import com.arkueid.onair.domain.entity.WeeklyData
 import kotlinx.coroutines.flow.Flow
 
+interface Repository {
 
-interface DataSource {
+    fun getWeekly(): Flow<WeeklyData>
 
-    fun getWeeklyData(): Flow<WeeklyData>
-
-    fun getModuleData(): Flow<ModuleDataHolder>
+    fun getHome(): Flow<ModuleDataHolder>
 }

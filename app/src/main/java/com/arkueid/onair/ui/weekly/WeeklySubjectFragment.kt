@@ -14,7 +14,7 @@ import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
 
 
-class WeeklySubjectListFragment : Fragment() {
+class WeeklySubjectFragment : Fragment() {
 
     private lateinit var binding: FragmentWeeklySubjectListBinding
     private lateinit var adapter: WeeklySubjectRecyclerViewAdapter
@@ -49,8 +49,8 @@ class WeeklySubjectListFragment : Fragment() {
     @Subscribe(sticky = true, threadMode = ThreadMode.MAIN)
     fun onEvent(event: WeeklySubjectEvent) {
         event.subjectsByWeek.let {
-            if (it.data.size <= position) return
-            adapter.data = it.data[position]
+            if (it.size <= position) return
+            adapter.data = it[position]
             adapter.notifyDataSetChanged()
         }
     }
@@ -69,7 +69,7 @@ class WeeklySubjectListFragment : Fragment() {
         private const val TAG = "WeeklySubjectListFragment"
 
         @JvmStatic
-        fun newInstance(position: Int) = WeeklySubjectListFragment().apply {
+        fun newInstance(position: Int) = WeeklySubjectFragment().apply {
             arguments = Bundle().apply {
                 putInt("position", position)
             }

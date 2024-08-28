@@ -12,20 +12,15 @@ import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.ViewGroup.LayoutParams
 import android.widget.TextView
-import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.arkueid.onair.R
 import com.arkueid.onair.databinding.ItemModuleBannerBinding
 import com.arkueid.onair.databinding.ItemModuleNormalBinding
-import com.arkueid.onair.ui.home.model.Module
-import com.youth.banner.Banner
+import com.arkueid.onair.domain.entity.Module
 import com.youth.banner.indicator.CircleIndicator
-import com.youth.banner.indicator.Indicator
-import com.youth.banner.indicator.RoundLinesIndicator
 
 /**
  * @author: Arkueid

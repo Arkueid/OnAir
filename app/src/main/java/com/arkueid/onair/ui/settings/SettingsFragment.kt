@@ -9,6 +9,10 @@ import com.arkueid.onair.databinding.FragmentSettingsBinding
 
 class SettingsFragment : Fragment() {
 
+    companion object {
+        const val TAG = "SettingsFragment"
+    }
+
     private lateinit var binding: FragmentSettingsBinding
     override fun onCreateView(
         inflater: LayoutInflater,

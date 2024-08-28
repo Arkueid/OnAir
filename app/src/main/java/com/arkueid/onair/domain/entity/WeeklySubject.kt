@@ -1,9 +1,9 @@
-package com.arkueid.onair.ui.weekly.model
+package com.arkueid.onair.domain.entity
 
 import java.io.Serializable
 
 // 番剧
-data class WeeklySubjectHolder(
+data class WeeklySubject(
     // 标题
     val title: String,
     // 番剧封面

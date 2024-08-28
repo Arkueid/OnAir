@@ -4,7 +4,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.arkueid.onair.databinding.ModuleItemBannerBinding
-import com.arkueid.onair.ui.home.model.ModuleItem
+import com.arkueid.onair.domain.entity.ModuleItem
 import com.bumptech.glide.Glide
 import com.youth.banner.adapter.BannerAdapter
 

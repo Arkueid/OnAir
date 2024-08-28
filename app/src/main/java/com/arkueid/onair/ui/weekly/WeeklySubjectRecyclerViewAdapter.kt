@@ -4,12 +4,12 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.arkueid.onair.databinding.ItemWeeklySubjectBinding
-import com.arkueid.onair.ui.weekly.model.WeeklySubjectHolder
+import com.arkueid.onair.domain.entity.WeeklySubject
 import com.bumptech.glide.Glide
 
 
 class WeeklySubjectRecyclerViewAdapter(
-    var data: List<WeeklySubjectHolder>
+    var data: List<WeeklySubject>
 ) : RecyclerView.Adapter<WeeklySubjectRecyclerViewAdapter.ViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
