@@ -8,6 +8,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.transform
+import java.time.LocalDate
 import javax.inject.Inject
 
 @HiltViewModel
@@ -26,9 +27,10 @@ class WeeklyViewModel @Inject constructor(private val repository: Repository) :
             emit(Result.failure(it, emptyList()))
         }
 
-    fun getWeeklySubjects() {
-
-    }
+    val currentTabIndex: Int
+        get() {
+            return LocalDate.now().dayOfWeek.value - 1
+        }
 
     override fun onCleared() {
         super.onCleared()

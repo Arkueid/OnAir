@@ -3,7 +3,9 @@ package com.arkueid.onair.common
 import android.content.Context
 import android.util.AttributeSet
 import android.util.TypedValue
+import android.view.View
 import android.view.ViewGroup
+import android.widget.AdapterView.OnItemClickListener
 import com.arkueid.onair.R
 
 class TagLayout(context: Context, attributeSet: AttributeSet?, defStyle: Int) :
@@ -41,9 +43,8 @@ class TagLayout(context: Context, attributeSet: AttributeSet?, defStyle: Int) :
 
         var maxChildHeight = 0
 
-        // layout children from the last to first
-        val lastIndex = childCount - 1
-        for (i in lastIndex downTo 0) {
+        val size = childCount
+        for (i in 0 until size) {
             val child = getChildAt(i)
             if (child.visibility == GONE) {
                 continue
@@ -91,7 +92,7 @@ class TagLayout(context: Context, attributeSet: AttributeSet?, defStyle: Int) :
         var startY = paddingTop
 
         val lastIndex = childCount - 1
-        for (i in lastIndex downTo  0) {
+        for (i in lastIndex downTo 0) {
             val child = getChildAt(i)
             if (child.visibility == GONE) {
                 continue

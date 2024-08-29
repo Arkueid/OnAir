@@ -8,6 +8,11 @@
     <!--    横向模块列表宽高-->
     <dimen name="wideModuleItemWidth">120dp</dimen>
     <dimen name="wideModuleItemHeight">80dp</dimen>
-<!--    首页轮播图模块高度-->
+    <!--    首页轮播图模块高度-->
     <dimen name="bannerModuleListHeight">160dp</dimen>
+    <!--    搜索建议高度-->
+    <dimen name="searchSuggestionSize">40dp</dimen>
+    <!--    搜索结果 cover 宽高-->
+    <dimen name="searchResultCoverHeight">120dp</dimen>
+    <dimen name="searchResultCoverWidth">90dp</dimen>
 </resources>

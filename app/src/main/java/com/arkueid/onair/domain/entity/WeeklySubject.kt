@@ -11,3 +11,5 @@ data class WeeklySubject(
     // 星期
     val weekday: Int,
 ) : Serializable
+
+typealias WeeklyData = List<List<WeeklySubject>>

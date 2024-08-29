@@ -6,6 +6,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.postDelayed
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.ViewModelProvider
@@ -42,7 +43,6 @@ class WeeklyFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
         binding = FragmentWeeklyBinding.inflate(inflater, container, false)
-        Log.e(TAG, "onCreateView: ")
         return binding.root
     }
 
@@ -54,18 +54,19 @@ class WeeklyFragment : Fragment() {
         binding.weeklyViewPager.adapter = adapter
         binding.weeklyViewPager.offscreenPageLimit = 7
 
+
         TabLayoutMediator(binding.weekdayTab, binding.weeklyViewPager) { tab, index ->
             tab.text = numToHan(index)
         }.attach()
 
-        binding.refreshLayout.setOnRefreshListener {
-            getWeeklyData()
-        }
+        binding.refreshLayout.setOnRefreshListener { getWeeklyData() }
 
         // first loading
         if (savedInstanceState == null) {
             binding.initProgressBar.visibility = View.VISIBLE
             view.post { getWeeklyData() }
+            // set default tab according to the weekday
+            binding.weeklyViewPager.setCurrentItem(viewModel.currentTabIndex, false)
         }
     }
 
@@ -89,7 +90,7 @@ class WeeklyFragment : Fragment() {
     }
 
     private fun numToHan(index: Int): String {
-        if (index == LocalDate.now().dayOfWeek.value - 1) return "今"
+        if (index == viewModel.currentTabIndex) return "今"
         return when (index) {
             0 -> "一"
             1 -> "二"

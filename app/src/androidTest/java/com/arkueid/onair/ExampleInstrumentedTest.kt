@@ -2,11 +2,11 @@ package com.arkueid.onair
 
 import android.util.Log
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import com.arkueid.onair.data.api.mikan.MikanSource
-import kotlinx.coroutines.flow.catch
+import com.arkueid.onair.data.TestDataSource
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.runBlocking
 import okhttp3.OkHttpClient
-import org.jsoup.Jsoup
+import okhttp3.Request
 import org.junit.Test
 import org.junit.runner.RunWith
 
@@ -24,13 +24,11 @@ class ExampleInstrumentedTest {
 
     @Test
     fun useAppContext() {
+
         runBlocking {
-            MikanSource(OkHttpClient()).getWeeklyData()
-                .catch { e ->
-                    Log.e(TAG, "error: $e")
-                }.collect {
-                    Log.e(TAG, "data: $it")
-                }
+            TestDataSource(OkHttpClient()).getSearchTipData("clan").collect {
+                Log.d(TAG, "useAppContext: $it")
+            }
         }
     }
 }

@@ -5,7 +5,7 @@ package com.arkueid.onair.domain.entity
  * @date: 2024/8/26
  * @desc: module display model for home page
  */
-class Module(
+data class Module(
     val style: Int,
     val title: String?,
     val items: List<ModuleItem>,
@@ -29,3 +29,5 @@ class Module(
         const val WIDE_RECTANGLE_LIST = 6
     }
 }
+
+typealias ModuleData = List<Module>

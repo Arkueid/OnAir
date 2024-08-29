@@ -5,7 +5,7 @@ package com.arkueid.onair.domain.entity
  * @date: 2024/8/26
  * @desc: anime item model
  */
-class ModuleItem(
+data class ModuleItem(
     val title: String,
     val cover: String,
     // TODO play url, episode url or other

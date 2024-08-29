@@ -1,7 +1,9 @@
 package com.arkueid.onair.data.api.bangumi
 
 import com.arkueid.onair.data.repository.DataSource
-import com.arkueid.onair.domain.entity.ModuleDataHolder
+import com.arkueid.onair.domain.entity.ModuleData
+import com.arkueid.onair.domain.entity.SearchResultData
+import com.arkueid.onair.domain.entity.SearchTipData
 import com.arkueid.onair.domain.entity.WeeklyData
 import com.arkueid.onair.domain.entity.WeeklySubject
 import kotlinx.coroutines.flow.Flow
@@ -37,7 +39,15 @@ class BangumiSource(private val okHttpClient: OkHttpClient) : DataSource {
         }
     }
 
-    override fun getModuleData(): Flow<ModuleDataHolder> {
+    override fun getModuleData(): Flow<ModuleData> {
+        TODO("Not yet implemented")
+    }
+
+    override fun getSearchTipData(query: String): Flow<SearchTipData> {
+        TODO("Not yet implemented")
+    }
+
+    override fun getSearchResultData(query: String): Flow<SearchResultData> {
         TODO("Not yet implemented")
     }
 }

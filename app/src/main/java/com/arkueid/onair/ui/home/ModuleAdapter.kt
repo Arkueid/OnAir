@@ -137,7 +137,7 @@ class ModuleAdapter(var data: List<Module>) : RecyclerView.Adapter<ModuleAdapter
 
                         override fun onClick(widget: View) {
                             Intent(holder.itemView.context, MoreActivity::class.java).let {
-                                it.putExtra("url", module.moreUrl)
+                                it.putExtra("moreUrl", module.moreUrl)
                                 holder.itemView.context.startActivity(it)
                             }
                         }

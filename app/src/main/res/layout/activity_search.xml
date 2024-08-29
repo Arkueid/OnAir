@@ -32,10 +32,12 @@
             android:layout_marginStart="20dp"
             android:layout_marginEnd="20dp"
             android:layout_weight="1"
-            android:drawableLeft="@drawable/round_search_24"
             android:background="@drawable/round_rect"
             android:backgroundTint="@color/inputBackgroundColor"
+            android:drawableLeft="@drawable/round_search_24"
             android:drawablePadding="5dp"
+            android:imeOptions="actionSearch"
+            android:inputType="textWebEditText"
             android:gravity="center_vertical|start"
             android:hint="@string/search_hint"
             android:padding="10dp"
@@ -91,5 +93,27 @@
         app:layout_constraintTop_toBottomOf="@id/searchHistory">
 
     </com.arkueid.onair.common.TagLayout>
+
+    <ListView
+        android:id="@+id/searchSuggestion"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/searchBar" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/searchResult"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/searchBar" />
+
+    <androidx.constraintlayout.widget.Group
+        android:id="@+id/historyGroup"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:constraint_referenced_ids="searchHistory,clearHistory,tagLayout" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

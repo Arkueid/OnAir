@@ -10,6 +10,7 @@
                 <map>
                   <entry key="Duration" value="90" />
                   <entry key="HUAWEI PCT-AL10" value="120" />
+                  <entry key="HUAWEI TEL-AN00a" value="120" />
                   <entry key="Tests" value="360" />
                 </map>
               </option>
@@ -23,6 +24,7 @@
                 <map>
                   <entry key="Duration" value="109" />
                   <entry key="HUAWEI PCT-AL10" value="138" />
+                  <entry key="HUAWEI TEL-AN00a" value="120" />
                   <entry key="Tests" value="378" />
                 </map>
               </option>
