@@ -6,8 +6,8 @@
         android:drawable="@color/white" />
 
     <item
-        android:width="100dp"
-        android:height="100dp"
+        android:width="120dp"
+        android:height="120dp"
         android:drawable="@drawable/heroine"
         android:gravity="center" />
 </layer-list>

@@ -88,6 +88,12 @@ dependencies {
 
     // banner
     implementation("io.github.youth5201314:banner:2.2.3")
+
+    // exo player
+    implementation("androidx.media3:media3-exoplayer:1.4.0")
+    implementation("androidx.media3:media3-exoplayer-dash:1.4.0")
+    implementation("androidx.media3:media3-ui:1.4.0")
+    implementation("androidx.media3:media3-exoplayer-hls:1.4.0")
 }
 
 // Allow references to generated code

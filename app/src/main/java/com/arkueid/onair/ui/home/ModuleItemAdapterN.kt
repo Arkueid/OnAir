@@ -1,6 +1,8 @@
 package com.arkueid.onair.ui.home
 
+import android.content.Intent
 import android.view.LayoutInflater
+import android.view.View.OnClickListener
 import android.view.ViewGroup
 import android.view.ViewGroup.LayoutParams
 import androidx.constraintlayout.widget.ConstraintLayout
@@ -9,6 +11,7 @@ import com.arkueid.onair.R
 import com.arkueid.onair.databinding.ModuleItemNormalBinding
 import com.arkueid.onair.domain.entity.Module
 import com.arkueid.onair.domain.entity.ModuleItem
+import com.arkueid.onair.ui.play.PlayerActivity
 import com.bumptech.glide.Glide
 
 /**
@@ -22,6 +25,7 @@ class ModuleItemAdapterN(private val style: Int, var data: List<ModuleItem>) :
     class ItemVH(binding: ModuleItemNormalBinding) : RecyclerView.ViewHolder(binding.root) {
         val title = binding.title
         val cover = binding.cover
+        val clickable = binding.clickable
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ItemVH {
@@ -38,6 +42,10 @@ class ModuleItemAdapterN(private val style: Int, var data: List<ModuleItem>) :
         val item = data[position]
         holder.title.text = item.title
         Glide.with(holder.itemView).asBitmap().load(item.cover).into(holder.cover)
+        holder.clickable.setOnClickListener {
+            val intent = Intent(holder.itemView.context, PlayerActivity::class.java)
+            holder.itemView.context.startActivity(intent)
+        }
 
         when (style) {
             Module.SQUARE_GRID, Module.SQUARE_LIST -> {

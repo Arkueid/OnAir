@@ -17,6 +17,10 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
+            android:name=".ui.play.PlayerActivity"
+            android:configChanges="screenSize|orientation"
+            android:exported="false" />
+        <activity
             android:name=".ui.home.MoreActivity"
             android:exported="false" />
         <activity

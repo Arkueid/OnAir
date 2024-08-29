@@ -30,28 +30,29 @@ class TestDataSource(okHttpClient: OkHttpClient) : MikanSource(okHttpClient) {
     override fun getModuleData(): Flow<ModuleData> {
         var time = System.currentTimeMillis()
         return flow {
-            mutableListOf(
-                Module(
-                    Module.BANNER, null, listOf(
-                        ModuleItem(
-                            "",
-                            "https://acg.suyanw.cn/sjdm/random.php?r=${time++}",
-                        ), ModuleItem(
-                            "",
-                            "https://acg.suyanw.cn/sjdm/random.php?r=${time++}",
-                        ), ModuleItem(
-                            "",
-                            "https://acg.suyanw.cn/sjdm/random.php?r=${time++}",
-                        ), ModuleItem(
-                            "",
-                            "https://acg.suyanw.cn/sjdm/random.php?r=${time++}",
-                        )
-                    ), null
-                )
-            ).apply {
-                addAll(fetchModulesFromOmofunIn())
-                emit(this)
-            }
+//            mutableListOf(
+//                Module(
+//                    Module.BANNER, null, listOf(
+//                        ModuleItem(
+//                            "",
+//                            "https://acg.suyanw.cn/sjdm/random.php?r=${time++}",
+//                        ), ModuleItem(
+//                            "",
+//                            "https://acg.suyanw.cn/sjdm/random.php?r=${time++}",
+//                        ), ModuleItem(
+//                            "",
+//                            "https://acg.suyanw.cn/sjdm/random.php?r=${time++}",
+//                        ), ModuleItem(
+//                            "",
+//                            "https://acg.suyanw.cn/sjdm/random.php?r=${time++}",
+//                        )
+//                    ), null
+//                )
+//            ).apply {
+//                addAll(fetchModulesFromOmofunIn())
+//                emit(this)
+//            }
+            emit(fetchHomeData())
         }.flowOn(Dispatchers.IO)
     }
 
