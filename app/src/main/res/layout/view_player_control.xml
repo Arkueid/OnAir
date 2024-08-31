@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/background_play_control">
+
+    <androidx.constraintlayout.utils.widget.ImageFilterView
+        android:id="@+id/exitBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="?attr/selectableItemBackground"
+        android:clickable="true"
+        android:padding="10dp"
+        android:src="@drawable/baseline_arrow_back_24"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:roundPercent="1" />
+
+    <TextView
+        android:id="@+id/title"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:gravity="center"
+        android:text="Hello World!"
+        android:textColor="@color/white"
+        android:textSize="16sp"
+        app:layout_constraintBottom_toBottomOf="@id/exitBtn"
+        app:layout_constraintEnd_toStartOf="@id/optionBtn"
+        app:layout_constraintStart_toEndOf="@id/exitBtn"
+        app:layout_constraintTop_toTopOf="@id/exitBtn" />
+
+
+    <androidx.constraintlayout.utils.widget.ImageFilterView
+        android:id="@+id/optionBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:background="?attr/selectableItemBackground"
+        android:clickable="true"
+        android:paddingHorizontal="10dp"
+        android:src="@drawable/baseline_more_vert_24"
+        app:layout_constraintBottom_toBottomOf="@id/exitBtn"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@id/exitBtn"
+        app:roundPercent="1" />
+
+    <androidx.constraintlayout.utils.widget.ImageFilterView
+        android:id="@+id/lockBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="?attr/selectableItemBackground"
+        android:clickable="true"
+        android:padding="10dp"
+        android:src="@drawable/button_lock"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:roundPercent="1" />
+
+
+    <androidx.constraintlayout.utils.widget.ImageFilterView
+        android:id="@+id/playBtn"
+        android:layout_width="44dp"
+        android:layout_height="44dp"
+        android:background="?attr/selectableItemBackground"
+        android:clickable="true"
+        android:padding="10dp"
+        android:src="@drawable/button_play"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/currentPositionText"
+        app:layout_constraintStart_toStartOf="parent"
+        app:roundPercent="1" />
+
+    <TextView
+        android:id="@+id/currentPositionText"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:ellipsize="none"
+        android:gravity="center"
+        android:padding="10dp"
+        android:singleLine="true"
+        android:text="@string/_1_53"
+        android:textColor="#FFFFFF"
+        android:textSize="12sp"
+        app:layout_constraintBottom_toBottomOf="@id/playBtn"
+        app:layout_constraintEnd_toStartOf="@id/seekBar"
+        app:layout_constraintStart_toEndOf="@id/playBtn"
+        app:layout_constraintTop_toTopOf="@id/playBtn"
+        tools:ignore="SmallSp" />
+
+    <SeekBar
+        android:id="@+id/seekBar"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:progress="30"
+        android:progressBackgroundTint="@color/white"
+        android:progressTint="#FF4081"
+        android:secondaryProgress="50"
+        android:secondaryProgressTint="@color/white"
+        android:thumbTint="@color/white"
+        app:layout_constraintBottom_toBottomOf="@id/currentPositionText"
+        app:layout_constraintEnd_toStartOf="@+id/durationText"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/currentPositionText"
+        app:layout_constraintTop_toTopOf="@id/currentPositionText"
+        tools:layout_editor_absoluteY="562dp" />
+
+    <TextView
+        android:id="@+id/durationText"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:ellipsize="none"
+        android:gravity="center"
+        android:padding="10dp"
+        android:singleLine="true"
+        android:text="@string/_3_11"
+        android:textColor="#FFFFFF"
+        android:textSize="12sp"
+        app:layout_constraintBottom_toBottomOf="@id/seekBar"
+        app:layout_constraintEnd_toStartOf="@id/danmakuBtn"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@id/seekBar"
+        app:layout_constraintTop_toTopOf="@id/seekBar"
+        tools:ignore="SmallSp"
+        tools:layout_editor_absoluteY="200dp" />
+
+    <androidx.constraintlayout.utils.widget.ImageFilterView
+        android:id="@+id/danmakuBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:background="?attr/selectableItemBackground"
+        android:clickable="true"
+        android:padding="10dp"
+        android:src="@drawable/button_danmaku"
+        app:layout_constraintBottom_toBottomOf="@id/durationText"
+        app:layout_constraintEnd_toStartOf="@id/fullscreenBtn"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/durationText"
+        app:layout_constraintTop_toTopOf="@id/durationText"
+        app:roundPercent="1"
+        tools:layout_editor_absoluteY="343dp" />
+
+    <androidx.constraintlayout.utils.widget.ImageFilterView
+        android:id="@+id/fullscreenBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:background="?attr/selectableItemBackground"
+        android:clickable="true"
+        android:padding="10dp"
+        android:src="@drawable/button_fullscreen"
+        app:layout_constraintBottom_toBottomOf="@id/danmakuBtn"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/danmakuBtn"
+        app:layout_constraintTop_toTopOf="@id/danmakuBtn"
+        app:roundPercent="1"
+        tools:layout_editor_absoluteY="343dp" />
+
+    <ProgressBar
+        android:id="@+id/loadingProgress"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:indeterminateTint="@color/pink"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.constraintlayout.widget.Group
+        android:id="@+id/buttonsNoLock"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:constraint_referenced_ids="exitBtn,title,optionBtn,fullscreenBtn,danmakuBtn,durationText,seekBar,currentPositionText,playBtn" />
+
+    <androidx.constraintlayout.widget.Group
+        android:id="@+id/allButtons"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:constraint_referenced_ids="exitBtn,title,optionBtn,lockBtn,playBtn,currentPositionText,seekBar,durationText,danmakuBtn,fullscreenBtn,buttonsNoLock" />
+</androidx.constraintlayout.widget.ConstraintLayout>

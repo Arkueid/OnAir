@@ -9,8 +9,8 @@
 
     <androidx.fragment.app.FragmentContainerView
         android:id="@+id/fragmentContainer"
-        android:layout_width="match_parent"
         android:name="com.arkueid.onair.ui.play.PlayerFragment"
+        android:layout_width="match_parent"
         android:layout_height="0dp"
         app:layout_constraintDimensionRatio="H,16:9"
         app:layout_constraintTop_toTopOf="parent" />

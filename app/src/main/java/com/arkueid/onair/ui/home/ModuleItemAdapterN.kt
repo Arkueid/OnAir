@@ -2,7 +2,6 @@ package com.arkueid.onair.ui.home
 
 import android.content.Intent
 import android.view.LayoutInflater
-import android.view.View.OnClickListener
 import android.view.ViewGroup
 import android.view.ViewGroup.LayoutParams
 import androidx.constraintlayout.widget.ConstraintLayout

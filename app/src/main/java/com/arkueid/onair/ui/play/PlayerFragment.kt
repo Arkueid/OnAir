@@ -1,34 +1,62 @@
 package com.arkueid.onair.ui.play
 
-import android.media.MediaDataSource
+import android.content.pm.ActivityInfo
+import android.content.res.Configuration
+import android.net.Uri
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
+import android.util.Log
 import android.view.LayoutInflater
+import android.view.SurfaceHolder
 import android.view.View
+import android.view.View.OnClickListener
 import android.view.ViewGroup
+import android.widget.SeekBar
+import android.widget.SeekBar.OnSeekBarChangeListener
+import androidx.activity.OnBackPressedCallback
 import androidx.annotation.OptIn
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.media3.common.MediaItem
+import androidx.media3.common.Player
+import androidx.media3.common.VideoSize
 import androidx.media3.common.util.UnstableApi
-import androidx.media3.datasource.DataSchemeDataSource
-import androidx.media3.datasource.DataSourceUtil
-import androidx.media3.datasource.DefaultHttpDataSource
 import androidx.media3.exoplayer.ExoPlayer
-import androidx.media3.exoplayer.hls.HlsMediaSource
+import com.arkueid.onair.R
 import com.arkueid.onair.databinding.FragmentPlayerBinding
+import com.arkueid.onair.ui.play.danmaku.DanmakuItem
+import kotlin.random.Random
 
 /**
  * @author: Arkueid
  * @date: 2024/8/29
  * @desc:
  */
-class PlayerFragment : Fragment() {
+class PlayerFragment : Fragment(), SurfaceHolder.Callback, OnClickListener, Player.Listener,
+    OnSeekBarChangeListener {
 
     companion object {
         const val TAG = "PlayerFragment"
+        private const val FPS = 30L
+        private const val UPDATE_INTERVAL = 1000L / FPS
     }
 
     private lateinit var binding: FragmentPlayerBinding
     private lateinit var player: ExoPlayer
+    private val viewModel: PlayerFragmentViewModel by viewModels()
+
+    private val onBackPressedCallback = object : OnBackPressedCallback(true) {
+        override fun handleOnBackPressed() {
+            if (resources.configuration.orientation == Configuration.ORIENTATION_LANDSCAPE) {
+                toggleFullscreen()
+            } else {
+                requireActivity().finish()
+            }
+        }
+
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
@@ -38,25 +66,289 @@ class PlayerFragment : Fragment() {
     }
 
 
-    private val url = "\n" +
-            "http://192.168.137.1:8096/Videos/383107eba1d73105e0a144a070fd7c62/stream.mp4?Static=true&mediaSourceId=383107eba1d73105e0a144a070fd7c62&deviceId=TW96aWxsYS81LjAgKFdpbmRvd3MgTlQgMTAuMDsgV2luNjQ7IHg2NCkgQXBwbGVXZWJLaXQvNTM3LjM2IChLSFRNTCwgbGlrZSBHZWNrbykgQ2hyb21lLzEyNy4wLjAuMCBTYWZhcmkvNTM3LjM2fDE3MjI2MDQwNTIwNjk1&api_key=3c50f169c177480f8e09847d490c27e8&Tag=a3bc2bff26103d4fd623c4000ddaad7e"
-
     @OptIn(UnstableApi::class)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         player = ExoPlayer.Builder(requireContext()).build()
-        binding.playerView.player = player
+        val mediaItem = MediaItem.fromUri(Uri.parse("rawresource:///${R.raw.test}"))
 
-        val mediaItem = MediaItem.fromUri(url)
-
+        // --for test--
         player.setMediaItem(mediaItem)
         player.prepare()
+        player.playWhenReady = true
+        // --for test--
+        player.addListener(this)
+
+        binding.surfaceView.holder.addCallback(this)
+        binding.playerControl.root.setOnClickListener(this)
+        binding.playerControl.playBtn.setOnClickListener(this)
+        binding.playerControl.lockBtn.setOnClickListener(this)
+        binding.playerControl.fullscreenBtn.setOnClickListener(this)
+        binding.playerControl.danmakuBtn.setOnClickListener(this)
+        binding.playerControl.exitBtn.setOnClickListener(this)
+        binding.playerControl.seekBar.setOnSeekBarChangeListener(this)
+
+        requireActivity().onBackPressedDispatcher.addCallback(
+            viewLifecycleOwner,
+            onBackPressedCallback
+        )
+
+        observe()
+
+        view.post { showControl() }
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
+    private val rollingDanmakus by lazy {
+        val list = mutableListOf<DanmakuItem>()
+        for (i in 0..500) {
+            val p = Random.nextLong(0, player.duration)
+            list.add(
+                DanmakuItem(
+                    progress = p, // 时间范围 0 到 7分27秒
+                    content = "弹幕${parseTime(p)}",
+                    color = Random.nextInt(0xFF000000.toInt(), 0xFFFFFFFF.toInt()) // 随机颜色
+                )
+            )
+        }
+        list.sortBy { it.progress }
+        list
+    }
+
+    private fun observe() {
+    }
+
+    override fun onPause() {
+        super.onPause()
+        viewModel.lastIsPlaying = player.isPlaying
+        player.pause()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        if (viewModel.lastIsPlaying) {
+            player.play()
+        }
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
         player.release()
     }
 
+    override fun surfaceCreated(holder: SurfaceHolder) {
+        player.setVideoSurfaceHolder(holder)
+        Log.d(TAG, "surfaceCreated: ")
+    }
+
+    override fun surfaceChanged(holder: SurfaceHolder, format: Int, width: Int, height: Int) {
+        Log.d(TAG, "surfaceChanged: ")
+    }
+
+    override fun surfaceDestroyed(holder: SurfaceHolder) {
+        player.clearVideoSurfaceHolder(holder)
+    }
+
+    override fun onClick(v: View?) {
+        v ?: return
+
+        when (v.id) {
+            R.id.playBtn -> togglePlay()
+
+            R.id.lockBtn -> toggleLock()
+
+            R.id.playerControl -> toggleShowControl()
+
+            R.id.danmakuBtn -> toggleDanmaku()
+
+            R.id.fullscreenBtn -> toggleFullscreen()
+
+            R.id.exitBtn -> requireActivity().onBackPressedDispatcher.onBackPressed()
+        }
+    }
+
+    /**
+     * update view except seek bar
+     */
+    private fun updateProgress() {
+        binding.playerControl.currentPositionText.text = parseTime(player.currentPosition)
+        binding.playerControl.durationText.text = parseTime(player.duration)
+        binding.danmakuView.setProgress(player.currentPosition)
+    }
+
+    private fun postUpdateProgress() {
+        binding.danmakuView.start()
+        // TODO fetch from viewModel
+        binding.danmakuView.setRollingData(rollingDanmakus)
+        val handler = Handler(Looper.getMainLooper())
+        val runnable = object : Runnable {
+            override fun run() {
+                binding.playerControl.seekBar.let {
+                    it.max = player.duration.toInt()
+                    it.progress = player.currentPosition.toInt()
+                }
+
+                updateProgress()
+
+                if (player.isPlaying) {
+                    handler.postDelayed(this, UPDATE_INTERVAL)
+                }
+            }
+        }
+        handler.post(runnable)
+    }
+
+    private fun parseTime(time: Long): String {
+        val hour = time / 3600000
+        val minute = time % 3600000 / 60000
+        val second = time % 60000 / 1000
+        return if (hour > 0) {
+            "%02d:%02d:%02d".format(hour, minute, second)
+        } else {
+            "%02d:%02d".format(minute, second)
+        }
+    }
+
+    private fun toggleFullscreen() {
+        binding.playerControl.fullscreenBtn.let {
+            viewModel.isFullScreen = !viewModel.isFullScreen
+            it.isSelected = viewModel.isFullScreen
+        }
+        requireActivity().requestedOrientation = if (viewModel.isFullScreen) {
+            ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
+        } else {
+            ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
+        }
+    }
+
+    private fun toggleLock() {
+        binding.playerControl.lockBtn.let {
+            viewModel.isLocked = !viewModel.isLocked
+            it.isSelected = viewModel.isLocked
+            if (it.isSelected) {
+                binding.playerControl.buttonsNoLock.visibility = View.GONE
+            } else {
+                binding.playerControl.buttonsNoLock.visibility = View.VISIBLE
+            }
+        }
+    }
+
+    private fun toggleShowControl() {
+        viewModel.showControl = !viewModel.showControl
+        if (viewModel.showControl) {
+            showControl()
+        } else {
+            hideControl()
+        }
+    }
+
+    private val hideRunnable = Runnable { hideControl() }
+
+    private fun hideControl() {
+        binding.playerControl.allButtons.visibility = View.GONE
+    }
+
+    private fun showControl() {
+        val group = if (viewModel.isLocked) {
+            binding.playerControl.lockBtn
+        } else {
+            binding.playerControl.allButtons
+        }
+        group.visibility = View.VISIBLE
+        // hide control after 5s
+        group.removeCallbacks(hideRunnable)
+        group.postDelayed(hideRunnable, 5000)
+    }
+
+    private fun toggleDanmaku() {
+        binding.playerControl.danmakuBtn.let {
+            viewModel.showDanmaku = !viewModel.showDanmaku
+            it.isSelected = !viewModel.showDanmaku
+            binding.danmakuView.visibility = if (viewModel.showDanmaku) {
+                View.VISIBLE
+            } else {
+                View.GONE
+            }
+        }
+    }
+
+    private fun togglePlay() {
+        // relay when stopped
+        if (viewModel.isEnd) {
+            viewModel.isEnd = false
+            player.seekTo(0)
+        }
+
+        if (player.isPlaying) {
+            player.pause()
+        } else {
+            player.play()
+        }
+    }
+
+    override fun onPlaybackStateChanged(playbackState: Int) {
+        super.onPlaybackStateChanged(playbackState)
+        // is initializing source or buffering after position change
+        binding.playerControl.loadingProgress.visibility =
+            if (playbackState == Player.STATE_BUFFERING) {
+                View.VISIBLE
+            } else {
+                View.GONE
+            }
+
+        if (playbackState == Player.STATE_ENDED) {
+            viewModel.isEnd = true
+            binding.playerControl.playBtn.setImageResource(R.drawable.baseline_replay_24)
+        } else {
+            binding.playerControl.playBtn.setImageResource(R.drawable.button_play)
+        }
+    }
+
+    override fun onIsLoadingChanged(isLoading: Boolean) {
+        super.onIsLoadingChanged(isLoading)
+        binding.playerControl.playBtn.isEnabled = !isLoading
+    }
+
+    override fun onIsPlayingChanged(isPlaying: Boolean) {
+        super.onIsPlayingChanged(isPlaying)
+        if (isPlaying) {
+            binding.playerControl.playBtn.isSelected = true
+            postUpdateProgress()
+        } else {
+            binding.playerControl.playBtn.isSelected = false
+            binding.danmakuView.stop()
+        }
+    }
+
+    private var fromUser: Boolean = false
+
+    override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
+        if (fromUser) {
+            player.seekTo(progress.toLong())
+        }
+    }
+
+    override fun onStartTrackingTouch(seekBar: SeekBar?) {}
+
+    override fun onStopTrackingTouch(seekBar: SeekBar?) {
+        updateProgress()
+    }
+
+    override fun onConfigurationChanged(newConfig: Configuration) {
+        super.onConfigurationChanged(newConfig)
+        binding.space.post {
+            binding.surfaceView.run {
+                layoutParams = (layoutParams as ConstraintLayout.LayoutParams).apply {
+                    width =
+                        binding.space.height * viewModel.resolution.first / viewModel.resolution.second
+                }
+            }
+        }
+
+    }
+
+    override fun onVideoSizeChanged(videoSize: VideoSize) {
+        super.onVideoSizeChanged(videoSize)
+        viewModel.resolution = Pair(videoSize.width, videoSize.height)
+    }
 }

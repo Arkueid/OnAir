@@ -1,17 +1,21 @@
 package com.arkueid.onair.ui.play
 
+import android.content.res.Configuration
 import android.os.Bundle
+import android.view.View
+import android.view.WindowInsets
+import android.view.WindowInsetsController
 import androidx.annotation.OptIn
 import androidx.appcompat.app.AppCompatActivity
+import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.view.WindowInsetsCompat
+import androidx.core.view.WindowInsetsControllerCompat
 import androidx.media3.common.util.UnstableApi
 import com.arkueid.onair.databinding.ActivityPlayerBinding
 
 
 class PlayerActivity : AppCompatActivity() {
     private lateinit var binding: ActivityPlayerBinding
-
-    private val url =
-        "http://192.168.137.1:8096/Videos/383107eba1d73105e0a144a070fd7c62/stream.mp4?Static=true&mediaSourceId=383107eba1d73105e0a144a070fd7c62&deviceId=TW96aWxsYS81LjAgKFdpbmRvd3MgTlQgMTAuMDsgV2luNjQ7IHg2NCkgQXBwbGVXZWJLaXQvNTM3LjM2IChLSFRNTCwgbGlrZSBHZWNrbykgQ2hyb21lLzEyNy4wLjAuMCBTYWZhcmkvNTM3LjM2fDE3MjI2MDQwNTIwNjk1&api_key=3c50f169c177480f8e09847d490c27e8&Tag=a3bc2bff26103d4fd623c4000ddaad7e"
 
     @OptIn(UnstableApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -20,4 +24,48 @@ class PlayerActivity : AppCompatActivity() {
         setContentView(binding.root)
     }
 
+    @Suppress("DEPRECATION")
+    private fun hideSystemUI() {
+        window.decorView.systemUiVisibility =
+            (View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
+                    or View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                    or View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+                    or View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+                    or View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+                    or View.SYSTEM_UI_FLAG_FULLSCREEN)
+    }
+
+    @Suppress("DEPRECATION")
+    private fun showSystemUI() {
+        window.decorView.systemUiVisibility = (View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                or View.SYSTEM_UI_FLAG_VISIBLE)
+    }
+
+    override fun onConfigurationChanged(newConfig: Configuration) {
+        super.onConfigurationChanged(newConfig)
+        if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE) {
+            hideSystemUI()
+            binding.fragmentContainer.run {
+                layoutParams = (layoutParams as ConstraintLayout.LayoutParams).apply {
+                    height = ConstraintLayout.LayoutParams.MATCH_PARENT
+                    dimensionRatio = ""
+                }
+            }
+        } else {
+            showSystemUI()
+            binding.fragmentContainer.run {
+                layoutParams = (layoutParams as ConstraintLayout.LayoutParams).apply {
+                    height = 0
+                    dimensionRatio = "H,16:9"
+                }
+            }
+        }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        if (resources.configuration.orientation == Configuration.ORIENTATION_LANDSCAPE) {
+            hideSystemUI()
+        }
+    }
 }

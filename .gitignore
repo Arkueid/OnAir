@@ -14,3 +14,5 @@
 .cxx
 local.properties
 /app/src/main/resources/dev.properties
+
+/app/src/main/res/raw/*.mp4
