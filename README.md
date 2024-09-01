@@ -14,6 +14,7 @@ A simple anime streaming app.
 * Anime starring
 * Settings
 * Anime watching
+* Danmaku
 
 ## Technologies Used
 
@@ -26,7 +27,6 @@ A simple anime streaming app.
 * [汉仪字体](https://www.hanyi.com.cn/home)
 * [PixAI](https://pixai.art/)
 * [Google Material Design Icons](https://fonts.google.com/icons)
-
 
 [//]: # (## Anime sources)
 

@@ -34,6 +34,7 @@ import kotlin.random.Random
  * @date: 2024/8/29
  * @desc:
  */
+
 class PlayerFragment : Fragment(), SurfaceHolder.Callback, OnClickListener, Player.Listener,
     OnSeekBarChangeListener {
 
@@ -55,7 +56,6 @@ class PlayerFragment : Fragment(), SurfaceHolder.Callback, OnClickListener, Play
                 requireActivity().finish()
             }
         }
-
     }
 
     override fun onCreateView(
@@ -90,8 +90,7 @@ class PlayerFragment : Fragment(), SurfaceHolder.Callback, OnClickListener, Play
         binding.playerControl.seekBar.setOnSeekBarChangeListener(this)
 
         requireActivity().onBackPressedDispatcher.addCallback(
-            viewLifecycleOwner,
-            onBackPressedCallback
+            viewLifecycleOwner, onBackPressedCallback
         )
 
         observe()
@@ -106,7 +105,7 @@ class PlayerFragment : Fragment(), SurfaceHolder.Callback, OnClickListener, Play
             list.add(
                 DanmakuItem(
                     progress = p, // 时间范围 0 到 7分27秒
-                    content = "弹幕${parseTime(p)}",
+                    content = "弹幕${parseTime(p)}.${p % 1000}",
                     color = Random.nextInt(0xFF000000.toInt(), 0xFFFFFFFF.toInt()) // 随机颜色
                 )
             )
@@ -177,7 +176,6 @@ class PlayerFragment : Fragment(), SurfaceHolder.Callback, OnClickListener, Play
     }
 
     private fun postUpdateProgress() {
-        binding.danmakuView.start()
         // TODO fetch from viewModel
         binding.danmakuView.setRollingData(rollingDanmakus)
         val handler = Handler(Looper.getMainLooper())
@@ -316,7 +314,6 @@ class PlayerFragment : Fragment(), SurfaceHolder.Callback, OnClickListener, Play
             postUpdateProgress()
         } else {
             binding.playerControl.playBtn.isSelected = false
-            binding.danmakuView.stop()
         }
     }
 

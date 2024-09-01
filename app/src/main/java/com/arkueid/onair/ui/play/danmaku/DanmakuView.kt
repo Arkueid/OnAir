@@ -5,12 +5,11 @@ import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.Paint
 import android.util.AttributeSet
-import android.util.Log
 import android.util.TypedValue
 import android.view.View
 
 /**
- * TODO: 完善功能
+ * TODO: 顶部弹幕，底部弹幕
  */
 class DanmakuView(context: Context, attributeSet: AttributeSet?, defStyle: Int) :
     View(context, attributeSet, defStyle) {
@@ -24,9 +23,6 @@ class DanmakuView(context: Context, attributeSet: AttributeSet?, defStyle: Int) 
 
     // 弹幕控制器
     private var danmakuData = DanmakuData()
-
-    // 是否正在播放视频
-    private var isPlaying = false
 
     // 当前视频的播放进度
     private var progress: Long = 0
@@ -73,14 +69,6 @@ class DanmakuView(context: Context, attributeSet: AttributeSet?, defStyle: Int) 
         strokeWidth = 3f
     }
 
-    fun start() {
-        isPlaying = true
-    }
-
-    fun stop() {
-        isPlaying = false
-    }
-
     fun setProgress(progress: Long) {
         this.progress = progress
         invalidate()
@@ -100,6 +88,7 @@ class DanmakuView(context: Context, attributeSet: AttributeSet?, defStyle: Int) 
     override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
         super.onSizeChanged(w, h, oldw, oldh)
         calculateTrackYs()
+        invalidate()
     }
 
     private fun calculateTrackYs() {
@@ -118,8 +107,10 @@ class DanmakuView(context: Context, attributeSet: AttributeSet?, defStyle: Int) 
     }
 
     private fun drawRollingDanmaku(canvas: Canvas) {
-        // rolling danmaku
+        // 绘制滚动弹幕
         val startX = measuredWidth.toFloat()
+        // 清理进度超过当前进度，但仍然在屏幕内的弹幕
+        // 当视频进度回调时会出现这种弹幕，需要清理
         for (i in 0 until trackYs.size) {
             val idx = lastRollingDanmakuIndexMapOnTrack[i] ?: continue
             val danmakuItem = danmakuData.rollingDanmakus[idx]
@@ -127,14 +118,18 @@ class DanmakuView(context: Context, attributeSet: AttributeSet?, defStyle: Int) 
                 lastRollingDanmakuIndexMapOnTrack.remove(i, idx)
             }
         }
+        // 绘制弹幕
         for ((index, danmakuItem) in danmakuData.rollingDanmakus.withIndex()) {
             // 如果当前弹幕的进度大于当前视频的进度则跳过
             if (danmakuItem.progress > progress) break
+            // 已经跳过的弹幕只要是防挡模式就不会被再次绘制
+            if (danmakuItem.skip) continue
+
             // 初始化弹幕速度
             danmakuItem.speed = speed
-            // 更新弹幕横坐标
+            // 确定当前帧的坐标x
             danmakuItem.x = startX
-            danmakuItem.updatePosition(progress)
+            danmakuItem.syncX(progress)
             // 计算宽度
             if (danmakuItem.width == Float.NEGATIVE_INFINITY) {
                 danmakuItem.width = textPaint.measureText(danmakuItem.content)
@@ -169,8 +164,11 @@ class DanmakuView(context: Context, attributeSet: AttributeSet?, defStyle: Int) 
                 }
 
                 // 对于当前弹幕没有找到合适的弹道，则跳过
-                if (availableTrackIndex == -1) continue
-
+                if (availableTrackIndex == -1) {
+                    danmakuItem.skip = true
+                    continue
+                }
+                // 记录弹幕所在弹道
                 lastRollingDanmakuIndexMapOnTrack[availableTrackIndex] = index
                 danmakuItem.y = trackYs[availableTrackIndex]
             }
