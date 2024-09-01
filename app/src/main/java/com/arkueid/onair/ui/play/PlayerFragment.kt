@@ -6,7 +6,6 @@ import android.net.Uri
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.SurfaceHolder
 import android.view.View
@@ -98,22 +97,6 @@ class PlayerFragment : Fragment(), SurfaceHolder.Callback, OnClickListener, Play
         view.post { showControl() }
     }
 
-    private val rollingDanmakus by lazy {
-        val list = mutableListOf<DanmakuItem>()
-        for (i in 0..500) {
-            val p = Random.nextLong(0, player.duration)
-            list.add(
-                DanmakuItem(
-                    progress = p, // 时间范围 0 到 7分27秒
-                    content = "弹幕${parseTime(p)}.${p % 1000}",
-                    color = Random.nextInt(0xFF000000.toInt(), 0xFFFFFFFF.toInt()) // 随机颜色
-                )
-            )
-        }
-        list.sortBy { it.progress }
-        list
-    }
-
     private fun observe() {
     }
 
@@ -133,16 +116,14 @@ class PlayerFragment : Fragment(), SurfaceHolder.Callback, OnClickListener, Play
     override fun onDestroyView() {
         super.onDestroyView()
         player.release()
+        onBackPressedCallback.remove()
     }
 
     override fun surfaceCreated(holder: SurfaceHolder) {
         player.setVideoSurfaceHolder(holder)
-        Log.d(TAG, "surfaceCreated: ")
     }
 
-    override fun surfaceChanged(holder: SurfaceHolder, format: Int, width: Int, height: Int) {
-        Log.d(TAG, "surfaceChanged: ")
-    }
+    override fun surfaceChanged(holder: SurfaceHolder, format: Int, width: Int, height: Int) {}
 
     override fun surfaceDestroyed(holder: SurfaceHolder) {
         player.clearVideoSurfaceHolder(holder)
@@ -172,12 +153,29 @@ class PlayerFragment : Fragment(), SurfaceHolder.Callback, OnClickListener, Play
     private fun updateProgress() {
         binding.playerControl.currentPositionText.text = parseTime(player.currentPosition)
         binding.playerControl.durationText.text = parseTime(player.duration)
-        binding.danmakuView.setProgress(player.currentPosition)
+        binding.danmakuView.progress = player.currentPosition
+    }
+
+    private val rollingDanmakus = {
+        val list = mutableListOf<DanmakuItem>()
+        for (i in 0..400) {
+            val p = Random.nextLong(0, player.duration)
+            list.add(
+                DanmakuItem(
+                    progress = p, // 时间范围 0 到 7分27秒
+                    content = "弹幕${parseTime(p)}.${p % 1000}",
+                    color = Random.nextInt(0xFF000000.toInt(), 0xFFFFFFFF.toInt()) // 随机颜色
+                )
+            )
+        }
+        list.apply { sortBy { it.progress } }
     }
 
     private fun postUpdateProgress() {
         // TODO fetch from viewModel
-        binding.danmakuView.setRollingData(rollingDanmakus)
+        binding.danmakuView.rollingDanmakus = rollingDanmakus()
+        binding.danmakuView.topDanmakus = rollingDanmakus()
+        binding.danmakuView.bottomDanmakus = rollingDanmakus()
         val handler = Handler(Looper.getMainLooper())
         val runnable = object : Runnable {
             override fun run() {
@@ -224,7 +222,7 @@ class PlayerFragment : Fragment(), SurfaceHolder.Callback, OnClickListener, Play
             viewModel.isLocked = !viewModel.isLocked
             it.isSelected = viewModel.isLocked
             if (it.isSelected) {
-                binding.playerControl.buttonsNoLock.visibility = View.GONE
+                binding.playerControl.buttonsNoLock.visibility = View.INVISIBLE
             } else {
                 binding.playerControl.buttonsNoLock.visibility = View.VISIBLE
             }
@@ -316,8 +314,6 @@ class PlayerFragment : Fragment(), SurfaceHolder.Callback, OnClickListener, Play
             binding.playerControl.playBtn.isSelected = false
         }
     }
-
-    private var fromUser: Boolean = false
 
     override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
         if (fromUser) {

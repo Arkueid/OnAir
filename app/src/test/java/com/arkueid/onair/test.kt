@@ -1,5 +1,6 @@
 package com.arkueid.onair
 
+import com.arkueid.onair.ui.play.danmaku.DanmakuItem
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
@@ -14,6 +15,7 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import org.jsoup.Jsoup
+import kotlin.random.Random
 
 /**
  * @author: Arkueid
@@ -49,26 +51,15 @@ fun search(query: String): Flow<List<String>> {
 }
 
 fun main() {
-    val s = "clan"
-
-    CoroutineScope(Dispatchers.Default).launch {
-        query
-            .debounce(500)
-            .distinctUntilChanged()
-            .flatMapLatest {
-                search(s)
-            }.collect { data ->
-                tips.update { data }
-            }
-    }
-
-    CoroutineScope(Dispatchers.Default).launch {
-        tips.collectLatest {
-            println(it)
+    val l by lazy {
+        List(500) {
+            val p = Random.nextLong(0, 5000)
+            DanmakuItem(
+                progress = p, // 时间范围 0 到 7分27秒
+                content = "弹幕$p",
+                color = Random.nextInt(0xFF000000.toInt(), 0xFFFFFFFF.toInt()) // 随机颜色
+            )
         }
     }
-
-    query.value = s
-
-    Thread.sleep(3000)
+    println(l)
 }
