@@ -10,5 +10,5 @@
     <color name="pink">#F48FB1</color>
     <color name="theme_blue">#90CAF9</color>
     <color name="inputBackgroundColor">#0D000000</color>
-    <color name="tagBackgroundColor">#EFEFEF</color>
+    <color name="tagBackgroundColor">#80EFEFEF</color>
 </resources>

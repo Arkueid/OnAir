@@ -3,6 +3,15 @@
 
     <style name="Theme.OnAir.Splash" parent="Theme.OnAir">
         <item name="android:windowBackground">@drawable/splash_background</item>
-        
+    </style>
+
+    <style name="Theme.OnAir.PopupBottom">
+        <item name="android:windowEnterAnimation">@anim/slide_in_bottom</item>
+        <item name="android:windowExitAnimation">@anim/slide_out_bottom</item>
+    </style>
+
+    <style name="Theme.OnAir.PopupRight">
+        <item name="android:windowEnterAnimation">@anim/slide_in_right</item>
+        <item name="android:windowExitAnimation">@anim/slide_out_right</item>
     </style>
 </resources>

@@ -29,4 +29,21 @@
     <string name="clear_history">clear history</string>
     <string name="_3_11">3:11</string>
     <string name="_1_53">1:53</string>
+    <string name="danmaku_settings">弹幕设置</string>
+    <string name="top">顶部</string>
+    <string name="bottom">底部</string>
+    <string name="rolling">滚动</string>
+    <string name="danmaku_filter">弹幕屏蔽:</string>
+    <string name="danmaku_alpha">弹幕透明度:</string>
+    <string name="_0_5">0.5</string>
+    <string name="video_speed">视频播放倍速:</string>
+    <string name="_1_0">1.0</string>
+    <string name="danmaku_font_size">弹幕字体大小:</string>
+    <string name="_4_4">4/4</string>
+    <string name="danmaku_speed">弹幕速度:</string>
+    <string name="middle">中</string>
+    <string name="danmaku_visible_range">弹幕显示范围:</string>
+    <string name="_0_1">0.1</string>
+    <string name="_1">1</string>
+    <string name="_1_0_0">1.00</string>
 </resources>

@@ -3,21 +3,14 @@ package com.arkueid.onair.ui.play
 import android.content.res.Configuration
 import android.os.Bundle
 import android.view.View
-import android.view.WindowInsets
-import android.view.WindowInsetsController
-import androidx.annotation.OptIn
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
-import androidx.core.view.WindowInsetsCompat
-import androidx.core.view.WindowInsetsControllerCompat
-import androidx.media3.common.util.UnstableApi
 import com.arkueid.onair.databinding.ActivityPlayerBinding
 
 
 class PlayerActivity : AppCompatActivity() {
     private lateinit var binding: ActivityPlayerBinding
 
-    @OptIn(UnstableApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityPlayerBinding.inflate(layoutInflater)

@@ -32,7 +32,7 @@ class ModuleAdapter(var data: List<Module>) : RecyclerView.Adapter<ModuleAdapter
     open class ModuleVH(itemView: View) : RecyclerView.ViewHolder(itemView) {
         open val title: TextView
             get() {
-                TODO("not implemented")
+                throw NotImplementedError("Not implemented")
             }
     }
 

@@ -23,43 +23,22 @@ import kotlin.random.Random
  * @desc:
  */
 
-val animes = listOf(
-    "Naruto", "One Piece", "Bleach", "Attack on Titan", "Fullmetal Alchemist",
-    "Dragon Ball Z", "Sword Art Online", "My Hero Academia", "Death Note",
-    "Tokyo Ghoul", "Fairy Tail", "Hunter x Hunter", "Demon Slayer",
-    "Jujutsu Kaisen", "Black Clover", "One Punch Man", "Gintama", "Blue Exorcist",
-    "Soul Eater", "Fire Force", "Re:Zero", "No Game No Life", "Steins;Gate",
-    "Cowboy Bebop", "Neon Genesis Evangelion", "Akame ga Kill", "Code Geass",
-    "Fate/stay night", "KonoSuba", "Overlord", "The Rising of the Shield Hero",
-    "The Promised Neverland", "Mob Psycho 100", "Parasyte", "Your Lie in April",
-    "Clannad", "Angel Beats!", "Toradora!", "Anohana", "Violet Evergarden",
-    "Madoka Magica", "Erased", "Tokyo Revengers", "Beastars", "Dr. Stone",
-    "The Quintessential Quintuplets", "Kaguya-sama: Love is War",
-    "Rent-a-Girlfriend", "The Seven Deadly Sins", "Noragami"
-)
-
-val query = MutableStateFlow("")
-
-val tips = MutableStateFlow(emptyList<String>())
-
-fun search(query: String): Flow<List<String>> {
-    return flow {
-        emit(animes.filter {
-            it.contains(it, ignoreCase = true)
-        })
-    }.flowOn(Dispatchers.IO)
+object Style {
+    const val ROLLING = 0b001
+    const val TOP = 0b010
+    const val BOTTOM = 0b100
 }
 
 fun main() {
-    val l by lazy {
-        List(500) {
-            val p = Random.nextLong(0, 5000)
-            DanmakuItem(
-                progress = p, // 时间范围 0 到 7分27秒
-                content = "弹幕$p",
-                color = Random.nextInt(0xFF000000.toInt(), 0xFFFFFFFF.toInt()) // 随机颜色
-            )
-        }
-    }
-    println(l)
+    var styles = 0
+
+    styles = styles or Style.TOP
+    styles = styles or Style.BOTTOM
+    styles = styles or Style.ROLLING
+    println(styles)
+    styles = styles and (Style.ROLLING.inv() and 0b111)
+    println(styles)
+    println(styles and (Style.TOP.inv() and 0b111))
+
+
 }

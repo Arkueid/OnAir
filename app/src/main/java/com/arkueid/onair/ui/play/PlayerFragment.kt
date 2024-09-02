@@ -6,6 +6,7 @@ import android.net.Uri
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.SurfaceHolder
 import android.view.View
@@ -35,7 +36,7 @@ import kotlin.random.Random
  */
 
 class PlayerFragment : Fragment(), SurfaceHolder.Callback, OnClickListener, Player.Listener,
-    OnSeekBarChangeListener {
+    OnSeekBarChangeListener, PlayerSettingsPopup.OnPlayerSettingsChangedListener {
 
     companion object {
         const val TAG = "PlayerFragment"
@@ -46,6 +47,7 @@ class PlayerFragment : Fragment(), SurfaceHolder.Callback, OnClickListener, Play
     private lateinit var binding: FragmentPlayerBinding
     private lateinit var player: ExoPlayer
     private val viewModel: PlayerFragmentViewModel by viewModels()
+    private lateinit var popupWindow: PlayerSettingsPopup
 
     private val onBackPressedCallback = object : OnBackPressedCallback(true) {
         override fun handleOnBackPressed() {
@@ -85,6 +87,7 @@ class PlayerFragment : Fragment(), SurfaceHolder.Callback, OnClickListener, Play
         binding.playerControl.lockBtn.setOnClickListener(this)
         binding.playerControl.fullscreenBtn.setOnClickListener(this)
         binding.playerControl.danmakuBtn.setOnClickListener(this)
+        binding.playerControl.optionBtn.setOnClickListener(this)
         binding.playerControl.exitBtn.setOnClickListener(this)
         binding.playerControl.seekBar.setOnSeekBarChangeListener(this)
 
@@ -98,6 +101,8 @@ class PlayerFragment : Fragment(), SurfaceHolder.Callback, OnClickListener, Play
     }
 
     private fun observe() {
+        popupWindow = PlayerSettingsPopup(layoutInflater)
+        popupWindow.listener = this
     }
 
     override fun onPause() {
@@ -143,8 +148,14 @@ class PlayerFragment : Fragment(), SurfaceHolder.Callback, OnClickListener, Play
 
             R.id.fullscreenBtn -> toggleFullscreen()
 
+            R.id.optionBtn -> showPlayerSettings()
+
             R.id.exitBtn -> requireActivity().onBackPressedDispatcher.onBackPressed()
         }
+    }
+
+    private fun showPlayerSettings() {
+        popupWindow.show(binding.root)
     }
 
     /**
@@ -156,15 +167,18 @@ class PlayerFragment : Fragment(), SurfaceHolder.Callback, OnClickListener, Play
         binding.danmakuView.progress = player.currentPosition
     }
 
-    private val rollingDanmakus = {
+    private val danmakus = {
         val list = mutableListOf<DanmakuItem>()
-        for (i in 0..400) {
+        val styles =
+            listOf(DanmakuItem.Style.ROLLING, )
+        for (i in 0..1200) {
             val p = Random.nextLong(0, player.duration)
             list.add(
                 DanmakuItem(
                     progress = p, // 时间范围 0 到 7分27秒
                     content = "弹幕${parseTime(p)}.${p % 1000}",
-                    color = Random.nextInt(0xFF000000.toInt(), 0xFFFFFFFF.toInt()) // 随机颜色
+                    color = Random.nextInt(0xFF000000.toInt(), 0xFFFFFFFF.toInt()), // 随机颜色
+                    style = styles.random()
                 )
             )
         }
@@ -173,9 +187,7 @@ class PlayerFragment : Fragment(), SurfaceHolder.Callback, OnClickListener, Play
 
     private fun postUpdateProgress() {
         // TODO fetch from viewModel
-        binding.danmakuView.rollingDanmakus = rollingDanmakus()
-        binding.danmakuView.topDanmakus = rollingDanmakus()
-        binding.danmakuView.bottomDanmakus = rollingDanmakus()
+        binding.danmakuView.danmakus = danmakus()
         val handler = Handler(Looper.getMainLooper())
         val runnable = object : Runnable {
             override fun run() {
@@ -343,5 +355,34 @@ class PlayerFragment : Fragment(), SurfaceHolder.Callback, OnClickListener, Play
     override fun onVideoSizeChanged(videoSize: VideoSize) {
         super.onVideoSizeChanged(videoSize)
         viewModel.resolution = Pair(videoSize.width, videoSize.height)
+    }
+
+    override fun onDanmakuFontSizeChanged(sizeFlag: Int) {
+        binding.danmakuView.fontSize = when (sizeFlag) {
+            1 -> 14f
+            2 -> 16f
+            3 -> 18f
+            else -> 16f
+        }
+    }
+
+    override fun onDanmakuVisibleRangeChanged(range: Int) {
+        binding.danmakuView.trackRange = range
+    }
+
+    override fun onDanmakuOpacityChanged(opacity: Int) {
+        binding.danmakuView.danmakuAlpha = opacity
+    }
+
+    override fun onDanmakuSpeedChanged(speed: Float) {
+        binding.danmakuView.speedScale = speed
+    }
+
+    override fun onDanmakuFilterStylesChanged(styles: Int) {
+        binding.danmakuView.filteredStyles = styles
+    }
+
+    override fun onVideoSpeedChanged(speed: Float) {
+        player.setPlaybackSpeed(speed)
     }
 }

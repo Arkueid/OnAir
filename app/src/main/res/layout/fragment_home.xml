@@ -27,7 +27,6 @@
         android:background="@drawable/ripple_effect"
         android:drawablePadding="5dp"
         android:gravity="center_vertical|start"
-        android:padding="10dp"
         android:text="@string/search_hint"
         android:textColor="#80000000"
         android:textSize="14sp"
