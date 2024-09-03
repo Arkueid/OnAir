@@ -5,22 +5,17 @@
 
 ---
 
-A simple anime streaming app.
+A simple anime watching app.
 
 ## Features
 
-* Anime search & recommendation
-* Weekly anime update schedule
-* Anime starring
-* Settings
-* Anime watching
-* Danmaku
-
-## Technologies Used
-
-* `Hilt`
-* `Flow`
-* MVVM, Clean Architecture
+- [x] Anime search
+- [x] Weekly anime update schedule
+- [x] Anime following list
+- [x] Anime watching
+- [x] Danmaku
+- [ ] Settings
+- [ ] Anime source control
 
 ## Image and font sources
 
