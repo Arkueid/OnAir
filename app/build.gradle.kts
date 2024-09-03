@@ -5,6 +5,7 @@ plugins {
     // dependency injection
     id("kotlin-kapt")
     id("com.google.dagger.hilt.android")
+    id("kotlin-parcelize")
 }
 
 android {
@@ -40,9 +41,6 @@ android {
 
     buildFeatures {
         viewBinding = true
-        viewBinding {
-            enable = true
-        }
     }
 }
 

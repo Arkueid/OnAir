@@ -61,7 +61,7 @@ class DanmakuView(context: Context, attributeSet: AttributeSet?, defStyle: Int) 
     /**
      * 单位：sp
      */
-    var fontSize: Float =
+    var danmakuSize: Float =
         TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, 16f, resources.displayMetrics)
         set(value) {
             field = TypedValue.applyDimension(
@@ -103,14 +103,14 @@ class DanmakuView(context: Context, attributeSet: AttributeSet?, defStyle: Int) 
 
     // 画笔
     private val textPaint = Paint().apply {
-        textSize = fontSize
+        textSize = danmakuSize
         color = Color.WHITE
         isAntiAlias = true
         textAlign = Paint.Align.LEFT
     }
 
     private val strokePaint = Paint().apply {
-        textSize = fontSize
+        textSize = danmakuSize
         color = Color.BLACK
         isAntiAlias = true
         textAlign = Paint.Align.LEFT
@@ -129,10 +129,10 @@ class DanmakuView(context: Context, attributeSet: AttributeSet?, defStyle: Int) 
         // 计算弹道高度
         trackYs.clear()
         lastRollingDanmaku.clear()
-        val startY = lineSpacing + fontSize
-        val maxSize = measuredHeight.floorDiv(fontSize.toInt() + lineSpacing.toInt())
+        val startY = lineSpacing + danmakuSize
+        val maxSize = measuredHeight.floorDiv(danmakuSize.toInt() + lineSpacing.toInt())
         for (i in 0 until maxSize) {
-            trackYs.add((startY + i * (fontSize + lineSpacing)))
+            trackYs.add((startY + i * (danmakuSize + lineSpacing)))
         }
         trackRange = trackRange
         sizeChanged = true
@@ -143,8 +143,8 @@ class DanmakuView(context: Context, attributeSet: AttributeSet?, defStyle: Int) 
         lastRollingDanmaku.clear()
         lastFixedDanmaku.clear()
 
-        textPaint.textSize = fontSize
-        strokePaint.textSize = fontSize
+        textPaint.textSize = danmakuSize
+        strokePaint.textSize = danmakuSize
         strokePaint.color = colorByAlpha(strokePaint.color)
 
         for (danmakuItem in danmakus) {

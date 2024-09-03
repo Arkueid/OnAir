@@ -19,6 +19,7 @@ import kotlin.math.round
  */
 class PlayerSettingsPopup(
     inflater: LayoutInflater,
+    private val listener: OnPlayerSettingsChangedListener?,
     private val binding: PopupPlayerSettingsBinding = PopupPlayerSettingsBinding.inflate(
         inflater
     )
@@ -26,10 +27,10 @@ class PlayerSettingsPopup(
     binding.root, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT, true
 ) {
 
-    private var filterStyles: Int = 0
+    private var _filterStyles: Int = 0
 
     interface OnPlayerSettingsChangedListener {
-        fun onDanmakuFontSizeChanged(sizeFlag: Int)
+        fun onDanmakuFontSizeChanged(size: Float)
         fun onDanmakuVisibleRangeChanged(range: Int)
         fun onDanmakuOpacityChanged(opacity: Int)
         fun onDanmakuSpeedChanged(speed: Float)
@@ -37,82 +38,133 @@ class PlayerSettingsPopup(
         fun onVideoSpeedChanged(speed: Float)
     }
 
-    var listener: OnPlayerSettingsChangedListener? = null
+    var filteredStyles: Int
+        get() = _filterStyles
+        set(value) {
+            _filterStyles = value
+            binding.danmakuFilterTopCheckBox.isChecked = value and DanmakuItem.Style.TOP != 0
+            binding.danmakuFilterBottomCheckBox.isChecked = value and DanmakuItem.Style.BOTTOM != 0
+            binding.danmakuFilterRollingCheckBox.isChecked =
+                value and DanmakuItem.Style.ROLLING != 0
+            listener?.onDanmakuFilterStylesChanged(_filterStyles)
+        }
+
+    var danmakuSize: Float
+        get() = binding.danmakuFontSizeSlider.value
+        set(value) {
+            binding.danmakuFontSizeSlider.value = when (value) {
+                14f -> 1f
+                16f -> 2f
+                18f -> 3f
+                else -> 2f
+            }
+        }
+
+    var danmakuVisibleRange: Int
+        get() = binding.danmakuVisibleRangeSlider.value.toInt()
+        set(value) {
+            binding.danmakuVisibleRangeSlider.value = value.toFloat()
+        }
+
+    var danmakuSpeed: Float
+        get() = binding.danmakuSpeedSlider.value
+        set(value) {
+            binding.danmakuSpeedSlider.value = value
+        }
+
+    var danmakuAlpha: Int
+        get() = binding.danmakuTransparencySlider.value.toInt()
+        set(value) {
+            binding.danmakuTransparencySlider.value = value.toFloat()
+        }
+
+    var videoSpeed: Float
+        get() = binding.videoPlaybackSpeedSlider.value
+        set(value) {
+            binding.videoPlaybackSpeedSlider.value = value
+        }
 
     init {
         contentView = binding.root
 
         binding.danmakuFilterTopCheckBox.setOnCheckedChangeListener { _, isChecked ->
-            filterStyles = if (isChecked) {
-                filterStyles or DanmakuItem.Style.TOP
+            _filterStyles = if (isChecked) {
+                _filterStyles or DanmakuItem.Style.TOP
             } else {
-                filterStyles and (DanmakuItem.Style.TOP.inv() and 0b111)
+                _filterStyles and (DanmakuItem.Style.TOP.inv() and 0b111)
             }
-            listener?.onDanmakuFilterStylesChanged(filterStyles)
+            listener?.onDanmakuFilterStylesChanged(_filterStyles)
         }
 
         binding.danmakuFilterBottomCheckBox.setOnCheckedChangeListener { _, isChecked ->
-            filterStyles = if (isChecked) {
-                filterStyles or DanmakuItem.Style.BOTTOM
+            _filterStyles = if (isChecked) {
+                _filterStyles or DanmakuItem.Style.BOTTOM
             } else {
-                filterStyles and (DanmakuItem.Style.BOTTOM.inv() and 0b111)
+                _filterStyles and (DanmakuItem.Style.BOTTOM.inv() and 0b111)
             }
-            listener?.onDanmakuFilterStylesChanged(filterStyles)
+            listener?.onDanmakuFilterStylesChanged(_filterStyles)
         }
 
         binding.danmakuFilterRollingCheckBox.setOnCheckedChangeListener { _, isChecked ->
-            filterStyles = if (isChecked) {
-                filterStyles or DanmakuItem.Style.ROLLING
+            _filterStyles = if (isChecked) {
+                _filterStyles or DanmakuItem.Style.ROLLING
             } else {
-                filterStyles and (DanmakuItem.Style.ROLLING.inv() and 0b111)
+                _filterStyles and (DanmakuItem.Style.ROLLING.inv() and 0b111)
             }
-            listener?.onDanmakuFilterStylesChanged(filterStyles)
+            listener?.onDanmakuFilterStylesChanged(_filterStyles)
         }
 
         binding.danmakuFontSizeSlider.addOnChangeListener { _, value, fromUser ->
+            binding.danmakuFontSizeText.text = when (value) {
+                1f -> "小"
+                2f -> "中"
+                3f -> "大"
+                else -> "未知"
+            }
             if (fromUser) {
-                binding.danmakuFontSizeText.text = when (value) {
-                    1f -> "小"
-                    2f -> "中"
-                    3f -> "大"
-                    else -> "未知"
-                }
-                listener?.onDanmakuFontSizeChanged(value.toInt())
+                listener?.onDanmakuFontSizeChanged(
+                    when (value) {
+                        1f -> 14f
+                        2f -> 16f
+                        3f -> 18f
+                        else -> 16f
+                    }
+                )
             }
         }
 
         binding.danmakuVisibleRangeSlider.addOnChangeListener { _, value, fromUser ->
+            binding.danmakuVisibleRangeText.text = when (value) {
+                1f -> "1/4"
+                2f -> "1/2"
+                3f -> "3/4"
+                4f -> "全部"
+                else -> "未知"
+            }
             if (fromUser) {
-                binding.danmakuVisibleRangeText.text = when (value) {
-                    1f -> "1/4"
-                    2f -> "1/2"
-                    3f -> "3/4"
-                    4f -> "全部"
-                    else -> "未知"
-                }
                 listener?.onDanmakuVisibleRangeChanged(value.toInt())
             }
         }
 
         binding.danmakuSpeedSlider.addOnChangeListener { _, value, fromUser ->
+            binding.danmakuSpeedText.text = String.format(Locale.getDefault(), "%.1f", value)
             if (fromUser) {
-                binding.danmakuSpeedText.text = String.format(Locale.getDefault(), "%.1f", value)
                 listener?.onDanmakuSpeedChanged(value)
             }
         }
 
         binding.danmakuTransparencySlider.addOnChangeListener { _, value, fromUser ->
+            binding.danmakuTransparencyText.text =
+                String.format(Locale.getDefault(), "%.1f", value / 255f)
             if (fromUser) {
-                binding.danmakuTransparencyText.text =
-                    String.format(Locale.getDefault(), "%.1f", value / 255f)
                 listener?.onDanmakuOpacityChanged(value.toInt())
             }
         }
 
         binding.videoPlaybackSpeedSlider.addOnChangeListener { _, value, fromUser ->
+            binding.videoPlaybackSpeedText.text =
+                String.format(Locale.getDefault(), "%.2f", value)
             if (fromUser) {
-                binding.videoPlaybackSpeedText.text =
-                    String.format(Locale.getDefault(), "%.2f", value)
                 listener?.onVideoSpeedChanged(value)
             }
         }
