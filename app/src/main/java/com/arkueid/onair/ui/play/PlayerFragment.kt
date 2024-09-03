@@ -26,6 +26,7 @@ import androidx.media3.common.util.UnstableApi
 import androidx.media3.exoplayer.ExoPlayer
 import com.arkueid.onair.R
 import com.arkueid.onair.databinding.FragmentPlayerBinding
+import com.arkueid.onair.domain.entity.Anime
 import com.arkueid.onair.ui.play.danmaku.DanmakuItem
 import kotlin.random.Random
 
@@ -48,6 +49,8 @@ class PlayerFragment : Fragment(), SurfaceHolder.Callback, OnClickListener, Play
     private lateinit var player: ExoPlayer
     private val viewModel: PlayerFragmentViewModel by viewModels()
     private lateinit var popupWindow: PlayerSettingsPopup
+
+    private lateinit var anime: Anime
 
     private val onBackPressedCallback = object : OnBackPressedCallback(true) {
         override fun handleOnBackPressed() {
@@ -72,13 +75,6 @@ class PlayerFragment : Fragment(), SurfaceHolder.Callback, OnClickListener, Play
         super.onViewCreated(view, savedInstanceState)
 
         player = ExoPlayer.Builder(requireContext()).build()
-        val mediaItem = MediaItem.fromUri(Uri.parse("rawresource:///${R.raw.test}"))
-
-        // --for test--
-        player.setMediaItem(mediaItem)
-        player.prepare()
-        player.playWhenReady = true
-        // --for test--
         player.addListener(this)
 
         binding.surfaceView.holder.addCallback(this)
@@ -98,6 +94,18 @@ class PlayerFragment : Fragment(), SurfaceHolder.Callback, OnClickListener, Play
         observe()
 
         view.post { showControl() }
+
+        arguments?.run {
+            anime = requireArguments().getParcelable("anime")!!
+            play(anime.url)
+        }
+    }
+
+    fun play(url: String) {
+        val mediaItem = MediaItem.fromUri(url)
+        player.setMediaItem(mediaItem)
+        player.prepare()
+        player.playWhenReady = true
     }
 
     private fun observe() {
@@ -170,7 +178,7 @@ class PlayerFragment : Fragment(), SurfaceHolder.Callback, OnClickListener, Play
     private val danmakus = {
         val list = mutableListOf<DanmakuItem>()
         val styles =
-            listOf(DanmakuItem.Style.ROLLING, )
+            listOf(DanmakuItem.Style.ROLLING, DanmakuItem.Style.TOP, DanmakuItem.Style.BOTTOM)
         for (i in 0..1200) {
             val p = Random.nextLong(0, player.duration)
             list.add(

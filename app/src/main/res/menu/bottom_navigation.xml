@@ -2,18 +2,18 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
         android:id="@+id/fragmentHome"
-        android:icon="@drawable/nav_button_home"
+        android:icon="@drawable/button_home"
         android:title="@string/home" />
     <item
         android:id="@+id/fragmentWeekly"
-        android:icon="@drawable/nav_button_calendar"
+        android:icon="@drawable/button_calendar"
         android:title="@string/weekly" />
     <item
         android:id="@+id/fragmentFollowing"
-        android:icon="@drawable/nav_button_following"
+        android:icon="@drawable/button_like"
         android:title="@string/following" />
     <item
         android:id="@+id/fragmentSettings"
-        android:icon="@drawable/nav_button_settings"
+        android:icon="@drawable/button_settings"
         android:title="@string/settings" />
 </menu>

@@ -8,7 +8,7 @@ package com.arkueid.onair.domain.entity
 data class Module(
     val style: Int,
     val title: String?,
-    val items: List<ModuleItem>,
+    val items: List<Anime>,
     // if data source provides more url, use it to jump to more page
     val moreUrl: String?,
 ) {

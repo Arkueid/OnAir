@@ -1,6 +1,7 @@
 package com.arkueid.onair.data.api.bangumi
 
 import com.arkueid.onair.data.repository.DataSource
+import com.arkueid.onair.domain.entity.Anime
 import com.arkueid.onair.domain.entity.ModuleData
 import com.arkueid.onair.domain.entity.SearchResultData
 import com.arkueid.onair.domain.entity.SearchTipData
@@ -28,8 +29,11 @@ class BangumiSource(private val okHttpClient: OkHttpClient) : DataSource {
             apiService.getWeekly().map { responseItem ->
                 responseItem.items.map { subject ->
                     WeeklySubject(
-                        subject.name_cn.ifEmpty { subject.name },
-                        subject.images.common,
+                        Anime(
+                            subject.name_cn.ifEmpty { subject.name },
+                            subject.images.common,
+                            "" // TODO: get bangumi url
+                        ),
                         subject.air_weekday
                     )
                 }

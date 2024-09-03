@@ -1,6 +1,7 @@
 package com.arkueid.onair.data.api.mikan
 
 import com.arkueid.onair.data.repository.DataSource
+import com.arkueid.onair.domain.entity.Anime
 import com.arkueid.onair.domain.entity.ModuleData
 import com.arkueid.onair.domain.entity.SearchResultData
 import com.arkueid.onair.domain.entity.SearchTipData
@@ -46,8 +47,7 @@ open class MikanSource(protected val okHttpClient: OkHttpClient) : DataSource {
 
     private fun parseWeeklyData(html: String): WeeklyData {
         val doc = Jsoup.parse(html)
-        return doc.select(".m-home-week-item")
-            .take(7)
+        return doc.select(".m-home-week-item").take(7)
             .sortedBy { text2DayOfWeek(it.select(".title span").text()) }
             .mapIndexed { index, elemByWeekDay ->
                 parseWeeklySubject(index, elemByWeekDay)
@@ -57,9 +57,11 @@ open class MikanSource(protected val okHttpClient: OkHttpClient) : DataSource {
     private fun parseWeeklySubject(index: Int, element: Element): List<WeeklySubject> {
         return element.select(".m-week-square").map {
             WeeklySubject(
-                it.select(".small-title").text(),
-                it.select(".b-lazy").attr("data-src").let { "$BASE_URL$it" },
-                index + 1
+                Anime(
+                    it.select(".small-title").text(),
+                    it.select(".b-lazy").attr("data-src").let { "$BASE_URL$it" },
+                    "https://img.qunliao.info/4oEGX68t_9505974551.mp4", // TODO
+                ), index + 1
             )
         }
     }

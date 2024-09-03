@@ -59,12 +59,12 @@ class MainActivity : AppCompatActivity(), NavigationBarView.OnItemSelectedListen
     private fun createFragments() {
         with(supportFragmentManager) {
             beginTransaction().apply {
-                add(R.id.fragmentContainer, homeFragment, HomeFragment.TAG)
-                add(R.id.fragmentContainer, weeklyFragment, WeeklyFragment.TAG)
+                add(R.id.playerFragment, homeFragment, HomeFragment.TAG)
+                add(R.id.playerFragment, weeklyFragment, WeeklyFragment.TAG)
                 hide(weeklyFragment)
-                add(R.id.fragmentContainer, followingFragment, FollowingFragment.TAG)
+                add(R.id.playerFragment, followingFragment, FollowingFragment.TAG)
                 hide(followingFragment)
-                add(R.id.fragmentContainer, settingsFragment, SettingsFragment.TAG)
+                add(R.id.playerFragment, settingsFragment, SettingsFragment.TAG)
                 hide(settingsFragment)
                 commit()
             }

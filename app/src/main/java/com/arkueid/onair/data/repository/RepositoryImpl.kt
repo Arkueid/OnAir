@@ -5,7 +5,6 @@ import com.arkueid.onair.domain.entity.SearchResultData
 import com.arkueid.onair.domain.entity.SearchTipData
 import com.arkueid.onair.domain.entity.WeeklyData
 import kotlinx.coroutines.flow.Flow
-import retrofit2.http.Query
 import javax.inject.Inject
 
 class RepositoryImpl @Inject constructor(private val dataSource: DataSource) :

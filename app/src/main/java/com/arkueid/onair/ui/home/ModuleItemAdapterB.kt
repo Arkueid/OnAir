@@ -4,7 +4,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.arkueid.onair.databinding.ModuleItemBannerBinding
-import com.arkueid.onair.domain.entity.ModuleItem
+import com.arkueid.onair.domain.entity.Anime
 import com.bumptech.glide.Glide
 import com.youth.banner.adapter.BannerAdapter
 
@@ -13,8 +13,8 @@ import com.youth.banner.adapter.BannerAdapter
  * @date: 2024/8/26
  * @desc: adapter for module banner which uses banner adapter to display
  */
-class ModuleItemAdapterB(data: List<ModuleItem>) :
-    BannerAdapter<ModuleItem, ModuleItemAdapterB.BannerVH>(data) {
+class ModuleItemAdapterB(data: List<Anime>) :
+    BannerAdapter<Anime, ModuleItemAdapterB.BannerVH>(data) {
 
     class BannerVH(binding: ModuleItemBannerBinding) : RecyclerView.ViewHolder(binding.root) {
         val cover = binding.cover
@@ -29,7 +29,7 @@ class ModuleItemAdapterB(data: List<ModuleItem>) :
         )
     }
 
-    override fun onBindView(holder: BannerVH?, data: ModuleItem?, position: Int, size: Int) {
+    override fun onBindView(holder: BannerVH?, data: Anime?, position: Int, size: Int) {
         if (data == null || holder == null) return
 
         holder.title.text = data.title

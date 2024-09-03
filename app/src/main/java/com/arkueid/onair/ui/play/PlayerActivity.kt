@@ -6,8 +6,9 @@ import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
 import com.arkueid.onair.databinding.ActivityPlayerBinding
+import dagger.hilt.android.AndroidEntryPoint
 
-
+@AndroidEntryPoint
 class PlayerActivity : AppCompatActivity() {
     private lateinit var binding: ActivityPlayerBinding
 
@@ -15,6 +16,9 @@ class PlayerActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityPlayerBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        binding.playerFragment.getFragment<PlayerFragment>().arguments = intent.extras
+        binding.playInfoFragment.getFragment<PlayInfoFragment>().arguments = intent.extras
     }
 
     @Suppress("DEPRECATION")
@@ -38,7 +42,7 @@ class PlayerActivity : AppCompatActivity() {
         super.onConfigurationChanged(newConfig)
         if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE) {
             hideSystemUI()
-            binding.fragmentContainer.run {
+            binding.playerFragment.run {
                 layoutParams = (layoutParams as ConstraintLayout.LayoutParams).apply {
                     height = ConstraintLayout.LayoutParams.MATCH_PARENT
                     dimensionRatio = ""
@@ -46,7 +50,7 @@ class PlayerActivity : AppCompatActivity() {
             }
         } else {
             showSystemUI()
-            binding.fragmentContainer.run {
+            binding.playerFragment.run {
                 layoutParams = (layoutParams as ConstraintLayout.LayoutParams).apply {
                     height = 0
                     dimensionRatio = "H,16:9"

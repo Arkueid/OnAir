@@ -232,7 +232,7 @@
                     android:stepSize="0.25"
                     android:value="1"
                     android:valueFrom="0.25"
-                    android:valueTo="4"
+                    android:valueTo="2"
                     app:labelBehavior="gone"
                     app:thumbColor="?colorSecondary"
                     app:thumbHeight="20dp"

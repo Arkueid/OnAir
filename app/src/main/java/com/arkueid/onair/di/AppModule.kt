@@ -6,6 +6,9 @@ import com.arkueid.onair.data.api.mikan.MikanSource
 import com.arkueid.onair.data.repository.DataSource
 import com.arkueid.onair.data.repository.Repository
 import com.arkueid.onair.data.repository.RepositoryImpl
+import com.arkueid.onair.ui.following.FollowingViewModel
+import com.google.gson.Gson
+import com.tencent.mmkv.MMKV
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -63,4 +66,12 @@ object AppModule {
     fun provideRepository(@Named("test") dataSource: DataSource): Repository {
         return RepositoryImpl(dataSource)
     }
+
+    @Singleton
+    @Provides
+    fun provideGson() = Gson()
+
+    @Singleton
+    @Provides
+    fun provideMMKV() = MMKV.defaultMMKV()
 }

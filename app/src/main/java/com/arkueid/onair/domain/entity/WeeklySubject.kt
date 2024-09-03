@@ -4,10 +4,7 @@ import java.io.Serializable
 
 // 番剧
 data class WeeklySubject(
-    // 标题
-    val title: String,
-    // 番剧封面
-    val cover: String,
+    val anime: Anime,
     // 星期
     val weekday: Int,
 ) : Serializable

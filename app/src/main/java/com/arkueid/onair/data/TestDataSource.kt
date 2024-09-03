@@ -1,17 +1,15 @@
 package com.arkueid.onair.data
 
+import com.arkueid.onair.R
 import com.arkueid.onair.data.api.mikan.MikanSource
 import com.arkueid.onair.domain.entity.ModuleData
 import com.arkueid.onair.domain.entity.Module
-import com.arkueid.onair.domain.entity.ModuleItem
-import com.arkueid.onair.domain.entity.SearchResult
+import com.arkueid.onair.domain.entity.Anime
+import com.arkueid.onair.domain.entity.SearchResultItem
 import com.arkueid.onair.domain.entity.SearchResultData
 import com.arkueid.onair.domain.entity.SearchTipData
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.emptyFlow
-import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.transform
@@ -26,6 +24,8 @@ import org.jsoup.nodes.Element
  * @desc:
  */
 class TestDataSource(okHttpClient: OkHttpClient) : MikanSource(okHttpClient) {
+
+    private val url = "https://img.qunliao.info/4oEGX68t_9505974551.mp4"
 
     override fun getModuleData(): Flow<ModuleData> {
         var time = System.currentTimeMillis()
@@ -58,18 +58,56 @@ class TestDataSource(okHttpClient: OkHttpClient) : MikanSource(okHttpClient) {
 
     private val animes by lazy {
         listOf(
-            "Naruto", "One Piece", "Bleach", "Attack on Titan", "Fullmetal Alchemist",
-            "Dragon Ball Z", "Sword Art Online", "My Hero Academia", "Death Note",
-            "Tokyo Ghoul", "Fairy Tail", "Hunter x Hunter", "Demon Slayer",
-            "Jujutsu Kaisen", "Black Clover", "One Punch Man", "Gintama", "Blue Exorcist",
-            "Soul Eater", "Fire Force", "Re:Zero", "No Game No Life", "Steins;Gate",
-            "Cowboy Bebop", "Neon Genesis Evangelion", "Akame ga Kill", "Code Geass",
-            "Fate/stay night", "KonoSuba", "Overlord", "The Rising of the Shield Hero",
-            "The Promised Neverland", "Mob Psycho 100", "Parasyte", "Your Lie in April",
-            "Clannad", "Angel Beats!", "Toradora!", "Anohana", "Violet Evergarden",
-            "Madoka Magica", "Erased", "Tokyo Revengers", "Beastars", "Dr. Stone",
-            "The Quintessential Quintuplets", "Kaguya-sama: Love is War",
-            "Rent-a-Girlfriend", "The Seven Deadly Sins", "Noragami"
+            "Naruto",
+            "One Piece",
+            "Bleach",
+            "Attack on Titan",
+            "Fullmetal Alchemist",
+            "Dragon Ball Z",
+            "Sword Art Online",
+            "My Hero Academia",
+            "Death Note",
+            "Tokyo Ghoul",
+            "Fairy Tail",
+            "Hunter x Hunter",
+            "Demon Slayer",
+            "Jujutsu Kaisen",
+            "Black Clover",
+            "One Punch Man",
+            "Gintama",
+            "Blue Exorcist",
+            "Soul Eater",
+            "Fire Force",
+            "Re:Zero",
+            "No Game No Life",
+            "Steins;Gate",
+            "Cowboy Bebop",
+            "Neon Genesis Evangelion",
+            "Akame ga Kill",
+            "Code Geass",
+            "Fate/stay night",
+            "KonoSuba",
+            "Overlord",
+            "The Rising of the Shield Hero",
+            "The Promised Neverland",
+            "Mob Psycho 100",
+            "Parasyte",
+            "Your Lie in April",
+            "Clannad",
+            "Angel Beats!",
+            "Toradora!",
+            "Anohana",
+            "Violet Evergarden",
+            "Madoka Magica",
+            "Erased",
+            "Tokyo Revengers",
+            "Beastars",
+            "Dr. Stone",
+            "The Quintessential Quintuplets",
+            "Kaguya-sama: Love is War",
+            "Rent-a-Girlfriend",
+            "The Seven Deadly Sins",
+            "Noragami"
         )
     }
 
@@ -88,9 +126,12 @@ class TestDataSource(okHttpClient: OkHttpClient) : MikanSource(okHttpClient) {
     override fun getSearchResultData(query: String): Flow<SearchResultData> {
         return getSearchTipData(query).transform {
             emit(it.map { tip ->
-                SearchResult(
-                    tip,
-                    "https://acg.suyanw.cn/sjdm/random.php?r=${tip}"
+                SearchResultItem(
+                    Anime(
+                        tip,
+                        "https://acg.suyanw.cn/sjdm/random.php?r=${tip}",
+                        url,
+                    )
                 )
             })
         }
@@ -115,11 +156,12 @@ class TestDataSource(okHttpClient: OkHttpClient) : MikanSource(okHttpClient) {
         }
     }
 
-    private fun parseModuleItems(elem: Element): List<ModuleItem> {
+    private fun parseModuleItems(elem: Element): List<Anime> {
         return elem.select(".module-items a").map {
-            ModuleItem(
+            Anime(
                 it.select(".module-poster-item-title").text(),
-                "https://omofun.in/${it.select(".module-item-pic img").attr("data-original")}"
+                "https://omofun.in/${it.select(".module-item-pic img").attr("data-original")}",
+                url,
             )
         }
     }
@@ -129,126 +171,166 @@ class TestDataSource(okHttpClient: OkHttpClient) : MikanSource(okHttpClient) {
         return listOf(
             Module(
                 Module.BANNER, null, listOf(
-                    ModuleItem(
+                    Anime(
                         "${time++}".reversed(),
                         "https://acg.suyanw.cn/sjdm/random.php?r=${time++}",
-                    ), ModuleItem(
+                        url,
+                    ), Anime(
                         "${time++}".reversed(),
                         "https://acg.suyanw.cn/sjdm/random.php?r=${time++}",
-                    ), ModuleItem(
+                        url,
+                    ), Anime(
                         "${time++}".reversed(),
                         "https://acg.suyanw.cn/sjdm/random.php?r=${time++}",
-                    ), ModuleItem(
+                        url,
+                    ), Anime(
                         "${time++}".reversed(),
                         "https://acg.suyanw.cn/sjdm/random.php?r=${time++}",
+                        url,
                     )
                 ), "https://www.google.com"
             ),
             Module(
                 Module.WIDE_RECTANGLE_LIST, "热门推荐", listOf(
-                    ModuleItem(
+                    Anime(
                         "${time++}".reversed(),
                         "https://acg.suyanw.cn/sjdm/random.php?r=${time++}",
+                        url,
                     ),
-                    ModuleItem(
+                    Anime(
                         "${time++}".reversed(),
                         "https://acg.suyanw.cn/sjdm/random.php?r=${time++}",
+                        url,
                     ),
-                    ModuleItem(
+                    Anime(
                         "${time++}".reversed(),
                         "https://acg.suyanw.cn/sjdm/random.php?r=${time++}",
+                        url,
                     ),
-                    ModuleItem(
+                    Anime(
                         "${time++}".reversed(),
                         "https://acg.suyanw.cn/sjdm/random.php?r=${time++}",
+                        url,
                     ),
-                    ModuleItem(
+                    Anime(
                         "${time++}".reversed(),
                         "https://acg.suyanw.cn/sjdm/random.php?r=${time++}",
+                        url,
                     ),
                 ), "example.com"
             ),
             Module(
                 Module.TALL_RECTANGLE_GRID, "最新日漫", listOf(
-                    ModuleItem(
+                    Anime(
                         "${time++}".reversed(),
                         "https://acg.suyanw.cn/sjdm/random.php?r=${time++}",
-                    ), ModuleItem(
+                        url,
+                    ), Anime(
                         "${time++}".reversed(),
                         "https://acg.suyanw.cn/sjdm/random.php?r=${time++}",
-                    ), ModuleItem(
-                        "${time++}".reversed(), "https://acg.suyanw.cn/sjdm/random.php?r=${time++}"
-                    ), ModuleItem(
+                        url,
+                    ), Anime(
                         "${time++}".reversed(),
                         "https://acg.suyanw.cn/sjdm/random.php?r=${time++}",
-                    ), ModuleItem(
+                        url,
+                    ), Anime(
                         "${time++}".reversed(),
                         "https://acg.suyanw.cn/sjdm/random.php?r=${time++}",
-                    ), ModuleItem(
-                        "${time++}".reversed(), "https://acg.suyanw.cn/sjdm/random.php?r=${time++}"
+                        url,
+                    ), Anime(
+                        "${time++}".reversed(),
+                        "https://acg.suyanw.cn/sjdm/random.php?r=${time++}",
+                        url,
+                    ), Anime(
+                        "${time++}".reversed(), "https://acg.suyanw.cn/sjdm/random.php?r=${time++}",
+                        url,
                     )
                 ), "ssssss"
             ),
             Module(
                 Module.TALL_RECTANGLE_GRID, "最新国漫", listOf(
-                    ModuleItem(
+                    Anime(
                         "${time++}".reversed(),
                         "https://acg.suyanw.cn/sjdm/random.php?r=${time++}",
-                    ), ModuleItem(
+                        url,
+                    ), Anime(
                         "${time++}".reversed(),
                         "https://acg.suyanw.cn/sjdm/random.php?r=${time++}",
-                    ), ModuleItem(
-                        "${time++}".reversed(), "https://acg.suyanw.cn/sjdm/random.php?r=${time++}"
-                    ), ModuleItem(
+                        url,
+                    ), Anime(
                         "${time++}".reversed(),
                         "https://acg.suyanw.cn/sjdm/random.php?r=${time++}",
-                    ), ModuleItem(
+                        url,
+                    ), Anime(
                         "${time++}".reversed(),
                         "https://acg.suyanw.cn/sjdm/random.php?r=${time++}",
-                    ), ModuleItem(
-                        "${time++}".reversed(), "https://acg.suyanw.cn/sjdm/random.php?r=${time++}"
+                        url,
+                    ), Anime(
+                        "${time++}".reversed(),
+                        "https://acg.suyanw.cn/sjdm/random.php?r=${time++}",
+                        url,
+                    ), Anime(
+                        "${time++}".reversed(),
+                        "https://acg.suyanw.cn/sjdm/random.php?r=${time++}",
+                        url,
                     )
                 ), "ssss"
             ),
             Module(
                 Module.TALL_RECTANGLE_GRID, "最新美漫", listOf(
-                    ModuleItem(
+                    Anime(
                         "${time++}".reversed(),
                         "https://acg.suyanw.cn/sjdm/random.php?r=${time++}",
-                    ), ModuleItem(
+                        url,
+                    ), Anime(
                         "${time++}".reversed(),
                         "https://acg.suyanw.cn/sjdm/random.php?r=${time++}",
-                    ), ModuleItem(
-                        "${time++}".reversed(), "https://acg.suyanw.cn/sjdm/random.php?r=${time++}"
-                    ), ModuleItem(
+                        url,
+                    ), Anime(
                         "${time++}".reversed(),
                         "https://acg.suyanw.cn/sjdm/random.php?r=${time++}",
-                    ), ModuleItem(
+                        url,
+                    ), Anime(
                         "${time++}".reversed(),
                         "https://acg.suyanw.cn/sjdm/random.php?r=${time++}",
-                    ), ModuleItem(
-                        "${time++}".reversed(), "https://acg.suyanw.cn/sjdm/random.php?r=${time++}"
+                        url,
+                    ), Anime(
+                        "${time++}".reversed(),
+                        "https://acg.suyanw.cn/sjdm/random.php?r=${time++}",
+                        url,
+                    ), Anime(
+                        "${time++}".reversed(),
+                        "https://acg.suyanw.cn/sjdm/random.php?r=${time++}",
+                        url,
                     )
                 ), "ssss"
             ),
             Module(
                 Module.TALL_RECTANGLE_GRID, "最新剧场", listOf(
-                    ModuleItem(
+                    Anime(
                         "${time++}".reversed(),
                         "https://acg.suyanw.cn/sjdm/random.php?r=${time++}",
-                    ), ModuleItem(
+                        url,
+                    ), Anime(
                         "${time++}".reversed(),
                         "https://acg.suyanw.cn/sjdm/random.php?r=${time++}",
-                    ), ModuleItem(
-                        "${time++}".reversed(), "https://acg.suyanw.cn/sjdm/random.php?r=${time++}"
-                    ), ModuleItem(
+                        url,
+                    ), Anime(
                         "${time++}".reversed(),
                         "https://acg.suyanw.cn/sjdm/random.php?r=${time++}",
-                    ), ModuleItem(
+                        url,
+                    ), Anime(
                         "${time++}".reversed(),
                         "https://acg.suyanw.cn/sjdm/random.php?r=${time++}",
-                    ), ModuleItem(
-                        "${time++}".reversed(), "https://acg.suyanw.cn/sjdm/random.php?r=${time++}"
+                        url,
+                    ), Anime(
+                        "${time++}".reversed(),
+                        "https://acg.suyanw.cn/sjdm/random.php?r=${time++}",
+                        url,
+                    ), Anime(
+                        "${time++}".reversed(),
+                        "https://acg.suyanw.cn/sjdm/random.php?r=${time++}",
+                        url,
                     )
                 ), "ssss"
             ),

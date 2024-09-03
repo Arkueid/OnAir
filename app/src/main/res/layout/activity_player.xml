@@ -8,11 +8,21 @@
     tools:context=".ui.play.PlayerActivity">
 
     <androidx.fragment.app.FragmentContainerView
-        android:id="@+id/fragmentContainer"
+        android:id="@+id/playerFragment"
         android:name="com.arkueid.onair.ui.play.PlayerFragment"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         app:layout_constraintDimensionRatio="H,16:9"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        tools:layout="@layout/fragment_player" />
+
+    <androidx.fragment.app.FragmentContainerView
+        android:id="@+id/playInfoFragment"
+        android:name="com.arkueid.onair.ui.play.PlayInfoFragment"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/playerFragment"
+        tools:layout="@layout/fragment_play_info" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

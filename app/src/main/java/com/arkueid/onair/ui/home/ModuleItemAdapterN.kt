@@ -9,7 +9,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.arkueid.onair.R
 import com.arkueid.onair.databinding.ModuleItemNormalBinding
 import com.arkueid.onair.domain.entity.Module
-import com.arkueid.onair.domain.entity.ModuleItem
+import com.arkueid.onair.domain.entity.Anime
+import com.arkueid.onair.domain.entity.play
 import com.arkueid.onair.ui.play.PlayerActivity
 import com.bumptech.glide.Glide
 
@@ -18,7 +19,7 @@ import com.bumptech.glide.Glide
  * @date: 2024/8/26
  * @desc: adapter for normal module which using `RecyclerView` to display
  */
-class ModuleItemAdapterN(private val style: Int, var data: List<ModuleItem>) :
+class ModuleItemAdapterN(private val style: Int, var data: List<Anime>) :
     RecyclerView.Adapter<ModuleItemAdapterN.ItemVH>() {
 
     class ItemVH(binding: ModuleItemNormalBinding) : RecyclerView.ViewHolder(binding.root) {
@@ -40,10 +41,13 @@ class ModuleItemAdapterN(private val style: Int, var data: List<ModuleItem>) :
     override fun onBindViewHolder(holder: ItemVH, position: Int) {
         val item = data[position]
         holder.title.text = item.title
-        Glide.with(holder.itemView).asBitmap().load(item.cover).into(holder.cover)
+        Glide.with(holder.itemView)
+            .asBitmap()
+            .error(R.drawable.loading_image)
+            .load(item.cover)
+            .into(holder.cover)
         holder.clickable.setOnClickListener {
-            val intent = Intent(holder.itemView.context, PlayerActivity::class.java)
-            holder.itemView.context.startActivity(intent)
+            item.play(holder.itemView.context)
         }
 
         when (style) {

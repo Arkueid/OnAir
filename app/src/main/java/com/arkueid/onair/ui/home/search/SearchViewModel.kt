@@ -6,7 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.arkueid.onair.data.repository.Repository
 import com.arkueid.onair.domain.entity.SearchResultData
-import com.arkueid.onair.domain.entity.SearchTag
+import com.arkueid.onair.domain.entity.SearchHistoryTag
 import com.arkueid.onair.domain.entity.SearchTipData
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
@@ -22,24 +22,22 @@ import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.flatMapLatest
-import kotlinx.coroutines.flow.onEach
-import kotlinx.coroutines.flow.onStart
-import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @OptIn(ExperimentalCoroutinesApi::class, FlowPreview::class)
 @HiltViewModel
-class SearchViewModel @Inject constructor(private val repository: Repository) : ViewModel() {
+class SearchViewModel @Inject constructor(
+    private val repository: Repository,
+    private val gson: Gson,
+    private val mmkv: MMKV,
+) : ViewModel() {
     companion object {
         private const val SEARCH_HISTORY = "search_history"
     }
 
-    private val mmkv = MMKV.defaultMMKV()
-    private val gson = Gson()
-
-    private val _searchHistory = MutableLiveData<MutableList<SearchTag>>()
-    val searchHistory: LiveData<MutableList<SearchTag>> = _searchHistory
+    private val _searchHistory = MutableLiveData<MutableList<SearchHistoryTag>>()
+    val searchHistory: LiveData<MutableList<SearchHistoryTag>> = _searchHistory
 
     private val _query = MutableStateFlow("")
     private val _searchTips = MutableStateFlow<SearchTipData>(emptyList())
@@ -83,9 +81,9 @@ class SearchViewModel @Inject constructor(private val repository: Repository) : 
             if (json.isNullOrEmpty()) {
                 mutableListOf()
             } else {
-                gson.fromJson<MutableList<SearchTag>?>(
+                gson.fromJson<MutableList<SearchHistoryTag>?>(
                     json,
-                    object : TypeToken<List<SearchTag>>() {}.type
+                    object : TypeToken<List<SearchHistoryTag>>() {}.type
                 ).apply {
                     sortBy { it.timestamp }
                 }
@@ -96,7 +94,7 @@ class SearchViewModel @Inject constructor(private val repository: Repository) : 
     private fun addSearchHistory(keyword: String) {
         val list = _searchHistory.value!!
         if (list.find { it.content == keyword } != null) return // already exists
-        list.add(0, SearchTag(keyword, System.currentTimeMillis()))
+        list.add(0, SearchHistoryTag(keyword, System.currentTimeMillis()))
         _searchHistory.postValue(list)
         mmkv.encode(SEARCH_HISTORY, gson.toJson(list))
     }

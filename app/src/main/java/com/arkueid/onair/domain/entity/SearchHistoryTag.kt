@@ -8,7 +8,7 @@ import android.os.Parcelable
  * @date: 2024/8/29
  * @desc:
  */
-data class SearchTag(
+data class SearchHistoryTag(
     val content: String, val timestamp: Long
 ) : Parcelable {
     constructor(parcel: Parcel) : this(parcel.readString() ?: "", parcel.readLong())
@@ -20,12 +20,12 @@ data class SearchTag(
         dest.writeLong(timestamp)
     }
 
-    companion object CREATOR : Parcelable.Creator<SearchTag> {
-        override fun createFromParcel(parcel: Parcel): SearchTag {
-            return SearchTag(parcel)
+    companion object CREATOR : Parcelable.Creator<SearchHistoryTag> {
+        override fun createFromParcel(parcel: Parcel): SearchHistoryTag {
+            return SearchHistoryTag(parcel)
         }
 
-        override fun newArray(size: Int): Array<SearchTag?> {
+        override fun newArray(size: Int): Array<SearchHistoryTag?> {
             return arrayOfNulls(size)
         }
     }

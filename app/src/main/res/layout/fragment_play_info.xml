@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <androidx.constraintlayout.utils.widget.ImageFilterView
+        android:id="@+id/cover"
+        android:layout_width="@dimen/wideModuleItemWidth"
+        android:layout_height="0dp"
+        android:layout_margin="10dp"
+        android:contentDescription="@string/cover"
+        android:scaleType="centerCrop"
+        android:src="@drawable/heroine"
+        app:layout_constraintDimensionRatio="H,3:4"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:round="10dp" />
+
+    <TextView
+        android:id="@+id/title"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:ellipsize="end"
+        android:paddingHorizontal="10dp"
+        android:singleLine="true"
+        android:text="@string/re0_title"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/cover"
+        app:layout_constraintTop_toTopOf="@id/cover" />
+
+    <TextView
+        android:id="@+id/description"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:ellipsize="end"
+        android:maxLines="2"
+        android:paddingHorizontal="10dp"
+        android:paddingTop="10dp"
+        android:text="@string/re0_brief"
+        android:textColor="#99000000"
+        android:textSize="14sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@id/title"
+        app:layout_constraintTop_toBottomOf="@+id/title" />
+
+    <androidx.constraintlayout.utils.widget.ImageFilterView
+        android:id="@+id/expandBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="?attr/selectableItemBackground"
+        android:clickable="true"
+        android:padding="10dp"
+        android:src="@drawable/baseline_arrow_drop_down_24"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/description"
+        app:roundPercent="1" />
+
+    <View
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="@drawable/cover_text"
+        app:layout_constraintBottom_toBottomOf="@id/cover"
+        app:layout_constraintEnd_toEndOf="@id/cover"
+        app:layout_constraintStart_toStartOf="@id/cover"
+        app:layout_constraintTop_toTopOf="@id/cover" />
+
+    <androidx.constraintlayout.utils.widget.ImageFilterView
+        android:id="@+id/followBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="?attr/selectableItemBackground"
+        android:padding="10dp"
+        android:src="@drawable/button_like"
+        android:tint="@color/white"
+        android:clickable="true"
+        app:layout_constraintBottom_toBottomOf="@id/cover"
+        app:layout_constraintRight_toRightOf="@id/cover"
+        app:roundPercent="1" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

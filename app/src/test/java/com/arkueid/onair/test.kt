@@ -23,22 +23,15 @@ import kotlin.random.Random
  * @desc:
  */
 
-object Style {
-    const val ROLLING = 0b001
-    const val TOP = 0b010
-    const val BOTTOM = 0b100
-}
+data class Anime(
+    val title: String,
+    val cover: String,
+    val url: String
+)
 
 fun main() {
-    var styles = 0
-
-    styles = styles or Style.TOP
-    styles = styles or Style.BOTTOM
-    styles = styles or Style.ROLLING
-    println(styles)
-    styles = styles and (Style.ROLLING.inv() and 0b111)
-    println(styles)
-    println(styles and (Style.TOP.inv() and 0b111))
-
-
+    val l = listOf(Anime("title", "cove22r", "url"), Anime("title", "cover", "url"))
+    println(
+        l.contains(Anime("title", "cove22r", "url"))
+    )
 }

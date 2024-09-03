@@ -9,7 +9,7 @@ import android.util.TypedValue
 import android.view.View
 
 /**
- * TODO: 屏蔽弹幕，弹幕显示范围
+ * TODO: 点击弹幕
  */
 class DanmakuView(context: Context, attributeSet: AttributeSet?, defStyle: Int) :
     View(context, attributeSet, defStyle) {

@@ -81,10 +81,6 @@ class WeeklyFragment : Fragment() {
 
                 binding.refreshLayout.finishRefresh(it.isSuccess)
                 binding.initProgressBar.visibility = View.INVISIBLE
-
-                // TODO: change to a more efficient way
-                EventBus.getDefault().removeStickyEvent(WeeklySubjectEvent::class.java)
-                EventBus.getDefault().postSticky(WeeklySubjectEvent(it.data!!))
             }
         }
     }

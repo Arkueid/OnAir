@@ -8,20 +8,15 @@ import android.view.View
 import android.view.View.OnClickListener
 import android.view.inputmethod.EditorInfo
 import android.widget.ArrayAdapter
-import android.widget.TextView
-import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
-import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView.VERTICAL
 import com.arkueid.onair.R
 import com.arkueid.onair.common.TagText
 import com.arkueid.onair.databinding.ActivitySearchBinding
-import com.arkueid.onair.utils.ToastUtils
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
@@ -78,7 +73,7 @@ class SearchActivity : AppCompatActivity(), OnClickListener, TextWatcher {
         tipsAdapter = ArrayAdapter(this, R.layout.item_search_suggestion, R.id.content)
         binding.searchSuggestion.adapter = tipsAdapter
         // click on search tip
-        binding.searchSuggestion.setOnItemClickListener { parent, view, position, id ->
+        binding.searchSuggestion.setOnItemClickListener { _, _, position, _ ->
             confirmQuery(tipsAdapter.getItem(position) ?: "")
         }
 
@@ -145,6 +140,7 @@ class SearchActivity : AppCompatActivity(), OnClickListener, TextWatcher {
 
     override fun finish() {
         super.finish()
+        @Suppress("DEPRECATION")
         overridePendingTransition(android.R.anim.fade_in, R.anim.slide_out_bottom)
     }
 
