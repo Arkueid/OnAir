@@ -3,7 +3,7 @@ package com.arkueid.onair.ui.following
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.arkueid.onair.domain.entity.Anime
+import com.arkueid.onair.entity.Anime
 import com.google.gson.Gson
 import com.tencent.mmkv.MMKV
 import javax.inject.Inject
@@ -15,6 +15,7 @@ class FollowingViewModel @Inject constructor(
 
     companion object {
         private const val KEY_FOLLOWING_ANIME = "following_anime"
+        private const val TAG = "FollowingViewModel"
     }
 
     private val _followingAnimeList = MutableLiveData(emptyList<Anime>())

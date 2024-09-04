@@ -1,10 +1,8 @@
-package com.arkueid.onair.domain.entity
+package com.arkueid.onair.entity
 
 import android.content.Context
 import android.content.Intent
-import android.os.Parcel
 import android.os.Parcelable
-import androidx.versionedparcelable.ParcelField
 import com.arkueid.onair.ui.play.PlayerActivity
 import kotlinx.parcelize.Parcelize
 
@@ -18,7 +16,6 @@ data class Anime(
     val title: String,
     val cover: String,
     val url: String,
-    var liked: Boolean = false
 ) : Parcelable
 
 fun Anime.play(context: Context) {

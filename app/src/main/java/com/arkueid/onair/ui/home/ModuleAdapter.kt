@@ -19,7 +19,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.arkueid.onair.R
 import com.arkueid.onair.databinding.ItemModuleBannerBinding
 import com.arkueid.onair.databinding.ItemModuleNormalBinding
-import com.arkueid.onair.domain.entity.Module
+import com.arkueid.onair.entity.Module
 import com.youth.banner.indicator.CircleIndicator
 
 /**

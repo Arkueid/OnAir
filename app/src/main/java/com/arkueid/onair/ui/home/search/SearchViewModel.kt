@@ -5,9 +5,9 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.arkueid.onair.data.repository.Repository
-import com.arkueid.onair.domain.entity.SearchResultData
-import com.arkueid.onair.domain.entity.SearchHistoryTag
-import com.arkueid.onair.domain.entity.SearchTipData
+import com.arkueid.onair.entity.SearchResultData
+import com.arkueid.onair.entity.SearchHistoryTag
+import com.arkueid.onair.entity.SearchTipData
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.tencent.mmkv.MMKV

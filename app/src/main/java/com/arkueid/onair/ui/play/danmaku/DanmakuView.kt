@@ -7,9 +7,12 @@ import android.graphics.Paint
 import android.util.AttributeSet
 import android.util.TypedValue
 import android.view.View
+import com.arkueid.onair.entity.DanmakuItem
+import com.arkueid.onair.entity.isRolling
+
 
 /**
- * TODO: 点击弹幕
+ * TODO: 点击弹幕，动态适应fps
  */
 class DanmakuView(context: Context, attributeSet: AttributeSet?, defStyle: Int) :
     View(context, attributeSet, defStyle) {
@@ -32,8 +35,12 @@ class DanmakuView(context: Context, attributeSet: AttributeSet?, defStyle: Int) 
 
     var danmakuAlpha: Int = 255
 
-    // 弹幕列表，必须按播放顺序排列
-    var danmakus: List<DanmakuItem> = emptyList()
+    var showFps: Boolean = false
+
+    // 弹幕固定以30fps播放
+    private val updateInterval: Long = 1000L / 30L
+
+    private var lastUpdateAt: Long = 0
 
     // 当前视频的播放进度
     var progress: Long = 0
@@ -43,7 +50,7 @@ class DanmakuView(context: Context, attributeSet: AttributeSet?, defStyle: Int) 
         }
 
     // 弹幕参数
-    // 每帧移动的像素点
+    // 每秒移动的像素点
     private val baseSpeed: Float =
         TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 2f, resources.displayMetrics)
 
@@ -59,7 +66,7 @@ class DanmakuView(context: Context, attributeSet: AttributeSet?, defStyle: Int) 
     var filteredStyles: Int = 0
 
     /**
-     * 单位：sp
+     * 弹幕字体大小，单位：sp
      */
     var danmakuSize: Float =
         TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, 16f, resources.displayMetrics)
@@ -73,11 +80,11 @@ class DanmakuView(context: Context, attributeSet: AttributeSet?, defStyle: Int) 
         }
 
     // 弹幕行间距
-    private val lineSpacing: Float =
+    private val danmakuVGap: Float =
         TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 10f, resources.displayMetrics)
 
     // 同一行滚动弹幕之间间距
-    private val danmakuSpacing: Float =
+    private val danmakuHGap: Float =
         TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 15f, resources.displayMetrics)
 
     // 弹道高度
@@ -85,21 +92,27 @@ class DanmakuView(context: Context, attributeSet: AttributeSet?, defStyle: Int) 
 
     private var trackSize = 0
 
-    var trackRange: Int = Range.RANGE_4_4
+    var danmakuTrackRange: Int = Range.RANGE_4_4
         set(value) {
             field = value
             trackSize = value * trackYs.size / 4
-            sizeChanged = true
             invalidate()
         }
+
+
+    // 弹幕列表，必须按播放顺序排列
+    var danmakus: List<DisplayDanmaku> = emptyList()
 
     // 每条弹道的最新一条弹幕
     // 弹幕id -> DanmakuItem
     // 滚动弹幕单独考虑，由于滚动，和固定弹幕的重合时间有限，对观感影响较小
-    private val lastRollingDanmaku: MutableMap<Int, DanmakuItem> = mutableMapOf()
+    private val lastRollingDanmaku: MutableMap<Int, DisplayDanmaku> = mutableMapOf()
 
     // 顶部和底部弹幕
-    private val lastFixedDanmaku: MutableMap<Int, DanmakuItem> = mutableMapOf()
+    private val lastFixedDanmaku: MutableMap<Int, DisplayDanmaku> = mutableMapOf()
+
+    private var startX: Float = measuredWidth.toFloat()
+    private var centerX: Float = startX / 2
 
     // 画笔
     private val textPaint = Paint().apply {
@@ -118,8 +131,6 @@ class DanmakuView(context: Context, attributeSet: AttributeSet?, defStyle: Int) 
         strokeWidth = 3f
     }
 
-    private var sizeChanged: Boolean = false
-
     override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
         super.onSizeChanged(w, h, oldw, oldh)
         calculateTrackYs()
@@ -129,17 +140,27 @@ class DanmakuView(context: Context, attributeSet: AttributeSet?, defStyle: Int) 
         // 计算弹道高度
         trackYs.clear()
         lastRollingDanmaku.clear()
-        val startY = lineSpacing + danmakuSize
-        val maxSize = measuredHeight.floorDiv(danmakuSize.toInt() + lineSpacing.toInt())
+        val startY = danmakuVGap + danmakuSize
+        val maxSize = measuredHeight.floorDiv(danmakuSize.toInt() + danmakuVGap.toInt())
         for (i in 0 until maxSize) {
-            trackYs.add((startY + i * (danmakuSize + lineSpacing)))
+            trackYs.add((startY + i * (danmakuSize + danmakuVGap)))
         }
-        trackRange = trackRange
-        sizeChanged = true
+        danmakuTrackRange = danmakuTrackRange
+        startX = measuredWidth.toFloat()
+        centerX = startX / 2
         invalidate()
     }
 
     override fun onDraw(canvas: Canvas) {
+        // 绘制fps
+        if (showFps) {
+            val cur = System.currentTimeMillis()
+            textPaint.color = Color.RED
+            textPaint.textAlign = Paint.Align.LEFT
+            canvas.drawText("fps: ${1000 / (cur - lastUpdateAt)}", 20f, trackYs[0], textPaint)
+            lastUpdateAt = cur
+        }
+
         lastRollingDanmaku.clear()
         lastFixedDanmaku.clear()
 
@@ -150,6 +171,10 @@ class DanmakuView(context: Context, attributeSet: AttributeSet?, defStyle: Int) 
         for (danmakuItem in danmakus) {
             if (danmakuItem.progress > progress) break
 
+            // 大小改变后弹道id仍然超过弹道最大id，则跳过
+            // 否则在后续流程中分配弹道或者沿用上一次分配的弹道
+            if (danmakuItem.trackId >= trackSize) return
+
             if ((filteredStyles and danmakuItem.style) == danmakuItem.style) continue
 
             when (danmakuItem.style) {
@@ -158,21 +183,12 @@ class DanmakuView(context: Context, attributeSet: AttributeSet?, defStyle: Int) 
                 DanmakuItem.Style.BOTTOM -> drawBottomDanmaku(canvas, danmakuItem)
             }
         }
-
-        sizeChanged = false
     }
 
-    private fun drawRollingDanmaku(canvas: Canvas, danmakuItem: DanmakuItem) {
-        // TODO 考虑弹幕显示范围改变
+    private fun drawRollingDanmaku(canvas: Canvas, danmakuItem: DisplayDanmaku) {
         // 绘制滚动弹幕
-        val startX = measuredWidth.toFloat()
-
         textPaint.textAlign = Paint.Align.LEFT
         strokePaint.textAlign = Paint.Align.LEFT
-
-        // 大小改变后弹道id仍然超过弹道最大id，则跳过
-        // 否则在后续流程中初始化弹道id或者沿用上一次分配的弹道id
-        if (danmakuItem.trackId >= trackSize) return
 
         // 初始化弹幕速度，动态响应视频播放速度
         danmakuItem.speed = speed
@@ -187,7 +203,7 @@ class DanmakuView(context: Context, attributeSet: AttributeSet?, defStyle: Int) 
         if (danmakuItem.x + danmakuItem.width <= 0f) return
 
         // 第一次绘制弹幕需要初始化弹幕弹道
-        if (sizeChanged || danmakuItem.trackId == Int.MIN_VALUE) {
+        if (danmakuItem.trackId == Int.MIN_VALUE) {
             // 寻找合适弹道
             for (trackId in 0 until trackSize) {
 
@@ -198,50 +214,32 @@ class DanmakuView(context: Context, attributeSet: AttributeSet?, defStyle: Int) 
 
                 // 防止重叠
                 val lastDanmaku = lastRollingDanmaku[trackId]!!
-                if (lastDanmaku.x + lastDanmaku.width + danmakuSpacing < danmakuItem.x) {
+                if (lastDanmaku.x + lastDanmaku.width + danmakuHGap < danmakuItem.x) {
                     danmakuItem.trackId = trackId
                     break
                 }
             }
 
             // 对于当前弹幕没有找到合适的弹道，则跳过
-            if (danmakuItem.trackId == Int.MIN_VALUE) {
-                danmakuItem.skip = true
-                return
-            }
-
-            danmakuItem.skip = false
+            if (danmakuItem.trackId == Int.MIN_VALUE) return
         }
 
         // 记录弹幕所在弹道
         lastRollingDanmaku[danmakuItem.trackId] = danmakuItem
 
-        val y = trackYs[danmakuItem.trackId]
-        // 黑色描边
-        canvas.drawText(danmakuItem.content, danmakuItem.x, y, strokePaint)
-        // 内容
-        textPaint.color = colorByAlpha(danmakuItem.color)
-        canvas.drawText(danmakuItem.content, danmakuItem.x, y, textPaint)
-
+        danmakuItem.draw(canvas)
     }
 
-    private fun drawTopDanmaku(canvas: Canvas, danmakuItem: DanmakuItem) {
+    private fun drawTopDanmaku(canvas: Canvas, danmakuItem: DisplayDanmaku) {
         // 绘制顶部弹幕
-        val centerX = measuredWidth.toFloat() / 2
-
         strokePaint.textAlign = Paint.Align.CENTER
         textPaint.textAlign = Paint.Align.CENTER
-
-        if (danmakuItem.trackId >= trackSize) return
-
-        // 如果当前弹幕的进度大于当前视频的进度则跳过
-        if (danmakuItem.progress > progress) return
 
         // 已经播放的时间
         if (progress - danmakuItem.progress >= MAX_STAY_TIME) return
 
         // 第一次绘制弹幕需要初始化弹幕弹道
-        if (sizeChanged || danmakuItem.trackId == Int.MIN_VALUE) {
+        if (danmakuItem.trackId == Int.MIN_VALUE) {
             // 寻找合适弹道
             for (trackId in 0 until trackSize) {
                 if (lastFixedDanmaku[trackId] == null) {
@@ -253,32 +251,21 @@ class DanmakuView(context: Context, attributeSet: AttributeSet?, defStyle: Int) 
             if (danmakuItem.trackId == Int.MIN_VALUE) return
 
         }
-
         // 记录弹幕所在弹道
         lastFixedDanmaku[danmakuItem.trackId] = danmakuItem
 
-        val y = trackYs[danmakuItem.trackId]
-        // 黑色描边
-        canvas.drawText(danmakuItem.content, centerX, y, strokePaint)
-        // 内容
-        textPaint.color = colorByAlpha(danmakuItem.color)
-        canvas.drawText(danmakuItem.content, centerX, y, textPaint)
+        danmakuItem.draw(canvas)
     }
 
-    private fun drawBottomDanmaku(canvas: Canvas, danmakuItem: DanmakuItem) {
+    private fun drawBottomDanmaku(canvas: Canvas, danmakuItem: DisplayDanmaku) {
         // 绘制顶部弹幕
-        val centerX = measuredWidth.toFloat() / 2
-
         strokePaint.textAlign = Paint.Align.CENTER
         textPaint.textAlign = Paint.Align.CENTER
-
-        // 绘制弹幕
-        if (danmakuItem.trackId >= trackSize) return
 
         if (progress - danmakuItem.progress >= MAX_STAY_TIME) return
 
         // 第一次绘制弹幕需要初始化弹幕弹道
-        if (sizeChanged || danmakuItem.trackId == Int.MIN_VALUE) {
+        if (danmakuItem.trackId == Int.MIN_VALUE) {
             // 寻找合适弹道
             for (trackId in trackSize - 1 downTo 0) {
                 if (lastFixedDanmaku[trackId] == null) {
@@ -293,16 +280,24 @@ class DanmakuView(context: Context, attributeSet: AttributeSet?, defStyle: Int) 
         // 记录弹幕所在弹道
         lastFixedDanmaku[danmakuItem.trackId] = danmakuItem
 
-        val y = trackYs[danmakuItem.trackId]
+        danmakuItem.draw(canvas)
+    }
+
+    private fun colorByAlpha(color: Int): Int = color.and(0x00ffffff).or(danmakuAlpha shl 24)
+
+    // 根据进度计算弹幕所在位置
+    // 默认30fps
+    private fun DisplayDanmaku.syncX(currentProgress: Long) {
+        x -= speed * (currentProgress - progress) / updateInterval
+    }
+
+    private fun DisplayDanmaku.draw(canvas: Canvas) {
+        val x = if (this.isRolling()) this.x else centerX
+        val y = trackYs[this.trackId]
         // 黑色描边
-        canvas.drawText(danmakuItem.content, centerX, y, strokePaint)
+        canvas.drawText(this.content, x, y, strokePaint)
         // 内容
-        textPaint.color = colorByAlpha(danmakuItem.color)
-        canvas.drawText(danmakuItem.content, centerX, y, textPaint)
+        textPaint.color = colorByAlpha(this.color)
+        canvas.drawText(this.content, x, y, textPaint)
     }
-
-    private fun colorByAlpha(color: Int): Int {
-        return color.and(0x00ffffff).or(danmakuAlpha shl 24)
-    }
-
 }

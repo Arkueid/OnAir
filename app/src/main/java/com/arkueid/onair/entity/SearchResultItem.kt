@@ -1,4 +1,4 @@
-package com.arkueid.onair.domain.entity
+package com.arkueid.onair.entity
 
 /**
  * @author: Arkueid

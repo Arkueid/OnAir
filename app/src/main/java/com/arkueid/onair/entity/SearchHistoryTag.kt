@@ -1,4 +1,4 @@
-package com.arkueid.onair.domain.entity
+package com.arkueid.onair.entity
 
 import android.os.Parcel
 import android.os.Parcelable

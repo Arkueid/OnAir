@@ -1,13 +1,12 @@
 package com.arkueid.onair.data
 
-import com.arkueid.onair.R
-import com.arkueid.onair.data.api.mikan.MikanSource
-import com.arkueid.onair.domain.entity.ModuleData
-import com.arkueid.onair.domain.entity.Module
-import com.arkueid.onair.domain.entity.Anime
-import com.arkueid.onair.domain.entity.SearchResultItem
-import com.arkueid.onair.domain.entity.SearchResultData
-import com.arkueid.onair.domain.entity.SearchTipData
+import com.arkueid.onair.data.source.mikan.MikanSource
+import com.arkueid.onair.entity.ModuleData
+import com.arkueid.onair.entity.Module
+import com.arkueid.onair.entity.Anime
+import com.arkueid.onair.entity.SearchResultItem
+import com.arkueid.onair.entity.SearchResultData
+import com.arkueid.onair.entity.SearchTipData
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow

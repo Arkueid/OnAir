@@ -3,20 +3,16 @@ package com.arkueid.onair.ui.weekly
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.arkueid.onair.data.repository.Repository
-import com.arkueid.onair.domain.entity.Anime
-import com.arkueid.onair.domain.entity.WeeklyData
+import com.arkueid.onair.entity.WeeklyData
 import com.arkueid.onair.utils.Result
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.catch
-import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.flow.onCompletion
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.transform
 import java.time.LocalDate
 import javax.inject.Inject
-import javax.inject.Singleton
 
 @HiltViewModel
 class WeeklyViewModel @Inject constructor(private val repository: Repository) :

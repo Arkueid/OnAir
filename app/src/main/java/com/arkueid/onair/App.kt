@@ -14,5 +14,6 @@ class App : Application() {
         ToastUtils.init(this)
 
         MMKV.initialize(this)
+
     }
 }

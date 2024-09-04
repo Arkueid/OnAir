@@ -1,28 +1,19 @@
 package com.arkueid.onair.ui.weekly
 
-import android.annotation.SuppressLint
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.view.postDelayed
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.repeatOnLifecycle
 import com.arkueid.onair.databinding.FragmentWeeklyBinding
-import com.arkueid.onair.event.weekly.WeeklySubjectEvent
-import com.arkueid.onair.utils.Result
 import com.arkueid.onair.utils.ToastUtils
 import com.google.android.material.tabs.TabLayoutMediator
 import com.scwang.smart.refresh.header.ClassicsHeader
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
-import org.greenrobot.eventbus.EventBus
-import java.time.LocalDate
 import java.util.Date
 
 

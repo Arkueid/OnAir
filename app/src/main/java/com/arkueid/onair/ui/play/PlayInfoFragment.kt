@@ -2,20 +2,16 @@ package com.arkueid.onair.ui.play
 
 import android.graphics.Bitmap
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.postDelayed
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.activityViewModels
-import androidx.fragment.app.viewModels
-import androidx.lifecycle.ViewModelProvider
 import androidx.transition.ChangeBounds
 import androidx.transition.TransitionManager
 import com.arkueid.onair.R
 import com.arkueid.onair.databinding.FragmentPlayInfoBinding
-import com.arkueid.onair.domain.entity.Anime
+import com.arkueid.onair.entity.Anime
 import com.arkueid.onair.ui.following.FollowingViewModel
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.DataSource
@@ -116,13 +112,14 @@ class PlayInfoFragment : Fragment() {
             }
         }
 
-        binding.followBtn.isSelected = followingViewModel.isFollowed(anime)
+        followingViewModel.isFollowed(anime).let {
+            binding.followBtn.isSelected = it
+        }
 
         binding.followBtn.setOnClickListener {
             binding.followBtn.run {
                 isEnabled = false
                 isSelected = !isSelected
-                anime.liked = isSelected
                 if (isSelected) {
                     followingViewModel.addFollowedAnime(anime)
                 } else {

@@ -3,12 +3,11 @@ package com.arkueid.onair.ui.following
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
-import androidx.recyclerview.widget.DiffUtil.DiffResult
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.arkueid.onair.databinding.ItemFollowedAnimeBinding
-import com.arkueid.onair.domain.entity.Anime
-import com.arkueid.onair.domain.entity.play
+import com.arkueid.onair.entity.Anime
+import com.arkueid.onair.entity.play
 import com.bumptech.glide.Glide
 
 /**
@@ -25,7 +24,7 @@ class FollowedAnimeAdapter(
     }
 
     override fun areContentsTheSame(oldItem: Anime, newItem: Anime): Boolean {
-        return oldItem.cover == newItem.cover && oldItem.liked == newItem.liked
+        return oldItem.cover == newItem.cover && oldItem.url == newItem.url
     }
 
 }) {
@@ -41,11 +40,10 @@ class FollowedAnimeAdapter(
         val item = getItem(position)
         holder.title.text = item.title
         Glide.with(holder.cover).asBitmap().load(item.cover).into(holder.cover)
-        holder.likeBtn.isSelected = item.liked
+        holder.likeBtn.isSelected = true
         holder.likeBtn.setOnClickListener {
             holder.likeBtn.run {
                 isSelected = !isSelected
-                item.liked = isSelected
                 onLikeClicked?.invoke(item)
             }
         }

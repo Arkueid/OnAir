@@ -5,8 +5,8 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.arkueid.onair.databinding.ItemSearchResultBinding
-import com.arkueid.onair.domain.entity.SearchResultItem
-import com.arkueid.onair.domain.entity.play
+import com.arkueid.onair.entity.SearchResultItem
+import com.arkueid.onair.entity.play
 import com.bumptech.glide.Glide
 
 /**

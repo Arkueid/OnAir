@@ -36,12 +36,8 @@ class FollowingFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        adapter = FollowedAnimeAdapter {
-            if (it.liked) {
-                viewModel.addFollowedAnime(it)
-            } else {
-                viewModel.removeFollowedAnime(it)
-            }
+        adapter = FollowedAnimeAdapter { anime ->
+            viewModel.removeFollowedAnime(anime)
         }
         binding.followedAnimeList.adapter = adapter
         binding.followedAnimeList.layoutManager = LinearLayoutManager(requireContext())

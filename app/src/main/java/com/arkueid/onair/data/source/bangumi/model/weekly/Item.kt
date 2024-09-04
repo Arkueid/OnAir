@@ -1,4 +1,4 @@
-package com.arkueid.onair.data.api.bangumi.model.weekly
+package com.arkueid.onair.data.source.bangumi.model.weekly
 
 data class Item(
     val air_date: String,

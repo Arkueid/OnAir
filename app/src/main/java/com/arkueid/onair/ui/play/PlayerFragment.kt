@@ -23,8 +23,9 @@ import androidx.media3.common.util.UnstableApi
 import androidx.media3.exoplayer.ExoPlayer
 import com.arkueid.onair.R
 import com.arkueid.onair.databinding.FragmentPlayerBinding
-import com.arkueid.onair.domain.entity.Anime
-import com.arkueid.onair.ui.play.danmaku.DanmakuItem
+import com.arkueid.onair.entity.Anime
+import com.arkueid.onair.entity.DanmakuItem
+import com.arkueid.onair.ui.play.danmaku.toDisplay
 import dagger.hilt.android.AndroidEntryPoint
 import kotlin.random.Random
 
@@ -146,7 +147,7 @@ class PlayerFragment : Fragment(), SurfaceHolder.Callback, OnClickListener, Play
         }
 
         viewModel.danmakuVisibleRange.observe(viewLifecycleOwner) {
-            binding.danmakuView.trackRange = it
+            binding.danmakuView.danmakuTrackRange = it
         }
 
     }
@@ -235,7 +236,7 @@ class PlayerFragment : Fragment(), SurfaceHolder.Callback, OnClickListener, Play
 
     private fun postUpdateProgress() {
         // TODO fetch from viewModel
-        binding.danmakuView.danmakus = danmakus()
+        binding.danmakuView.danmakus = danmakus().map { it.toDisplay() }
         val handler = Handler(Looper.getMainLooper())
         val runnable = object : Runnable {
             override fun run() {

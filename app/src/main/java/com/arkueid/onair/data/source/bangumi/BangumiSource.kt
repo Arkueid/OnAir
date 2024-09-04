@@ -1,12 +1,12 @@
-package com.arkueid.onair.data.api.bangumi
+package com.arkueid.onair.data.source.bangumi
 
 import com.arkueid.onair.data.repository.DataSource
-import com.arkueid.onair.domain.entity.Anime
-import com.arkueid.onair.domain.entity.ModuleData
-import com.arkueid.onair.domain.entity.SearchResultData
-import com.arkueid.onair.domain.entity.SearchTipData
-import com.arkueid.onair.domain.entity.WeeklyData
-import com.arkueid.onair.domain.entity.WeeklySubject
+import com.arkueid.onair.entity.Anime
+import com.arkueid.onair.entity.ModuleData
+import com.arkueid.onair.entity.SearchResultData
+import com.arkueid.onair.entity.SearchTipData
+import com.arkueid.onair.entity.WeeklyData
+import com.arkueid.onair.entity.WeeklySubject
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import okhttp3.OkHttpClient

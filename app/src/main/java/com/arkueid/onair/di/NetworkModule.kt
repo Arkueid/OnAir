@@ -1,8 +1,8 @@
 package com.arkueid.onair.di
 
 import com.arkueid.onair.data.TestDataSource
-import com.arkueid.onair.data.api.bangumi.BangumiSource
-import com.arkueid.onair.data.api.mikan.MikanSource
+import com.arkueid.onair.data.source.bangumi.BangumiSource
+import com.arkueid.onair.data.source.mikan.MikanSource
 import com.arkueid.onair.data.repository.DataSource
 import com.arkueid.onair.data.repository.Repository
 import com.arkueid.onair.data.repository.RepositoryImpl

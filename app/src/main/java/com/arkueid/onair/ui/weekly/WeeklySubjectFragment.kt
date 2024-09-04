@@ -7,7 +7,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
@@ -24,7 +23,7 @@ class WeeklySubjectFragment : Fragment() {
 
     private lateinit var binding: FragmentWeeklySubjectListBinding
     private lateinit var adapter: WeeklySubjectRecyclerViewAdapter
-    private lateinit var viewModel: WeeklyViewModel
+    private lateinit var sharedViewModel: WeeklyViewModel
 
     private var position: Int = -1
 
@@ -48,7 +47,7 @@ class WeeklySubjectFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        viewModel = ViewModelProvider(requireParentFragment())[WeeklyViewModel::class.java]
+        sharedViewModel = ViewModelProvider(requireParentFragment())[WeeklyViewModel::class.java]
 
         adapter = WeeklySubjectRecyclerViewAdapter(emptyList())
         binding.subjectRecyclerView.adapter = adapter
@@ -56,14 +55,14 @@ class WeeklySubjectFragment : Fragment() {
 
         lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.RESUMED) {
-                viewModel.currentWeeklySubjects.collectLatest {
+                sharedViewModel.currentWeeklySubjects.collectLatest {
                     adapter.data = it.getOrElse(position) { emptyList() }
                     adapter.notifyDataSetChanged()
                 }
             }
         }
 
-        Log.e(TAG, "onViewCreated: $viewModel")
+        Log.e(TAG, "onViewCreated: $sharedViewModel")
     }
 
     companion object {
