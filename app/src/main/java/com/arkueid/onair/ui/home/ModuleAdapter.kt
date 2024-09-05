@@ -19,7 +19,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.arkueid.onair.R
 import com.arkueid.onair.databinding.ItemModuleBannerBinding
 import com.arkueid.onair.databinding.ItemModuleNormalBinding
-import com.arkueid.onair.entity.Module
+import com.arkueid.onair.domain.entity.Module
+import com.youth.banner.Banner
 import com.youth.banner.indicator.CircleIndicator
 
 /**
@@ -46,7 +47,7 @@ class ModuleAdapter(var data: List<Module>) : RecyclerView.Adapter<ModuleAdapter
         val bannerView = binding.bannerView
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ModuleAdapter.ModuleVH {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ModuleVH {
         when (viewType) {
             Module.BANNER -> {
                 return BannerVH(
@@ -68,7 +69,7 @@ class ModuleAdapter(var data: List<Module>) : RecyclerView.Adapter<ModuleAdapter
 
     override fun getItemCount(): Int = data.size
 
-    override fun onBindViewHolder(holder: ModuleAdapter.ModuleVH, position: Int) {
+    override fun onBindViewHolder(holder: ModuleVH, position: Int) {
         val module = data[position]
         bindTitle(holder, module)
 

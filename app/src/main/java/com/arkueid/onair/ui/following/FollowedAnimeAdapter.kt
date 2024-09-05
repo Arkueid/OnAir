@@ -6,8 +6,8 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.arkueid.onair.databinding.ItemFollowedAnimeBinding
-import com.arkueid.onair.entity.Anime
-import com.arkueid.onair.entity.play
+import com.arkueid.onair.domain.entity.Anime
+import com.arkueid.onair.domain.entity.play
 import com.bumptech.glide.Glide
 
 /**

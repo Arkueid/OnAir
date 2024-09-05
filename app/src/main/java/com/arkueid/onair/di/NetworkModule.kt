@@ -1,9 +1,8 @@
 package com.arkueid.onair.di
 
 import com.arkueid.onair.data.TestDataSource
-import com.arkueid.onair.data.source.bangumi.BangumiSource
 import com.arkueid.onair.data.source.mikan.MikanSource
-import com.arkueid.onair.data.repository.DataSource
+import com.arkueid.onair.data.source.DataSource
 import com.arkueid.onair.data.repository.Repository
 import com.arkueid.onair.data.repository.RepositoryImpl
 import dagger.Module
@@ -41,13 +40,6 @@ object NetworkModule {
         OkHttpClient.Builder()
             .addInterceptor(requestHeaderInterceptor)
             .build()
-    }
-
-    @Singleton
-    @Provides
-    @Named("bangumi")
-    fun provideBangumiDataSource(): DataSource {
-        return BangumiSource(okHttpClient)
     }
 
     @Singleton

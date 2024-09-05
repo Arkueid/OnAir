@@ -15,7 +15,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.arkueid.onair.R
-import com.arkueid.onair.common.TagText
+import com.arkueid.onair.common.view.TagText
 import com.arkueid.onair.databinding.ActivitySearchBinding
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch

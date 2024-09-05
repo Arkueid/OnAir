@@ -5,8 +5,8 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.arkueid.onair.databinding.ItemSearchResultBinding
-import com.arkueid.onair.entity.SearchResultItem
-import com.arkueid.onair.entity.play
+import com.arkueid.onair.domain.entity.SearchItem
+import com.arkueid.onair.domain.entity.play
 import com.bumptech.glide.Glide
 
 /**
@@ -17,7 +17,7 @@ import com.bumptech.glide.Glide
 class SearchResultAdapter :
     RecyclerView.Adapter<SearchResultAdapter.VH>() {
 
-    private var data: List<SearchResultItem> = emptyList()
+    private var data: List<SearchItem> = emptyList()
 
     class VH(binding: ItemSearchResultBinding) : RecyclerView.ViewHolder(binding.root) {
         val title = binding.title
@@ -25,7 +25,7 @@ class SearchResultAdapter :
     }
 
     @SuppressLint("NotifyDataSetChanged")
-    fun submitList(data: List<SearchResultItem>) {
+    fun submitList(data: List<SearchItem>) {
         this.data = data
         notifyDataSetChanged()
     }

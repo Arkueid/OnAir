@@ -20,7 +20,7 @@
         app:layout_constraintLeft_toLeftOf="@id/space"
         app:layout_constraintStart_toStartOf="@id/space" />
 
-    <com.arkueid.onair.ui.play.danmaku.DanmakuView
+    <com.arkueid.onair.common.view.DanmakuView
         android:id="@+id/danmakuView"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />

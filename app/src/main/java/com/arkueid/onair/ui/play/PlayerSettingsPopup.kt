@@ -8,7 +8,7 @@ import android.view.ViewGroup
 import android.widget.PopupWindow
 import com.arkueid.onair.R
 import com.arkueid.onair.databinding.PopupPlayerSettingsBinding
-import com.arkueid.onair.entity.DanmakuItem
+import com.arkueid.onair.domain.entity.Danmaku
 import java.util.Locale
 import kotlin.math.round
 
@@ -42,10 +42,10 @@ class PlayerSettingsPopup(
         get() = _filterStyles
         set(value) {
             _filterStyles = value
-            binding.danmakuFilterTopCheckBox.isChecked = value and DanmakuItem.Style.TOP != 0
-            binding.danmakuFilterBottomCheckBox.isChecked = value and DanmakuItem.Style.BOTTOM != 0
+            binding.danmakuFilterTopCheckBox.isChecked = value and Danmaku.Style.TOP != 0
+            binding.danmakuFilterBottomCheckBox.isChecked = value and Danmaku.Style.BOTTOM != 0
             binding.danmakuFilterRollingCheckBox.isChecked =
-                value and DanmakuItem.Style.ROLLING != 0
+                value and Danmaku.Style.ROLLING != 0
             listener?.onDanmakuFilterStylesChanged(_filterStyles)
         }
 
@@ -89,27 +89,27 @@ class PlayerSettingsPopup(
 
         binding.danmakuFilterTopCheckBox.setOnCheckedChangeListener { _, isChecked ->
             _filterStyles = if (isChecked) {
-                _filterStyles or DanmakuItem.Style.TOP
+                _filterStyles or Danmaku.Style.TOP
             } else {
-                _filterStyles and (DanmakuItem.Style.TOP.inv() and 0b111)
+                _filterStyles and (Danmaku.Style.TOP.inv() and 0b111)
             }
             listener?.onDanmakuFilterStylesChanged(_filterStyles)
         }
 
         binding.danmakuFilterBottomCheckBox.setOnCheckedChangeListener { _, isChecked ->
             _filterStyles = if (isChecked) {
-                _filterStyles or DanmakuItem.Style.BOTTOM
+                _filterStyles or Danmaku.Style.BOTTOM
             } else {
-                _filterStyles and (DanmakuItem.Style.BOTTOM.inv() and 0b111)
+                _filterStyles and (Danmaku.Style.BOTTOM.inv() and 0b111)
             }
             listener?.onDanmakuFilterStylesChanged(_filterStyles)
         }
 
         binding.danmakuFilterRollingCheckBox.setOnCheckedChangeListener { _, isChecked ->
             _filterStyles = if (isChecked) {
-                _filterStyles or DanmakuItem.Style.ROLLING
+                _filterStyles or Danmaku.Style.ROLLING
             } else {
-                _filterStyles and (DanmakuItem.Style.ROLLING.inv() and 0b111)
+                _filterStyles and (Danmaku.Style.ROLLING.inv() and 0b111)
             }
             listener?.onDanmakuFilterStylesChanged(_filterStyles)
         }

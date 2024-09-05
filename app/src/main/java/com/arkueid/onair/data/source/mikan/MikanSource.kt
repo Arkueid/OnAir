@@ -1,12 +1,12 @@
 package com.arkueid.onair.data.source.mikan
 
-import com.arkueid.onair.data.repository.DataSource
-import com.arkueid.onair.entity.Anime
-import com.arkueid.onair.entity.ModuleData
-import com.arkueid.onair.entity.SearchResultData
-import com.arkueid.onair.entity.SearchTipData
-import com.arkueid.onair.entity.WeeklyData
-import com.arkueid.onair.entity.WeeklySubject
+import com.arkueid.onair.data.source.DataSource
+import com.arkueid.onair.domain.ModuleData
+import com.arkueid.onair.domain.SearchResult
+import com.arkueid.onair.domain.SearchTipData
+import com.arkueid.onair.domain.WeeklyData
+import com.arkueid.onair.domain.entity.Anime
+import com.arkueid.onair.domain.entity.WeeklyAnime
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
@@ -41,7 +41,7 @@ open class MikanSource(protected val okHttpClient: OkHttpClient) : DataSource {
         TODO("Not yet implemented")
     }
 
-    override fun getSearchResultData(query: String): Flow<SearchResultData> {
+    override fun getSearchResultData(query: String): Flow<SearchResult> {
         TODO("Not yet implemented")
     }
 
@@ -54,12 +54,12 @@ open class MikanSource(protected val okHttpClient: OkHttpClient) : DataSource {
             }
     }
 
-    private fun parseWeeklySubject(index: Int, element: Element): List<WeeklySubject> {
+    private fun parseWeeklySubject(index: Int, element: Element): List<WeeklyAnime> {
         return element.select(".m-week-square").map {
-            WeeklySubject(
+            WeeklyAnime(
                 Anime(
                     it.select(".small-title").text(),
-                    it.select(".b-lazy").attr("data-src").let { "$BASE_URL$it" },
+                    it.select(".b-lazy").attr("data-src").let { s -> "$BASE_URL$s" },
                     "https://img.qunliao.info/4oEGX68t_9505974551.mp4", // TODO
                 ), index + 1
             )

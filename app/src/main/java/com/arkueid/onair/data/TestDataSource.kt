@@ -1,12 +1,12 @@
 package com.arkueid.onair.data
 
 import com.arkueid.onair.data.source.mikan.MikanSource
-import com.arkueid.onair.entity.ModuleData
-import com.arkueid.onair.entity.Module
-import com.arkueid.onair.entity.Anime
-import com.arkueid.onair.entity.SearchResultItem
-import com.arkueid.onair.entity.SearchResultData
-import com.arkueid.onair.entity.SearchTipData
+import com.arkueid.onair.domain.ModuleData
+import com.arkueid.onair.domain.entity.Module
+import com.arkueid.onair.domain.entity.Anime
+import com.arkueid.onair.domain.entity.SearchItem
+import com.arkueid.onair.domain.SearchResult
+import com.arkueid.onair.domain.SearchTipData
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
@@ -27,7 +27,7 @@ class TestDataSource(okHttpClient: OkHttpClient) : MikanSource(okHttpClient) {
     private val url = "https://img.qunliao.info/4oEGX68t_9505974551.mp4"
 
     override fun getModuleData(): Flow<ModuleData> {
-        var time = System.currentTimeMillis()
+//        var time = System.currentTimeMillis()
         return flow {
 //            mutableListOf(
 //                Module(
@@ -55,7 +55,7 @@ class TestDataSource(okHttpClient: OkHttpClient) : MikanSource(okHttpClient) {
         }.flowOn(Dispatchers.IO)
     }
 
-    private val animes by lazy {
+    private val animeDatabase by lazy {
         listOf(
             "Naruto",
             "One Piece",
@@ -113,7 +113,7 @@ class TestDataSource(okHttpClient: OkHttpClient) : MikanSource(okHttpClient) {
     override fun getSearchTipData(query: String): Flow<SearchTipData> {
         return flow {
             val keywords = query.split(" ").filter { it.isNotBlank() }
-            val results = animes.filter { title ->
+            val results = animeDatabase.filter { title ->
                 keywords.all { keyword ->
                     title.contains(keyword, ignoreCase = true)
                 }
@@ -122,10 +122,10 @@ class TestDataSource(okHttpClient: OkHttpClient) : MikanSource(okHttpClient) {
         }
     }
 
-    override fun getSearchResultData(query: String): Flow<SearchResultData> {
+    override fun getSearchResultData(query: String): Flow<SearchResult> {
         return getSearchTipData(query).transform {
             emit(it.map { tip ->
-                SearchResultItem(
+                SearchItem(
                     Anime(
                         tip,
                         "https://acg.suyanw.cn/sjdm/random.php?r=${tip}",
@@ -328,7 +328,7 @@ class TestDataSource(okHttpClient: OkHttpClient) : MikanSource(okHttpClient) {
                         url,
                     ), Anime(
                         "${time++}".reversed(),
-                        "https://acg.suyanw.cn/sjdm/random.php?r=${time++}",
+                        "https://acg.suyanw.cn/sjdm/random.php?r=${time}",
                         url,
                     )
                 ), "ssss"

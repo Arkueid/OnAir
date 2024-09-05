@@ -1,9 +1,9 @@
 package com.arkueid.onair.data.repository
 
-import com.arkueid.onair.entity.ModuleData
-import com.arkueid.onair.entity.SearchResultData
-import com.arkueid.onair.entity.SearchTipData
-import com.arkueid.onair.entity.WeeklyData
+import com.arkueid.onair.domain.ModuleData
+import com.arkueid.onair.domain.SearchResult
+import com.arkueid.onair.domain.SearchTipData
+import com.arkueid.onair.domain.WeeklyData
 import kotlinx.coroutines.flow.Flow
 
 interface Repository {
@@ -14,5 +14,5 @@ interface Repository {
 
     fun getSearchTip(query: String): Flow<SearchTipData>
 
-    fun getSearchResult(query: String): Flow<SearchResultData>
+    fun getSearchResult(query: String): Flow<SearchResult>
 }

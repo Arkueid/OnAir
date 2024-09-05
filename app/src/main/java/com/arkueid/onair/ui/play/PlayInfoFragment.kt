@@ -11,7 +11,7 @@ import androidx.transition.ChangeBounds
 import androidx.transition.TransitionManager
 import com.arkueid.onair.R
 import com.arkueid.onair.databinding.FragmentPlayInfoBinding
-import com.arkueid.onair.entity.Anime
+import com.arkueid.onair.domain.entity.Anime
 import com.arkueid.onair.ui.following.FollowingViewModel
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.DataSource
@@ -49,7 +49,7 @@ class PlayInfoFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         arguments?.let {
-            anime = it.getParcelable("anime")!!
+            anime = it.getParcelable<Anime>("anime")!!
             Glide.with(binding.cover).asBitmap().placeholder(R.drawable.loading_image)
                 .addListener(object : RequestListener<Bitmap> {
                     override fun onLoadFailed(

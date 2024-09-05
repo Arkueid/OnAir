@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.arkueid.testsource"
+    android:revisionCode="0"
+    android:versionCode="1">
+
+    <application
+        android:icon="@mipmap/ic_launcher"
+        android:label="测试源"
+        android:roundIcon="@mipmap/ic_launcher">
+        <meta-data
+            android:name="onair_extension"
+            android:value="true" />
+    </application>
+
+</manifest>

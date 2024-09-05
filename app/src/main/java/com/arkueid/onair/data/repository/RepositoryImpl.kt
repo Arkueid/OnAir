@@ -1,9 +1,10 @@
 package com.arkueid.onair.data.repository
 
-import com.arkueid.onair.entity.Module
-import com.arkueid.onair.entity.SearchResultData
-import com.arkueid.onair.entity.SearchTipData
-import com.arkueid.onair.entity.WeeklyData
+import com.arkueid.onair.data.source.DataSource
+import com.arkueid.onair.domain.entity.Module
+import com.arkueid.onair.domain.SearchResult
+import com.arkueid.onair.domain.SearchTipData
+import com.arkueid.onair.domain.WeeklyData
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
@@ -21,7 +22,7 @@ class RepositoryImpl @Inject constructor(private val dataSource: DataSource) :
         return dataSource.getSearchTipData(query)
     }
 
-    override fun getSearchResult(query: String): Flow<SearchResultData> {
+    override fun getSearchResult(query: String): Flow<SearchResult> {
         return dataSource.getSearchResultData(query)
     }
 }

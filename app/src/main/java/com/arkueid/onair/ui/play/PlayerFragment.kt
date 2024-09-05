@@ -22,12 +22,13 @@ import androidx.media3.common.VideoSize
 import androidx.media3.common.util.UnstableApi
 import androidx.media3.exoplayer.ExoPlayer
 import com.arkueid.onair.R
+import com.arkueid.onair.common.timeString
 import com.arkueid.onair.databinding.FragmentPlayerBinding
-import com.arkueid.onair.entity.Anime
-import com.arkueid.onair.entity.DanmakuItem
-import com.arkueid.onair.ui.play.danmaku.toDisplay
+import com.arkueid.onair.domain.entity.Anime
+import com.arkueid.onair.domain.entity.Danmaku
+import com.arkueid.onair.domain.entity.testData
+import com.arkueid.onair.domain.entity.toDisplay
 import dagger.hilt.android.AndroidEntryPoint
-import kotlin.random.Random
 
 /**
  * @author: Arkueid
@@ -81,6 +82,7 @@ class PlayerFragment : Fragment(), SurfaceHolder.Callback, OnClickListener, Play
 
         player = ExoPlayer.Builder(requireContext()).build()
         player.addListener(this)
+        lifecycle.addObserver(player.lifecycleObserver)
 
         binding.surfaceView.holder.addCallback(this)
         binding.playerControl.root.setOnClickListener(this)
@@ -92,6 +94,7 @@ class PlayerFragment : Fragment(), SurfaceHolder.Callback, OnClickListener, Play
         binding.playerControl.exitBtn.setOnClickListener(this)
         binding.playerControl.seekBar.setOnSeekBarChangeListener(this)
 
+        // 会被自动释放
         requireActivity().onBackPressedDispatcher.addCallback(
             viewLifecycleOwner, onBackPressedCallback
         )
@@ -101,7 +104,7 @@ class PlayerFragment : Fragment(), SurfaceHolder.Callback, OnClickListener, Play
         view.post { showControl() }
 
         arguments?.run {
-            anime = requireArguments().getParcelable("anime")!!
+            anime = requireArguments().getParcelable<Anime>("anime")!!
             play(anime.url)
         }
     }
@@ -152,27 +155,6 @@ class PlayerFragment : Fragment(), SurfaceHolder.Callback, OnClickListener, Play
 
     }
 
-    private var isLastPlaying = false
-
-    override fun onPause() {
-        super.onPause()
-        isLastPlaying = player.isPlaying
-        player.pause()
-    }
-
-    override fun onResume() {
-        super.onResume()
-        if (isLastPlaying) {
-            player.play()
-        }
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        player.release()
-        onBackPressedCallback.remove()
-    }
-
     override fun surfaceCreated(holder: SurfaceHolder) {
         player.setVideoSurfaceHolder(holder)
     }
@@ -211,32 +193,14 @@ class PlayerFragment : Fragment(), SurfaceHolder.Callback, OnClickListener, Play
      * update view except seek bar
      */
     private fun updateProgress() {
-        binding.playerControl.currentPositionText.text = parseTime(player.currentPosition)
-        binding.playerControl.durationText.text = parseTime(player.duration)
+        binding.playerControl.currentPositionText.text = player.currentPosition.timeString
+        binding.playerControl.durationText.text = player.duration.timeString
         binding.danmakuView.progress = player.currentPosition
-    }
-
-    private val danmakus = {
-        val list = mutableListOf<DanmakuItem>()
-        val styles =
-            listOf(DanmakuItem.Style.ROLLING, DanmakuItem.Style.TOP, DanmakuItem.Style.BOTTOM)
-        for (i in 0..1200) {
-            val p = Random.nextLong(0, player.duration)
-            list.add(
-                DanmakuItem(
-                    progress = p, // 时间范围 0 到 7分27秒
-                    content = "弹幕${parseTime(p)}.${p % 1000}",
-                    color = Random.nextInt(0xFF000000.toInt(), 0xFFFFFFFF.toInt()), // 随机颜色
-                    style = styles.random()
-                )
-            )
-        }
-        list.apply { sortBy { it.progress } }
     }
 
     private fun postUpdateProgress() {
         // TODO fetch from viewModel
-        binding.danmakuView.danmakus = danmakus().map { it.toDisplay() }
+        binding.danmakuView.danmakus = Danmaku.testData(player.duration).map { it.toDisplay() }
         val handler = Handler(Looper.getMainLooper())
         val runnable = object : Runnable {
             override fun run() {
@@ -253,17 +217,6 @@ class PlayerFragment : Fragment(), SurfaceHolder.Callback, OnClickListener, Play
             }
         }
         handler.post(runnable)
-    }
-
-    private fun parseTime(time: Long): String {
-        val hour = time / 3600000
-        val minute = time % 3600000 / 60000
-        val second = time % 60000 / 1000
-        return if (hour > 0) {
-            "%02d:%02d:%02d".format(hour, minute, second)
-        } else {
-            "%02d:%02d".format(minute, second)
-        }
     }
 
     private fun toggleFullscreen() {
@@ -393,8 +346,7 @@ class PlayerFragment : Fragment(), SurfaceHolder.Callback, OnClickListener, Play
         binding.space.post {
             binding.surfaceView.run {
                 layoutParams = layoutParams.apply {
-                    width =
-                        binding.space.height * resolution.first / resolution.second
+                    width = binding.space.height * resolution.first / resolution.second
                 }
             }
         }

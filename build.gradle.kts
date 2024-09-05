@@ -4,4 +4,5 @@ plugins {
     alias(libs.plugins.jetbrains.kotlin.android) apply false
     // dependency injection
     id("com.google.dagger.hilt.android") version "2.49" apply false
+    alias(libs.plugins.android.library) apply false
 }

@@ -3,10 +3,8 @@ package com.arkueid.onair.ui.play
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
 import com.tencent.mmkv.MMKV
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.cancel
 import javax.inject.Inject
 
 /**
@@ -87,10 +85,5 @@ class PlayerViewModel @Inject constructor(private val mmkv: MMKV) : ViewModel() 
         _danmakuOpacity.value = mmkv.decodeInt(KEY_DANMAKU_OPACITY, 255)
         _danmakuSize.value = mmkv.decodeFloat(KEY_DANMAKU_SIZE, 16f)
         _danmakuVisibleRange.value = mmkv.decodeInt(KEY_DANMAKU_VISIBLE_RANGE, 4)
-    }
-
-    override fun onCleared() {
-        super.onCleared()
-        viewModelScope.cancel(null)
     }
 }

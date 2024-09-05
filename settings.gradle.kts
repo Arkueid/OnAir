@@ -21,4 +21,4 @@ dependencyResolutionManagement {
 
 rootProject.name = "OnAir"
 include(":app")
- 
+include(":testsource")
