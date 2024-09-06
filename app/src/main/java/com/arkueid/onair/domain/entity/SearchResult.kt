@@ -1,5 +1,5 @@
 package com.arkueid.onair.domain.entity
 
-data class SearchItem(
+data class SearchResult(
     val anime: Anime,
 )

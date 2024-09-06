@@ -8,9 +8,7 @@
         android:icon="@mipmap/ic_launcher"
         android:label="测试源"
         android:roundIcon="@mipmap/ic_launcher">
-        <meta-data
-            android:name="onair_extension"
-            android:value="true" />
+
     </application>
 
 </manifest>

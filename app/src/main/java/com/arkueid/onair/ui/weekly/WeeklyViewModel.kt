@@ -3,7 +3,7 @@ package com.arkueid.onair.ui.weekly
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.arkueid.onair.data.repository.Repository
-import com.arkueid.onair.domain.WeeklyData
+import com.arkueid.onair.domain.entity.WeeklyAnime
 import com.arkueid.onair.utils.Result
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.cancel
@@ -22,7 +22,7 @@ class WeeklyViewModel @Inject constructor(private val repository: Repository) :
         private const val TAG = "WeeklyViewModel"
     }
 
-    val currentWeeklySubjects = MutableStateFlow<WeeklyData>(emptyList())
+    val currentWeeklySubjects = MutableStateFlow<List<List<WeeklyAnime>>>(emptyList())
 
     val weeklySubjects = repository.getWeekly()
         .transform {

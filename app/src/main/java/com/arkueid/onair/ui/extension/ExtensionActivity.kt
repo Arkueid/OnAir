@@ -31,11 +31,13 @@ class ExtensionActivity : AppCompatActivity() {
         checkPermissions()
         val extension = File(Environment.getExternalStorageDirectory(), "testsource-debug.apk")
         if (extension.exists()) {
-            ExtensionLoader.load(extension.absolutePath).let {
+            ExtensionLoader.load(extension.absolutePath)?.let {
                 binding.pluginId.text = it.key
                 binding.pluginName.text = it.name
                 binding.pluginVersion.text = it.version
                 binding.pluginIcon.setImageDrawable(it.icon)
+            } ?: run {
+                ToastUtils.showToast("插件加载失败")
             }
         }
 

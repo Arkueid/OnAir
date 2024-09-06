@@ -5,7 +5,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.arkueid.onair.databinding.ItemSearchResultBinding
-import com.arkueid.onair.domain.entity.SearchItem
+import com.arkueid.onair.domain.entity.SearchResult
 import com.arkueid.onair.domain.entity.play
 import com.bumptech.glide.Glide
 
@@ -17,7 +17,7 @@ import com.bumptech.glide.Glide
 class SearchResultAdapter :
     RecyclerView.Adapter<SearchResultAdapter.VH>() {
 
-    private var data: List<SearchItem> = emptyList()
+    private var data: List<SearchResult> = emptyList()
 
     class VH(binding: ItemSearchResultBinding) : RecyclerView.ViewHolder(binding.root) {
         val title = binding.title
@@ -25,7 +25,7 @@ class SearchResultAdapter :
     }
 
     @SuppressLint("NotifyDataSetChanged")
-    fun submitList(data: List<SearchItem>) {
+    fun submitList(data: List<SearchResult>) {
         this.data = data
         notifyDataSetChanged()
     }
@@ -44,7 +44,7 @@ class SearchResultAdapter :
 
     override fun onBindViewHolder(holder: VH, position: Int) {
         val item = data[position]
-        holder.title.text = item.anime.title
+        holder.title.text = item.anime.name
         Glide.with(holder.itemView)
             .asBitmap()
             .load(item.anime.cover)

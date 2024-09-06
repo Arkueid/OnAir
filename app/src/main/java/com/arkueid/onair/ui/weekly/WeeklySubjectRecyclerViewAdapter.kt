@@ -26,7 +26,7 @@ class WeeklySubjectRecyclerViewAdapter(
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val item = data[position]
-        holder.title.text = item.anime.title
+        holder.title.text = item.anime.name
         Glide.with(holder.cover)
             .asBitmap()
             .load(item.anime.cover)

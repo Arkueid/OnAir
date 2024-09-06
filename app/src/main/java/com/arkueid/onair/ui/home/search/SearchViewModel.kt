@@ -5,9 +5,9 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.arkueid.onair.data.repository.Repository
-import com.arkueid.onair.domain.SearchResult
 import com.arkueid.onair.domain.entity.SearchHistory
-import com.arkueid.onair.domain.SearchTipData
+import com.arkueid.onair.domain.entity.SearchResult
+import com.arkueid.onair.domain.entity.SearchTip
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.tencent.mmkv.MMKV
@@ -40,11 +40,11 @@ class SearchViewModel @Inject constructor(
     val searchHistory: LiveData<MutableList<SearchHistory>> = _searchHistory
 
     private val _query = MutableStateFlow("")
-    private val _searchTips = MutableStateFlow<SearchTipData>(emptyList())
-    val searchTips: StateFlow<SearchTipData> = _searchTips
+    private val _searchTips = MutableStateFlow<List<SearchTip>>(emptyList())
+    val searchTips: StateFlow<List<SearchTip>> = _searchTips
 
-    private val _searchResults = MutableStateFlow<SearchResult>(emptyList())
-    val searchResults: StateFlow<SearchResult> = _searchResults
+    private val _searchResults = MutableStateFlow<List<SearchResult>>(emptyList())
+    val searchResults: StateFlow<List<SearchResult>> = _searchResults
 
     init {
         loadSearchHistory()

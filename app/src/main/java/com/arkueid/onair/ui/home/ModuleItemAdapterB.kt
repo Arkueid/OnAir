@@ -32,7 +32,7 @@ class ModuleItemAdapterB(data: List<Anime>) :
     override fun onBindView(holder: BannerVH?, data: Anime?, position: Int, size: Int) {
         if (data == null || holder == null) return
 
-        holder.title.text = data.title
+        holder.title.text = data.name
         Glide.with(holder.itemView)
             .asBitmap()
             .load(data.cover)

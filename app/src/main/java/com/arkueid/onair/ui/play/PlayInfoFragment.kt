@@ -85,7 +85,7 @@ class PlayInfoFragment : Fragment() {
                     }
 
                 }).load(anime.cover).into(binding.cover)
-            binding.title.text = anime.title
+            binding.title.text = anime.name
             binding.description.text = getText(R.string.re0_brief)
         }
 

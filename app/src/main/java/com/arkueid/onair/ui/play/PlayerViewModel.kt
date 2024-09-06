@@ -3,8 +3,14 @@ package com.arkueid.onair.ui.play
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.arkueid.onair.data.repository.Repository
+import com.arkueid.onair.domain.entity.Anime
+import com.arkueid.onair.domain.entity.Danmaku
+import com.arkueid.onair.utils.Result
 import com.tencent.mmkv.MMKV
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
 /**
@@ -14,7 +20,10 @@ import javax.inject.Inject
  */
 
 @HiltViewModel
-class PlayerViewModel @Inject constructor(private val mmkv: MMKV) : ViewModel() {
+class PlayerViewModel @Inject constructor(
+    private val mmkv: MMKV,
+    private val repository: Repository
+) : ViewModel() {
 
     companion object {
         const val KEY_SHOW_DANMAKU = "showDanmaku"
@@ -25,6 +34,12 @@ class PlayerViewModel @Inject constructor(private val mmkv: MMKV) : ViewModel() 
         const val KEY_DANMAKU_SIZE = "danmakuSize"
         const val KEY_DANMAKU_VISIBLE_RANGE = "danmakuVisibleRange"
     }
+
+    fun getDanmakus(anime: Anime) = repository.getDanmakus(anime)
+        .map { Result.success(it) }
+        .catch {
+            emit(Result.failure(it, emptyList()))
+        }
 
     private val _videoSpeed = MutableLiveData<Float>()
     val videoSpeed: LiveData<Float> = _videoSpeed

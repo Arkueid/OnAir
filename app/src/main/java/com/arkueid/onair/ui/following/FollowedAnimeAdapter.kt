@@ -20,7 +20,7 @@ class FollowedAnimeAdapter(
 ) : ListAdapter<Anime, FollowedAnimeAdapter.FollowingAnimeViewHolder>(object :
     DiffUtil.ItemCallback<Anime>() {
     override fun areItemsTheSame(oldItem: Anime, newItem: Anime): Boolean {
-        return oldItem.title == newItem.title
+        return oldItem.id == newItem.id && oldItem.sourceId == newItem.sourceId
     }
 
     override fun areContentsTheSame(oldItem: Anime, newItem: Anime): Boolean {
@@ -38,7 +38,7 @@ class FollowedAnimeAdapter(
 
     override fun onBindViewHolder(holder: FollowingAnimeViewHolder, position: Int) {
         val item = getItem(position)
-        holder.title.text = item.title
+        holder.title.text = item.name
         Glide.with(holder.cover).asBitmap().load(item.cover).into(holder.cover)
         holder.likeBtn.isSelected = true
         holder.likeBtn.setOnClickListener {

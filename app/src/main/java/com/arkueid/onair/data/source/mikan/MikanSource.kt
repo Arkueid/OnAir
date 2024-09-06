@@ -1,11 +1,11 @@
 package com.arkueid.onair.data.source.mikan
 
 import com.arkueid.onair.data.source.DataSource
-import com.arkueid.onair.domain.ModuleData
-import com.arkueid.onair.domain.SearchResult
-import com.arkueid.onair.domain.SearchTipData
-import com.arkueid.onair.domain.WeeklyData
 import com.arkueid.onair.domain.entity.Anime
+import com.arkueid.onair.domain.entity.Danmaku
+import com.arkueid.onair.domain.entity.Module
+import com.arkueid.onair.domain.entity.SearchResult
+import com.arkueid.onair.domain.entity.SearchTip
 import com.arkueid.onair.domain.entity.WeeklyAnime
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
@@ -19,12 +19,18 @@ import org.jsoup.nodes.Element
 
 open class MikanSource(protected val okHttpClient: OkHttpClient) : DataSource {
 
+    override val sourceId: String
+        get() = "com.arkueid.source.mikan"
+
+    override val sourceName: String
+        get() = "Mikan"
+
     companion object {
         private const val BASE_URL = "https://mikanime.tv/"
     }
 
     // scraping weekly anime update info from html
-    override fun getWeeklyData(): Flow<WeeklyData> {
+    override fun getWeeklyData(): Flow<List<List<WeeklyAnime>>> {
         return flow {
             val html = Request.Builder().url(BASE_URL).get().build().let {
                 okHttpClient.newCall(it).execute().body()!!.string()
@@ -33,19 +39,23 @@ open class MikanSource(protected val okHttpClient: OkHttpClient) : DataSource {
         }.flowOn(Dispatchers.IO)
     }
 
-    override fun getModuleData(): Flow<ModuleData> {
+    override fun getModuleData(): Flow<List<Module>> {
         TODO("Not yet implemented")
     }
 
-    override fun getSearchTipData(query: String): Flow<SearchTipData> {
+    override fun getSearchTipData(query: String): Flow<List<SearchTip>> {
         TODO("Not yet implemented")
     }
 
-    override fun getSearchResultData(query: String): Flow<SearchResult> {
+    override fun getSearchResultData(query: String): Flow<List<SearchResult>> {
         TODO("Not yet implemented")
     }
 
-    private fun parseWeeklyData(html: String): WeeklyData {
+    override fun getDanmakuData(anime: Anime): Flow<List<Danmaku>> {
+        TODO("Not yet implemented")
+    }
+
+    private fun parseWeeklyData(html: String): List<List<WeeklyAnime>> {
         val doc = Jsoup.parse(html)
         return doc.select(".m-home-week-item").take(7)
             .sortedBy { text2DayOfWeek(it.select(".title span").text()) }
@@ -55,12 +65,16 @@ open class MikanSource(protected val okHttpClient: OkHttpClient) : DataSource {
     }
 
     private fun parseWeeklySubject(index: Int, element: Element): List<WeeklyAnime> {
-        return element.select(".m-week-square").map {
+        return element.select(".m-week-square").mapIndexed { id, it ->
             WeeklyAnime(
                 Anime(
+                    "weekly-$id",
+                    sourceId,
                     it.select(".small-title").text(),
+                    sourceName,
                     it.select(".b-lazy").attr("data-src").let { s -> "$BASE_URL$s" },
                     "https://img.qunliao.info/4oEGX68t_9505974551.mp4", // TODO
+                    "简介：",
                 ), index + 1
             )
         }

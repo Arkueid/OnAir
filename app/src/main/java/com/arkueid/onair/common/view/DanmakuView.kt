@@ -9,7 +9,7 @@ import android.view.View
 import com.arkueid.onair.common.dp
 import com.arkueid.onair.common.sp
 import com.arkueid.onair.domain.entity.Danmaku
-import com.arkueid.onair.domain.display.DisplayDanmaku
+import com.arkueid.onair.domain.entity.DisplayDanmaku
 import com.arkueid.onair.domain.entity.isRolling
 
 

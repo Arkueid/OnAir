@@ -7,8 +7,8 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.RecyclerView
 import com.arkueid.onair.R
 import com.arkueid.onair.databinding.ModuleItemNormalBinding
-import com.arkueid.onair.domain.entity.Module
 import com.arkueid.onair.domain.entity.Anime
+import com.arkueid.onair.domain.entity.Module
 import com.arkueid.onair.domain.entity.play
 import com.bumptech.glide.Glide
 
@@ -38,7 +38,7 @@ class ModuleItemAdapterN(private val style: Int, var data: List<Anime>) :
 
     override fun onBindViewHolder(holder: ItemVH, position: Int) {
         val item = data[position]
-        holder.title.text = item.title
+        holder.title.text = item.name
         Glide.with(holder.itemView)
             .asBitmap()
             .error(R.drawable.loading_image)

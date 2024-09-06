@@ -23,8 +23,8 @@ class HomeViewModel @Inject constructor(private val repository: Repository) : Vi
             emit(Result.success(it))
         }
         .catch {
-            throw it
-//            emit(Result.failure(it, emptyList()))
+//            throw it
+            emit(Result.failure(it, emptyList()))
         }
 
     override fun onCleared() {

@@ -1,6 +1,5 @@
 package com.arkueid.onair.extension
 
-import android.app.Application
 import android.content.Context
 import android.content.pm.PackageInfo
 import android.content.pm.PackageManager
@@ -23,7 +22,7 @@ object ExtensionLoader {
         return packageInfo.applicationInfo.metaData.getBoolean("onair_extension")
     }
 
-    fun load(apkPath: String): ExtensionInfo {
+    fun load(apkPath: String): ExtensionInfo? {
         val pm = applicationContext.packageManager
         val packageInfo = pm.getPackageArchiveInfo(apkPath, PackageManager.GET_META_DATA)
 
@@ -33,11 +32,11 @@ object ExtensionLoader {
                     packageInfo.packageName,
                     packageInfo.versionName,
                     packageInfo.applicationInfo.loadLabel(pm).toString(),
-                    pm.getApplicationIcon(packageInfo.packageName)
+                    pm.getApplicationIcon(packageInfo.applicationInfo)
                 )
             }
         }
 
-        throw RuntimeException("Extension load failed")
+        return null
     }
 }

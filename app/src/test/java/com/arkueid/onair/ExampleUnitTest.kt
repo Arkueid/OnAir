@@ -1,6 +1,6 @@
 package com.arkueid.onair
 
-import com.arkueid.onair.domain.entity.Danmaku
+import com.arkueid.onair.domain.entity.DanmakuImpl
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.withContext
@@ -16,7 +16,7 @@ class ExampleUnitTest {
     val l by lazy {
         List(500) {
             val p = Random.nextLong(0, 5000)
-            Danmaku(
+            DanmakuImpl(
                 progress = p, // 时间范围 0 到 7分27秒
                 content = "弹幕$p",
                 color = Random.nextInt(0xFF000000.toInt(), 0xFFFFFFFF.toInt()) // 随机颜色

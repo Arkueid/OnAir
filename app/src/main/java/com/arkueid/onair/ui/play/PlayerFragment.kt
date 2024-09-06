@@ -5,6 +5,7 @@ import android.content.res.Configuration
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.SurfaceHolder
 import android.view.View
@@ -16,6 +17,7 @@ import androidx.activity.OnBackPressedCallback
 import androidx.annotation.OptIn
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.media3.common.MediaItem
 import androidx.media3.common.Player
 import androidx.media3.common.VideoSize
@@ -26,9 +28,11 @@ import com.arkueid.onair.common.timeString
 import com.arkueid.onair.databinding.FragmentPlayerBinding
 import com.arkueid.onair.domain.entity.Anime
 import com.arkueid.onair.domain.entity.Danmaku
-import com.arkueid.onair.domain.entity.testData
 import com.arkueid.onair.domain.entity.toDisplay
+import com.arkueid.onair.utils.ToastUtils
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 
 /**
  * @author: Arkueid
@@ -104,8 +108,19 @@ class PlayerFragment : Fragment(), SurfaceHolder.Callback, OnClickListener, Play
         view.post { showControl() }
 
         arguments?.run {
-            anime = requireArguments().getParcelable<Anime>("anime")!!
+            anime = requireArguments().getParcelable("anime")!!
             play(anime.url)
+
+            lifecycleScope.launch {
+                viewModel.getDanmakus(anime).collect { result ->
+                    if (result.isSuccess) {
+                        binding.danmakuView.danmakus = result.data!!.map { it.toDisplay() }
+                        Log.d(TAG, "postUpdateProgress: ${binding.danmakuView.danmakus}")
+                    } else {
+                        ToastUtils.showToast("Failed to fetch danmakus")
+                    }
+                }
+            }
         }
     }
 
@@ -199,8 +214,7 @@ class PlayerFragment : Fragment(), SurfaceHolder.Callback, OnClickListener, Play
     }
 
     private fun postUpdateProgress() {
-        // TODO fetch from viewModel
-        binding.danmakuView.danmakus = Danmaku.testData(player.duration).map { it.toDisplay() }
+        // TODO test
         val handler = Handler(Looper.getMainLooper())
         val runnable = object : Runnable {
             override fun run() {
