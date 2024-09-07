@@ -8,9 +8,9 @@ import android.util.AttributeSet
 import android.view.View
 import com.arkueid.onair.common.dp
 import com.arkueid.onair.common.sp
-import com.arkueid.onair.domain.entity.Danmaku
-import com.arkueid.onair.domain.entity.DisplayDanmaku
-import com.arkueid.onair.domain.entity.isRolling
+import com.arkueid.onair.domain.DisplayDanmaku
+import com.arkueid.onair.domain.isRolling
+import com.arkueid.plugin.data.entity.Danmaku
 
 
 /**

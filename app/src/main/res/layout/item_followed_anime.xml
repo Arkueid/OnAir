@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="10dp"
+    android:layout_margin="5dp"
     app:cardCornerRadius="10dp">
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -13,26 +13,40 @@
         android:background="?attr/selectableItemBackground"
         android:clickable="true">
 
-        <androidx.constraintlayout.utils.widget.ImageFilterView
+        <ImageView
             android:id="@+id/cover"
-            android:layout_width="@dimen/wideModuleItemWidth"
-            android:layout_height="@dimen/wideModuleItemHeight"
-            android:layout_margin="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
             android:scaleType="centerCrop"
-            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintDimensionRatio="3:4"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:round="5dp" />
 
         <TextView
+            android:id="@+id/sourceName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/rect_round_right_bottom"
+            android:backgroundTint="@color/pink"
+            android:padding="5dp"
+            android:text="@string/sourceName"
+            android:textColor="@color/white"
+            android:textSize="12sp"
+            app:layout_constraintStart_toStartOf="@id/cover"
+            app:layout_constraintTop_toTopOf="@id/cover" />
+
+        <TextView
             android:id="@+id/title"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="10dp"
-            android:textSize="18sp"
+            android:padding="5dp"
+            android:text="@string/title"
+            android:textSize="14sp"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@id/cover"
-            app:layout_constraintTop_toTopOf="@id/cover" />
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/cover" />
 
         <androidx.constraintlayout.utils.widget.ImageFilterView
             android:id="@+id/likeBtn"
@@ -42,8 +56,8 @@
             android:clickable="true"
             android:padding="10dp"
             android:src="@drawable/button_like"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent" />
+            app:layout_constraintBottom_toBottomOf="@id/cover"
+            app:layout_constraintEnd_toEndOf="@id/cover" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

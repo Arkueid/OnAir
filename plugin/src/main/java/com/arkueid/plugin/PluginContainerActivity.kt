@@ -3,6 +3,8 @@ package com.arkueid.plugin
 import android.app.Activity
 import android.content.res.Resources
 import android.os.Bundle
+import android.util.Log
+import android.widget.Toast
 
 /**
  * @author: Arkueid
@@ -10,13 +12,31 @@ import android.os.Bundle
  * @desc:
  */
 class PluginContainerActivity : Activity() {
-    private val pluginLoader = PluginLoader(this)
+    private lateinit var pluginLoader: PluginLoader
+
+    companion object {
+        private const val TAG = "PluginContainerActivity"
+    }
+
+    init {
+        pluginLoader = PluginLoaderManager.currentLoader!!
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-//        pluginLoader.load()
 
-        val clazz = classLoader.loadClass("com.arkueid.testsource.MainActivity")
+
+        intent.getStringExtra("className")?.let { className ->
+            createPlugin(className, savedInstanceState)
+        }
+
+        if (!this::pluginLoader.isInitialized) {
+            Toast.makeText(this, "插件页面加载失败", Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    private fun createPlugin(className: String, savedInstanceState: Bundle?) {
+        val clazz = classLoader.loadClass(className)
         val constructor = clazz.getConstructor()
         val instance: IPlugin = constructor.newInstance() as IPlugin
         instance.attach(this)
@@ -30,6 +50,5 @@ class PluginContainerActivity : Activity() {
     override fun getClassLoader(): ClassLoader {
         return pluginLoader.classLoader
     }
-
 
 }

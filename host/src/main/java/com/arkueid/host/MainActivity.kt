@@ -10,16 +10,19 @@ import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
 import com.arkueid.plugin.PluginContainerActivity
 import com.arkueid.plugin.PluginLoader
+import com.arkueid.plugin.PluginLoaderManager
 import java.io.File
 
 class MainActivity : AppCompatActivity(), OnClickListener {
 
+    private lateinit var pluginLoader: PluginLoader
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
         requestPermissions(arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE), 1)
 
+        PluginLoaderManager.init(this)
 
         val loadBtn = findViewById<Button>(R.id.loadBtn)
         val gotoBtn = findViewById<Button>(R.id.gotoBtn)
@@ -29,7 +32,7 @@ class MainActivity : AppCompatActivity(), OnClickListener {
 
     private fun load() {
         val apk = File(Environment.getExternalStorageDirectory(), "testsource-debug.apk")
-        PluginLoader.load(apk.absolutePath)
+        pluginLoader = PluginLoaderManager.create(apk.absolutePath)!!
     }
 
     override fun onClick(v: View?) {
@@ -40,6 +43,10 @@ class MainActivity : AppCompatActivity(), OnClickListener {
     }
 
     private fun goto() {
-        startActivity(Intent(this, PluginContainerActivity::class.java))
+        PluginLoaderManager.push(pluginLoader.id)
+
+        startActivity(Intent(this, PluginContainerActivity::class.java).apply {
+            putExtra("className", pluginLoader.manifest.settingsActivityId)
+        })
     }
 }

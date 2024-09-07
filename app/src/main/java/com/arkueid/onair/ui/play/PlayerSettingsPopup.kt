@@ -8,7 +8,7 @@ import android.view.ViewGroup
 import android.widget.PopupWindow
 import com.arkueid.onair.R
 import com.arkueid.onair.databinding.PopupPlayerSettingsBinding
-import com.arkueid.onair.domain.entity.Danmaku
+import com.arkueid.plugin.data.entity.Danmaku
 import java.util.Locale
 import kotlin.math.round
 

@@ -4,8 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.arkueid.onair.data.repository.Repository
-import com.arkueid.onair.domain.entity.Anime
-import com.arkueid.onair.domain.entity.Danmaku
+import com.arkueid.plugin.data.entity.Anime
 import com.arkueid.onair.utils.Result
 import com.tencent.mmkv.MMKV
 import dagger.hilt.android.lifecycle.HiltViewModel

@@ -3,9 +3,9 @@ package com.arkueid.onair.ui.weekly
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.arkueid.onair.data.entity.play
 import com.arkueid.onair.databinding.ItemWeeklySubjectBinding
-import com.arkueid.onair.domain.entity.WeeklyAnime
-import com.arkueid.onair.domain.entity.play
+import com.arkueid.plugin.data.entity.WeeklyAnime
 import com.bumptech.glide.Glide
 
 

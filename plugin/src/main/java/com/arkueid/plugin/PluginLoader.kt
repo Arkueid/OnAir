@@ -1,8 +1,7 @@
 package com.arkueid.plugin
 
-import android.content.Context
-import android.content.pm.ApplicationInfo
 import android.content.res.Resources
+import androidx.core.content.res.ResourcesCompat
 import dalvik.system.DexClassLoader
 
 /**
@@ -10,26 +9,31 @@ import dalvik.system.DexClassLoader
  * @date: 2024/9/6
  * @desc:
  */
-class PluginLoader(private val proxyContext: Context) {
+class PluginLoader internal constructor(
+    val id: String,
+    val name: String,
+    val versionName: String,
+    private val iconResId: Int,
+    val resources: Resources,
+    val classLoader: DexClassLoader
+) {
+    val icon get() = ResourcesCompat.getDrawable(resources, iconResId, null)
 
-    private lateinit var _resources: Resources
-    val resources: Resources get() = _resources
-    private lateinit var _dexClassLoader: DexClassLoader
-    val classLoader: DexClassLoader get() = _dexClassLoader
+    @Suppress("UNCHECKED_CAST")
+    fun <T> create(className: String): T? {
+        return try {
+            val clazz = classLoader.loadClass(className)
+            val constructor = clazz.getConstructor()
+            constructor.newInstance() as T
+        } catch (e: Exception) {
+            e.printStackTrace()
+            null
+        }
+    }
 
-    fun load(pluginPath: String) {
-        // dex
-        val optimizedDirectory = proxyContext.getDir("dex", Context.MODE_PRIVATE).absolutePath
-        _dexClassLoader =
-            DexClassLoader(pluginPath, optimizedDirectory, null, proxyContext.classLoader)
-        val applicationInfo = ApplicationInfo()
-
-        // resources
-        applicationInfo.packageName = proxyContext.applicationInfo.packageName
-        applicationInfo.uid = proxyContext.applicationInfo.uid
-        applicationInfo.publicSourceDir = pluginPath
-        applicationInfo.sourceDir = pluginPath
-        applicationInfo.sharedLibraryFiles = proxyContext.applicationInfo.sharedLibraryFiles
-        _resources = proxyContext.packageManager.getResourcesForApplication(applicationInfo)
+    val manifest: IPluginManifest by lazy {
+        val clazz = classLoader.loadClass("$id.PluginManifest")
+        val constructor = clazz.getConstructor()
+        constructor.newInstance() as IPluginManifest
     }
 }

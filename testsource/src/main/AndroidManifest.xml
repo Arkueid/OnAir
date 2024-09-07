@@ -8,6 +8,15 @@
         android:icon="@mipmap/ic_launcher"
         android:label="测试源"
         android:roundIcon="@mipmap/ic_launcher">
+        <meta-data
+            android:name="on_air_ext"
+            android:value="true" />
+        <meta-data
+            android:name="on_air_ext_version_name"
+            android:value="1.0.0" />
+        <meta-data
+            android:name="on_air_ext_name"
+            android:value="测试源" />
 
     </application>
 

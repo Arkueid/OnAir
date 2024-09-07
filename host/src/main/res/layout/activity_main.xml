@@ -16,5 +16,9 @@
         android:layout_height="wrap_content"
         android:text="跳转页面" />
 
+    <com.google.android.material.materialswitch.MaterialSwitch
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
 </LinearLayout>
 

@@ -16,7 +16,7 @@ class SplashActivity : AppCompatActivity() {
 
     // milliseconds
     companion object {
-        private const val DISPLAY_DURATION = 500L
+        private const val DISPLAY_DURATION = 200L
         private const val TAG = "SplashActivity"
     }
 

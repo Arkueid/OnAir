@@ -4,9 +4,9 @@ import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.arkueid.onair.data.entity.play
 import com.arkueid.onair.databinding.ItemSearchResultBinding
-import com.arkueid.onair.domain.entity.SearchResult
-import com.arkueid.onair.domain.entity.play
+import com.arkueid.plugin.data.entity.SearchResult
 import com.bumptech.glide.Glide
 
 /**

@@ -1,5 +1,7 @@
 package com.arkueid.onair.di
 
+import com.arkueid.onair.SourceViewModel
+import com.arkueid.onair.data.repository.Repository
 import com.arkueid.onair.ui.following.FollowingViewModel
 import com.google.gson.Gson
 import com.tencent.mmkv.MMKV
@@ -21,6 +23,12 @@ object ViewModelModule {
     @Provides
     fun provideFollowingViewModel(gson: Gson, mmkv: MMKV): FollowingViewModel {
         return FollowingViewModel(gson, mmkv)
+    }
+
+    @Singleton
+    @Provides
+    fun providePluginViewModel(mmkv: MMKV, repository: Repository): SourceViewModel {
+        return SourceViewModel(mmkv, repository)
     }
 
 }

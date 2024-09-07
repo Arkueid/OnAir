@@ -6,10 +6,10 @@ import android.view.ViewGroup.LayoutParams
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.RecyclerView
 import com.arkueid.onair.R
+import com.arkueid.onair.data.entity.play
 import com.arkueid.onair.databinding.ModuleItemNormalBinding
-import com.arkueid.onair.domain.entity.Anime
-import com.arkueid.onair.domain.entity.Module
-import com.arkueid.onair.domain.entity.play
+import com.arkueid.plugin.data.entity.Anime
+import com.arkueid.plugin.data.entity.Module
 import com.bumptech.glide.Glide
 
 /**

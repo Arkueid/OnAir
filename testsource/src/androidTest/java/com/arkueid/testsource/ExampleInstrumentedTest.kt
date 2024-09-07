@@ -1,12 +1,11 @@
 package com.arkueid.testsource
 
-import androidx.test.platform.app.InstrumentationRegistry
+import android.content.pm.PackageManager
+import android.os.Environment
 import androidx.test.ext.junit.runners.AndroidJUnit4
-
+import androidx.test.platform.app.InstrumentationRegistry
 import org.junit.Test
 import org.junit.runner.RunWith
-
-import org.junit.Assert.*
 
 /**
  * Instrumented test, which will execute on an Android device.
@@ -19,6 +18,13 @@ class ExampleInstrumentedTest {
     fun useAppContext() {
         // Context of the app under test.
         val appContext = InstrumentationRegistry.getInstrumentation().targetContext
-        assertEquals("com.arkueid.testsource", appContext.packageName)
+        val list = Environment.getExternalStorageDirectory().listFiles()
+        if (!list.isNullOrEmpty()) for (file in list) {
+            appContext.packageManager.getPackageArchiveInfo(
+                file.absolutePath, PackageManager.GET_META_DATA
+            )?.let {
+                println(it.packageName)
+            }
+        }
     }
 }

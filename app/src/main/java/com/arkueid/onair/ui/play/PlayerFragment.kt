@@ -26,12 +26,10 @@ import androidx.media3.exoplayer.ExoPlayer
 import com.arkueid.onair.R
 import com.arkueid.onair.common.timeString
 import com.arkueid.onair.databinding.FragmentPlayerBinding
-import com.arkueid.onair.domain.entity.Anime
-import com.arkueid.onair.domain.entity.Danmaku
-import com.arkueid.onair.domain.entity.toDisplay
+import com.arkueid.onair.domain.toDisplay
+import com.arkueid.plugin.data.entity.Anime
 import com.arkueid.onair.utils.ToastUtils
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
 /**
@@ -214,7 +212,6 @@ class PlayerFragment : Fragment(), SurfaceHolder.Callback, OnClickListener, Play
     }
 
     private fun postUpdateProgress() {
-        // TODO test
         val handler = Handler(Looper.getMainLooper())
         val runnable = object : Runnable {
             override fun run() {

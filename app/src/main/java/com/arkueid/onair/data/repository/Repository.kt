@@ -1,14 +1,19 @@
 package com.arkueid.onair.data.repository
 
-import com.arkueid.onair.domain.entity.Anime
-import com.arkueid.onair.domain.entity.Danmaku
-import com.arkueid.onair.domain.entity.Module
-import com.arkueid.onair.domain.entity.SearchResult
-import com.arkueid.onair.domain.entity.SearchTip
-import com.arkueid.onair.domain.entity.WeeklyAnime
+import com.arkueid.plugin.data.entity.Anime
+import com.arkueid.plugin.data.entity.Danmaku
+import com.arkueid.plugin.data.entity.Module
+import com.arkueid.plugin.data.entity.SearchResult
+import com.arkueid.plugin.data.entity.SearchTip
+import com.arkueid.plugin.data.entity.WeeklyAnime
+import com.arkueid.plugin.data.source.Source
 import kotlinx.coroutines.flow.Flow
 
 interface Repository {
+
+    var source: Source?
+
+    val defaultSource: Source
 
     fun getWeekly(): Flow<List<List<WeeklyAnime>>>
 

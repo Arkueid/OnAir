@@ -5,9 +5,9 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.arkueid.onair.data.entity.play
 import com.arkueid.onair.databinding.ItemFollowedAnimeBinding
-import com.arkueid.onair.domain.entity.Anime
-import com.arkueid.onair.domain.entity.play
+import com.arkueid.plugin.data.entity.Anime
 import com.bumptech.glide.Glide
 
 /**
@@ -47,6 +47,7 @@ class FollowedAnimeAdapter(
                 onLikeClicked?.invoke(item)
             }
         }
+        holder.sourceName.text = item.sourceName
         holder.clickable.setOnClickListener { item.play(holder.itemView.context) }
     }
 
@@ -55,6 +56,7 @@ class FollowedAnimeAdapter(
         val title = binding.title
         val cover = binding.cover
         val likeBtn = binding.likeBtn
+        val sourceName = binding.sourceName
         val clickable = binding.clickable
     }
 }

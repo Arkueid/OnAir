@@ -33,6 +33,12 @@ android {
     kotlinOptions {
         jvmTarget = "1.8"
     }
+
+    aaptOptions {
+        additionalParameters(
+            "--package-id", "0x7E", "--allow-reserved-package-id"
+        )
+    }
 }
 
 dependencies {
@@ -47,4 +53,10 @@ dependencies {
     androidTestImplementation(libs.androidx.espresso.core)
 
     implementation(project(":plugin"))
+
+    // jsoup
+    implementation("org.jsoup:jsoup:1.18.1")
+    // retrofit
+    implementation("com.squareup.retrofit2:retrofit:2.11.0")
+    implementation("com.squareup.retrofit2:converter-gson:2.11.0")
 }

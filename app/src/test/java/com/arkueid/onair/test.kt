@@ -6,15 +6,21 @@ package com.arkueid.onair
  * @desc:
  */
 
-data class Anime(
-    val title: String,
-    val cover: String,
+interface IAnime {
+    val title: String
+    val cover: String
     val url: String
-)
+
+    val id get() = this.javaClass.name
+}
+
+data class Anime(
+    override val title: String,
+    override val cover: String,
+    override val url: String
+): IAnime
 
 fun main() {
-    val l = listOf(Anime("title", "cove22r", "url"), Anime("title", "cover", "url"))
-    println(
-        l.contains(Anime("title", "cove22r", "url"))
-    )
+    val anime : IAnime = Anime("title", "cover", "url")
+    println(anime.id)
 }

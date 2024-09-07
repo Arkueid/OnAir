@@ -12,15 +12,21 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.arkueid.onair.SourceViewModel
 import com.arkueid.onair.R
 import com.arkueid.onair.databinding.FragmentHomeBinding
+import com.arkueid.onair.event.SourceChangedEvent
 import com.arkueid.onair.ui.home.search.SearchActivity
 import com.arkueid.onair.utils.ToastUtils
 import com.scwang.smart.refresh.header.ClassicsHeader
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
+import org.greenrobot.eventbus.EventBus
+import org.greenrobot.eventbus.Subscribe
+import org.greenrobot.eventbus.ThreadMode
 import java.util.Date
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class HomeFragment : Fragment(), OnClickListener {
@@ -32,6 +38,9 @@ class HomeFragment : Fragment(), OnClickListener {
 
     private val viewModel by viewModels<HomeViewModel>()
     private lateinit var adapter: ModuleAdapter
+
+    @Inject
+    lateinit var sourceViewModel: SourceViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
@@ -56,7 +65,7 @@ class HomeFragment : Fragment(), OnClickListener {
 
         if (savedInstanceState == null) {
             binding.initProgressBar.visibility = View.VISIBLE
-            view.post { getModuleData() }
+//            view.post { getModuleData() }
         }
     }
 
@@ -79,6 +88,11 @@ class HomeFragment : Fragment(), OnClickListener {
         }
     }
 
+    @Subscribe(sticky = true, threadMode = ThreadMode.MAIN)
+    fun onSourceChanged(event: SourceChangedEvent) {
+        getModuleData()
+    }
+
     override fun onClick(v: View?) {
         when (v!!.id) {
             R.id.searchButton -> {
@@ -90,5 +104,15 @@ class HomeFragment : Fragment(), OnClickListener {
                 }
             }
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        EventBus.getDefault().register(this)
+    }
+
+    override fun onPause() {
+        super.onPause()
+        EventBus.getDefault().unregister(this)
     }
 }

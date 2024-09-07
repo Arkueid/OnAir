@@ -7,7 +7,8 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.arkueid.onair.databinding.FragmentSettingsBinding
-import com.arkueid.onair.ui.extension.ExtensionActivity
+import com.arkueid.onair.ui.plugin.PluginActivity
+import com.arkueid.plugin.PluginLoaderManager
 
 class SettingsFragment : Fragment() {
 
@@ -34,7 +35,7 @@ class SettingsFragment : Fragment() {
     }
 
     private fun openExtensionSetting() {
-        val intent = Intent(requireContext(), ExtensionActivity::class.java)
+        val intent = Intent(requireContext(), PluginActivity::class.java)
         startActivity(intent)
     }
 }

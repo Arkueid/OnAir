@@ -3,7 +3,7 @@ package com.arkueid.onair.ui.following
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.arkueid.onair.domain.entity.Anime
+import com.arkueid.plugin.data.entity.Anime
 import com.google.gson.Gson
 import com.tencent.mmkv.MMKV
 import javax.inject.Inject

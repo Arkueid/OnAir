@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.arkueid.onair.databinding.FragmentFollowingBinding
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
@@ -40,7 +41,8 @@ class FollowingFragment : Fragment() {
             viewModel.removeFollowedAnime(anime)
         }
         binding.followedAnimeList.adapter = adapter
-        binding.followedAnimeList.layoutManager = LinearLayoutManager(requireContext())
+        binding.followedAnimeList.layoutManager =
+            StaggeredGridLayoutManager(3, StaggeredGridLayoutManager.VERTICAL)
 
         viewModel.followedAnimeList.observe(viewLifecycleOwner) {
             adapter.submitList(it)

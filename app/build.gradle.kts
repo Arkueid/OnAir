@@ -1,3 +1,6 @@
+import com.android.build.api.dsl.AaptOptions
+import com.android.build.api.dsl.AndroidResources
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.jetbrains.kotlin.android)
@@ -5,7 +8,6 @@ plugins {
     // dependency injection
     id("kotlin-kapt")
     id("com.google.dagger.hilt.android")
-    id("kotlin-parcelize")
 }
 
 android {
@@ -26,8 +28,7 @@ android {
         release {
             isMinifyEnabled = false
             proguardFiles(
-                getDefaultProguardFile("proguard-android-optimize.txt"),
-                "proguard-rules.pro"
+                getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro"
             )
         }
     }
@@ -60,9 +61,6 @@ dependencies {
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
 
-    // retrofit
-    implementation("com.squareup.retrofit2:retrofit:2.11.0")
-    implementation("com.squareup.retrofit2:converter-gson:2.11.0")
 
     // dependency injection
     implementation("com.google.dagger:hilt-android:2.49")
@@ -78,9 +76,6 @@ dependencies {
     // eventbus
     implementation("org.greenrobot:eventbus:3.3.1")
 
-    // jsoup
-    implementation("org.jsoup:jsoup:1.18.1")
-
     // mmkv
     implementation("com.tencent:mmkv:1.3.9")
 
@@ -90,8 +85,12 @@ dependencies {
     // exo player
     implementation("androidx.media3:media3-exoplayer:1.4.0")
     implementation("androidx.media3:media3-exoplayer-dash:1.4.0")
-    implementation("androidx.media3:media3-ui:1.4.0")
     implementation("androidx.media3:media3-exoplayer-hls:1.4.0")
+
+    // gson
+    implementation("com.google.code.gson:gson:2.11.0")
+
+    implementation(project(":plugin"))
 }
 
 // Allow references to generated code

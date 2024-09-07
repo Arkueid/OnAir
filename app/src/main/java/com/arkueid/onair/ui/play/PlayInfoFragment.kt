@@ -11,7 +11,7 @@ import androidx.transition.ChangeBounds
 import androidx.transition.TransitionManager
 import com.arkueid.onair.R
 import com.arkueid.onair.databinding.FragmentPlayInfoBinding
-import com.arkueid.onair.domain.entity.Anime
+import com.arkueid.plugin.data.entity.Anime
 import com.arkueid.onair.ui.following.FollowingViewModel
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.DataSource

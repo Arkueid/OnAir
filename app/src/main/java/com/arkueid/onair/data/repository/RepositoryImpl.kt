@@ -1,34 +1,47 @@
 package com.arkueid.onair.data.repository
 
-import com.arkueid.onair.data.source.DataSource
-import com.arkueid.onair.domain.entity.Anime
-import com.arkueid.onair.domain.entity.Danmaku
-import com.arkueid.onair.domain.entity.Module
-import com.arkueid.onair.domain.entity.SearchResult
-import com.arkueid.onair.domain.entity.SearchTip
-import com.arkueid.onair.domain.entity.WeeklyAnime
+import com.arkueid.plugin.data.source.Source
+import com.arkueid.plugin.data.entity.Anime
+import com.arkueid.plugin.data.entity.Danmaku
+import com.arkueid.plugin.data.entity.Module
+import com.arkueid.plugin.data.entity.SearchResult
+import com.arkueid.plugin.data.entity.SearchTip
+import com.arkueid.plugin.data.entity.WeeklyAnime
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
-import javax.inject.Inject
+import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.flowOn
 
-class RepositoryImpl @Inject constructor(private val dataSource: DataSource) :
+class RepositoryImpl(override var source: Source?, override val defaultSource: Source) :
     Repository {
+
     override fun getWeekly(): Flow<List<List<WeeklyAnime>>> {
-        return dataSource.getWeeklyData()
+        return flow {
+            emit(source?.getWeeklyData() ?: defaultSource.getWeeklyData())
+        }.flowOn(Dispatchers.IO)
     }
 
     override fun getHome(): Flow<List<Module>> {
-        return dataSource.getModuleData()
+        return flow {
+            emit(source?.getModuleData() ?: defaultSource.getModuleData())
+        }.flowOn(Dispatchers.IO)
     }
 
     override fun getSearchTip(query: String): Flow<List<SearchTip>> {
-        return dataSource.getSearchTipData(query)
+        return flow {
+            emit(source?.getSearchTipData(query) ?: defaultSource.getSearchTipData(query))
+        }.flowOn(Dispatchers.IO)
     }
 
     override fun getSearchResult(query: String): Flow<List<SearchResult>> {
-        return dataSource.getSearchResultData(query)
+        return flow {
+            emit(source?.getSearchResultData(query) ?: defaultSource.getSearchResultData(query))
+        }.flowOn(Dispatchers.IO)
     }
 
     override fun getDanmakus(anime: Anime): Flow<List<Danmaku>> {
-        return dataSource.getDanmakuData(anime)
+        return flow {
+            emit(source?.getDanmakuData(anime) ?: defaultSource.getDanmakuData(anime))
+        }.flowOn(Dispatchers.IO)
     }
 }
