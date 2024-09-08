@@ -47,22 +47,14 @@
             android:layout_height="wrap_content"
             android:layout_marginEnd="10dp"
             android:background="?attr/selectableItemBackground"
+            android:clickable="true"
             android:contentDescription="@string/settings"
             android:padding="10dp"
-            android:clickable="true"
             android:src="@drawable/baseline_settings_24"
-            app:layout_constraintBottom_toBottomOf="@id/enableSwtich"
-            app:layout_constraintEnd_toStartOf="@id/enableSwtich"
-            app:layout_constraintTop_toTopOf="@id/enableSwtich"
-            app:roundPercent="1" />
-
-        <com.google.android.material.materialswitch.MaterialSwitch
-            android:id="@+id/enableSwtich"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:layout_constraintBottom_toBottomOf="@id/icon"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@id/icon" />
+            app:layout_constraintTop_toTopOf="parent"
+            app:roundPercent="1" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.cardview.widget.CardView>

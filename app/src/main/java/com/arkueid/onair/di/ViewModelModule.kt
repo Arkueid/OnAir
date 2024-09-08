@@ -9,6 +9,7 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
+import okhttp3.OkHttpClient
 import javax.inject.Singleton
 
 /**
@@ -27,8 +28,8 @@ object ViewModelModule {
 
     @Singleton
     @Provides
-    fun providePluginViewModel(mmkv: MMKV, repository: Repository): SourceViewModel {
-        return SourceViewModel(mmkv, repository)
+    fun providePluginViewModel(mmkv: MMKV, repository: Repository, okHttpClient: OkHttpClient): SourceViewModel {
+        return SourceViewModel(mmkv, repository, okHttpClient)
     }
 
 }

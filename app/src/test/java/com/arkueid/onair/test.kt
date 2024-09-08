@@ -6,21 +6,17 @@ package com.arkueid.onair
  * @desc:
  */
 
-interface IAnime {
-    val title: String
-    val cover: String
-    val url: String
-
-    val id get() = this.javaClass.name
+class A {
+    fun s() {}
 }
 
-data class Anime(
-    override val title: String,
-    override val cover: String,
-    override val url: String
-): IAnime
+val list = mutableListOf<() -> Unit>()
 
 fun main() {
-    val anime : IAnime = Anime("title", "cover", "url")
-    println(anime.id)
+    val a = A()
+    list.add(a::s)
+
+    list.remove(a::s)
+
+    println(list.size)
 }

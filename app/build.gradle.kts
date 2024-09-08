@@ -91,6 +91,8 @@ dependencies {
     implementation("com.google.code.gson:gson:2.11.0")
 
     implementation(project(":plugin"))
+
+    implementation("com.squareup.okhttp3:okhttp:4.12.0")
 }
 
 // Allow references to generated code

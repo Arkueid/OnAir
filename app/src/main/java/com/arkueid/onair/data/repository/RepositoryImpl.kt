@@ -1,5 +1,6 @@
 package com.arkueid.onair.data.repository
 
+import android.util.Log
 import com.arkueid.plugin.data.source.Source
 import com.arkueid.plugin.data.entity.Anime
 import com.arkueid.plugin.data.entity.Danmaku
@@ -14,6 +15,10 @@ import kotlinx.coroutines.flow.flowOn
 
 class RepositoryImpl(override var source: Source?, override val defaultSource: Source) :
     Repository {
+
+    companion object {
+        private const val TAG = "RepositoryImpl"
+    }
 
     override fun getWeekly(): Flow<List<List<WeeklyAnime>>> {
         return flow {

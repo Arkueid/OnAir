@@ -41,7 +41,7 @@ class ModuleItemAdapterN(private val style: Int, var data: List<Anime>) :
         holder.title.text = item.name
         Glide.with(holder.itemView)
             .asBitmap()
-            .error(R.drawable.loading_image)
+            .placeholder(R.drawable.placeholder)
             .load(item.cover)
             .into(holder.cover)
         holder.clickable.setOnClickListener {
@@ -50,49 +50,58 @@ class ModuleItemAdapterN(private val style: Int, var data: List<Anime>) :
 
         when (style) {
             Module.SQUARE_GRID, Module.SQUARE_LIST -> {
-                holder.cover.run {
-                    layoutParams = layoutParams.apply {
-                        width = resources.getDimension(R.dimen.wideModuleItemHeight).toInt()
-                        height = resources.getDimension(R.dimen.wideModuleItemHeight).toInt()
+                holder.cover.post {
+                    holder.cover.run {
+                        layoutParams = layoutParams.apply {
+                            width = resources.getDimension(R.dimen.wideModuleItemHeight).toInt()
+                            height = resources.getDimension(R.dimen.wideModuleItemHeight).toInt()
+                        }
                     }
                 }
             }
 
             Module.TALL_RECTANGLE_GRID, Module.TALL_RECTANGLE_LIST -> {
-                holder.cover.run {
-                    layoutParams = (layoutParams as ConstraintLayout.LayoutParams).apply {
-                        width = if (style == Module.TALL_RECTANGLE_GRID) {
-                            LayoutParams.MATCH_PARENT
-                        } else {
-                            resources.getDimension(R.dimen.tallModuleItemWidth).toInt()
-                        }
-                        if (style == Module.TALL_RECTANGLE_GRID) {
-                            dimensionRatio = "H,3:4"
-                            height = 0
-                        } else {
-                            dimensionRatio = ""
-                            height = resources.getDimension(R.dimen.tallModuleItemHeight).toInt()
+                holder.cover.post {
+                    holder.cover.run {
+                        layoutParams = (layoutParams as ConstraintLayout.LayoutParams).apply {
+                            width = if (style == Module.TALL_RECTANGLE_GRID) {
+                                LayoutParams.MATCH_PARENT
+                            } else {
+                                resources.getDimension(R.dimen.tallModuleItemWidth).toInt()
+                            }
+                            if (style == Module.TALL_RECTANGLE_GRID) {
+                                dimensionRatio = "H,3:4"
+                                height = 0
+                            } else {
+                                dimensionRatio = ""
+                                height =
+                                    resources.getDimension(R.dimen.tallModuleItemHeight).toInt()
+                            }
                         }
                     }
                 }
             }
 
             Module.WIDE_RECTANGLE_GRID, Module.WIDE_RECTANGLE_LIST -> {
-                holder.cover.run {
-                    layoutParams = (layoutParams as ConstraintLayout.LayoutParams).apply {
-                        width = if (style == Module.WIDE_RECTANGLE_GRID) {
-                            LayoutParams.MATCH_PARENT
-                        } else {
-                            resources.getDimension(R.dimen.wideModuleItemWidth).toInt()
-                        }
-                        if (style == Module.WIDE_RECTANGLE_GRID) {
-                            dimensionRatio = "H,4:3"
-                            height = 0
-                        } else {
-                            dimensionRatio = ""
-                            height = resources.getDimension(R.dimen.wideModuleItemHeight).toInt()
+                holder.cover.post {
+                    holder.cover.run {
+                        layoutParams = (layoutParams as ConstraintLayout.LayoutParams).apply {
+                            width = if (style == Module.WIDE_RECTANGLE_GRID) {
+                                LayoutParams.MATCH_PARENT
+                            } else {
+                                resources.getDimension(R.dimen.wideModuleItemWidth).toInt()
+                            }
+                            if (style == Module.WIDE_RECTANGLE_GRID) {
+                                dimensionRatio = "H,4:3"
+                                height = 0
+                            } else {
+                                dimensionRatio = ""
+                                height =
+                                    resources.getDimension(R.dimen.wideModuleItemHeight).toInt()
+                            }
                         }
                     }
+
                 }
             }
         }

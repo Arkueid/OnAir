@@ -22,5 +22,4 @@ dependencyResolutionManagement {
 rootProject.name = "OnAir"
 include(":app")
 include(":testsource")
-include(":host")
 include(":plugin")

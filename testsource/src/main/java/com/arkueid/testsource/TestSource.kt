@@ -71,7 +71,7 @@ class TestSource(okHttpClient: OkHttpClient) : MikanSource(okHttpClient) {
                     Anime(
                         "",
                         sourceId,
-                        "Banner",
+                        "",
                         sourceName,
                         "https://acg.suyanw.cn/sjdm/random.php?r=${time++}",
                         "",

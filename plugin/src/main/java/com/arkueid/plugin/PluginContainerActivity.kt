@@ -12,27 +12,23 @@ import android.widget.Toast
  * @desc:
  */
 class PluginContainerActivity : Activity() {
-    private lateinit var pluginLoader: PluginLoader
+    private var pluginLoader = PluginLoaderManager.currentLoader
 
     companion object {
         private const val TAG = "PluginContainerActivity"
     }
 
-    init {
-        pluginLoader = PluginLoaderManager.currentLoader!!
-    }
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-
         intent.getStringExtra("className")?.let { className ->
-            createPlugin(className, savedInstanceState)
+            if (pluginLoader == null) {
+                Toast.makeText(this, "插件页面加载失败", Toast.LENGTH_SHORT).show()
+            } else {
+                createPlugin(className, savedInstanceState)
+            }
         }
 
-        if (!this::pluginLoader.isInitialized) {
-            Toast.makeText(this, "插件页面加载失败", Toast.LENGTH_SHORT).show()
-        }
     }
 
     private fun createPlugin(className: String, savedInstanceState: Bundle?) {
@@ -44,11 +40,16 @@ class PluginContainerActivity : Activity() {
     }
 
     override fun getResources(): Resources {
-        return pluginLoader.resources
+        return pluginLoader?.resources ?: super.getResources()
     }
 
     override fun getClassLoader(): ClassLoader {
-        return pluginLoader.classLoader
+        return pluginLoader?.classLoader ?: super.getClassLoader()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        PluginLoaderManager.pop()
     }
 
 }

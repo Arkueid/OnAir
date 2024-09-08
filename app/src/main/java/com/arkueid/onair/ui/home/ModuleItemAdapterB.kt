@@ -3,6 +3,7 @@ package com.arkueid.onair.ui.home
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.arkueid.onair.R
 import com.arkueid.onair.databinding.ModuleItemBannerBinding
 import com.arkueid.plugin.data.entity.Anime
 import com.bumptech.glide.Glide
@@ -35,6 +36,7 @@ class ModuleItemAdapterB(data: List<Anime>) :
         holder.title.text = data.name
         Glide.with(holder.itemView)
             .asBitmap()
+            .placeholder(R.drawable.placeholder)
             .load(data.cover)
             .into(holder.cover)
     }

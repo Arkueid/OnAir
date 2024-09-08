@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.arkueid.onair.R
 import com.arkueid.onair.data.entity.play
 import com.arkueid.onair.databinding.ItemSearchResultBinding
 import com.arkueid.plugin.data.entity.SearchResult
@@ -47,6 +48,7 @@ class SearchResultAdapter :
         holder.title.text = item.anime.name
         Glide.with(holder.itemView)
             .asBitmap()
+            .placeholder(R.drawable.placeholder)
             .load(item.anime.cover)
             .into(holder.cover)
         holder.itemView.setOnClickListener { item.anime.play(holder.itemView.context) }

@@ -32,8 +32,8 @@ object PluginLoaderManager {
         pluginIdStack.pop()
     }
 
-    fun get(pluginId: String): PluginLoader {
-        return pluginMapper[pluginId] ?: throw IllegalArgumentException("Plugin not found")
+    fun get(pluginId: String): PluginLoader? {
+        return pluginMapper[pluginId]
     }
 
     fun create(pluginPath: String): PluginLoader? {

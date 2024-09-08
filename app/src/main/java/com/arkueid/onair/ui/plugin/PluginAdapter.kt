@@ -14,7 +14,6 @@ import com.arkueid.plugin.PluginLoader
  */
 class PluginAdapter(
     var data: List<PluginLoader>,
-    private val onSwitchChanged: ((String, Boolean) -> Unit)?,
     private val onSettingsClicked: ((PluginLoader) -> Unit)?
 ) : RecyclerView.Adapter<PluginAdapter.PluginViewHolder>() {
 
@@ -22,7 +21,6 @@ class PluginAdapter(
         val name = binding.name
         val version = binding.versionName
         val icon = binding.icon
-        val switch = binding.enableSwtich
         val settings = binding.settings
     }
 
@@ -41,9 +39,6 @@ class PluginAdapter(
         holder.name.text = item.name
         holder.version.text = item.versionName
         holder.icon.setImageDrawable(item.icon)
-        holder.switch.setOnCheckedChangeListener { _, isChecked ->
-            onSwitchChanged?.invoke(item.id, isChecked)
-        }
 
         item.manifest.settingsActivityId?.let {
             holder.settings.visibility = View.VISIBLE

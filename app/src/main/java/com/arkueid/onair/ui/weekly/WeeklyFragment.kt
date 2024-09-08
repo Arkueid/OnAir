@@ -7,18 +7,16 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
+import com.arkueid.onair.SourceViewModel
 import com.arkueid.onair.databinding.FragmentWeeklyBinding
-import com.arkueid.onair.event.SourceChangedEvent
 import com.arkueid.onair.utils.ToastUtils
 import com.google.android.material.tabs.TabLayoutMediator
 import com.scwang.smart.refresh.header.ClassicsHeader
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
-import org.greenrobot.eventbus.EventBus
-import org.greenrobot.eventbus.Subscribe
-import org.greenrobot.eventbus.ThreadMode
 import java.util.Date
+import javax.inject.Inject
 
 
 @AndroidEntryPoint
@@ -33,6 +31,9 @@ class WeeklyFragment : Fragment() {
     private lateinit var viewModel: WeeklyViewModel
 
     private lateinit var adapter: WeeklyPagerAdapter
+
+    @Inject
+    lateinit var sourceViewModel: SourceViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
@@ -58,11 +59,11 @@ class WeeklyFragment : Fragment() {
 
         // first loading
         if (savedInstanceState == null) {
-            binding.initProgressBar.visibility = View.VISIBLE
-//            view.post { getWeeklyData() }
             // set default tab according to the weekday
             binding.weeklyViewPager.setCurrentItem(viewModel.currentTabIndex, false)
         }
+
+        sourceViewModel.addSourceChangedListener(::onSourceChanged)
     }
 
     private fun getWeeklyData() {
@@ -80,18 +81,13 @@ class WeeklyFragment : Fragment() {
         }
     }
 
-    override fun onResume() {
-        super.onResume()
-        EventBus.getDefault().register(this)
+    override fun onDestroy() {
+        super.onDestroy()
+        sourceViewModel.removeSourceChangedListener(::onSourceChanged)
     }
 
-    override fun onPause() {
-        super.onPause()
-        EventBus.getDefault().unregister(this)
-    }
-
-    @Subscribe(threadMode = ThreadMode.MAIN, sticky = true)
-    fun onSourceChange(event: SourceChangedEvent) {
+    private fun onSourceChanged() {
+        binding.initProgressBar.visibility = View.VISIBLE
         getWeeklyData()
     }
 

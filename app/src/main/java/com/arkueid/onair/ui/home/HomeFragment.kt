@@ -3,17 +3,20 @@ package com.arkueid.onair.ui.home
 import android.annotation.SuppressLint
 import android.app.ActivityOptions
 import android.content.Intent
+import android.graphics.drawable.Drawable
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.View.OnClickListener
 import android.view.ViewGroup
+import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.arkueid.onair.SourceViewModel
 import com.arkueid.onair.R
+import com.arkueid.onair.SourceViewModel
 import com.arkueid.onair.databinding.FragmentHomeBinding
 import com.arkueid.onair.event.SourceChangedEvent
 import com.arkueid.onair.ui.home.search.SearchActivity
@@ -63,17 +66,32 @@ class HomeFragment : Fragment(), OnClickListener {
 
         binding.refreshLayout.setOnRefreshListener { getModuleData() }
 
-        if (savedInstanceState == null) {
-            binding.initProgressBar.visibility = View.VISIBLE
-//            view.post { getModuleData() }
+        binding.changeSource.setOnClickListener(this)
+
+        sourceViewModel.icon.observe(viewLifecycleOwner) { setSourceIcon(it) }
+
+        sourceViewModel.addSourceChangedListener(::onSourceChanged)
+    }
+
+    private fun setSourceIcon(icon: Any) {
+        when (icon) {
+            is Int -> binding.changeSource.setImageResource(icon)
+            is Drawable -> binding.changeSource.setImageDrawable(icon)
         }
+    }
+
+    private fun onSourceChanged() {
+        binding.initProgressBar.visibility = View.VISIBLE
+        getModuleData()
     }
 
     @SuppressLint("NotifyDataSetChanged")
     private fun getModuleData() {
+        Log.d(TAG, "getModuleData: called")
         lifecycleScope.launch {
             viewModel.modules.collectLatest {
                 if (it.isSuccess) {
+                    Log.d(TAG, "getModuleData: ${it.data!!.size}")
                     (binding.refreshLayout.refreshHeader as ClassicsHeader).setLastUpdateTime(Date())
                 } else {
                     ToastUtils.showContextToast(requireContext(), it.error?.message ?: "加载失败")
@@ -88,11 +106,6 @@ class HomeFragment : Fragment(), OnClickListener {
         }
     }
 
-    @Subscribe(sticky = true, threadMode = ThreadMode.MAIN)
-    fun onSourceChanged(event: SourceChangedEvent) {
-        getModuleData()
-    }
-
     override fun onClick(v: View?) {
         when (v!!.id) {
             R.id.searchButton -> {
@@ -103,16 +116,30 @@ class HomeFragment : Fragment(), OnClickListener {
                     startActivity(intent, it.toBundle())
                 }
             }
+
+            R.id.changeSource -> sourceSelector.show()
         }
     }
 
-    override fun onResume() {
-        super.onResume()
-        EventBus.getDefault().register(this)
+    override fun onDestroy() {
+        super.onDestroy()
+        sourceViewModel.removeSourceChangedListener(::onSourceChanged)
     }
 
-    override fun onPause() {
-        super.onPause()
-        EventBus.getDefault().unregister(this)
-    }
+    private val sourceSelector: AlertDialog
+        get() {
+            val data = sourceViewModel.allSources
+            val adapter = SourceAdapter(
+                requireContext(),
+                data,
+                data.indexOfFirst { it["enabled"] as Boolean }
+            ) {
+                sourceViewModel.changeSource(data[it]["id"] as String)
+            }
+            return AlertDialog.Builder(requireContext()).setSingleChoiceItems(
+                adapter,
+                -1,
+                null
+            ).create()
+        }
 }

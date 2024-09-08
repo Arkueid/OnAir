@@ -50,7 +50,7 @@ class PlayInfoFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         arguments?.let {
             anime = it.getParcelable<Anime>("anime")!!
-            Glide.with(binding.cover).asBitmap().placeholder(R.drawable.loading_image)
+            Glide.with(binding.cover).asBitmap().placeholder(R.drawable.placeholder)
                 .addListener(object : RequestListener<Bitmap> {
                     override fun onLoadFailed(
                         e: GlideException?,

@@ -1,7 +1,12 @@
 package com.arkueid.onair.ui
 
+import android.Manifest
+import android.content.Intent
+import android.content.pm.PackageManager
+import android.net.Uri
 import android.os.Bundle
 import android.os.Handler
+import android.provider.Settings
 import android.view.MenuItem
 import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AppCompatActivity
@@ -20,6 +25,10 @@ import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity(), NavigationBarView.OnItemSelectedListener {
+
+    companion object {
+        private const val PERMISSION_REQUEST_CODE = 1
+    }
     private lateinit var binding: ActivityMainBinding
 
     private val handler by lazy { Handler(mainLooper) }
@@ -54,6 +63,8 @@ class MainActivity : AppCompatActivity(), NavigationBarView.OnItemSelectedListen
         createFragments()
         binding.bottomNavView.setOnItemSelectedListener(this)
         onBackPressedDispatcher.addCallback(onBackPressedCallback)
+
+        checkPermissions()
     }
 
     private fun createFragments() {
@@ -99,5 +110,40 @@ class MainActivity : AppCompatActivity(), NavigationBarView.OnItemSelectedListen
         super.onDestroy()
         handler.removeCallbacksAndMessages(null)
         onBackPressedCallback.remove()
+    }
+
+    private fun checkPermissions() {
+        val permissions = mutableListOf<String>()
+        if (checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+            permissions.add(Manifest.permission.READ_EXTERNAL_STORAGE)
+        }
+        if (checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+            permissions.add(Manifest.permission.WRITE_EXTERNAL_STORAGE)
+        }
+        if (permissions.isNotEmpty()) {
+            requestPermissions(permissions.toTypedArray(), PERMISSION_REQUEST_CODE)
+        }
+    }
+
+    private fun goToSetting() {
+        val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
+        intent.data = Uri.parse("package:$packageName")
+        startActivity(intent)
+    }
+
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        if (requestCode == PERMISSION_REQUEST_CODE) {
+            if (grantResults.isNotEmpty() && grantResults.all { it == PackageManager.PERMISSION_GRANTED }) {
+                // 权限已授予，继续执行
+            } else {
+                ToastUtils.showToast("请在设置中开启权限")
+                goToSetting()
+            }
+        }
     }
 }

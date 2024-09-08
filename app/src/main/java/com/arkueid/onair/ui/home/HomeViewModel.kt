@@ -27,8 +27,4 @@ class HomeViewModel @Inject constructor(private val repository: Repository) : Vi
             emit(Result.failure(it, emptyList()))
         }
 
-    override fun onCleared() {
-        super.onCleared()
-        viewModelScope.cancel(null)
-    }
 }

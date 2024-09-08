@@ -55,6 +55,7 @@
             android:background="?attr/selectableItemBackground"
             android:clickable="true"
             android:padding="10dp"
+            android:tint="@color/pink"
             android:src="@drawable/button_like"
             app:layout_constraintBottom_toBottomOf="@id/cover"
             app:layout_constraintEnd_toEndOf="@id/cover" />

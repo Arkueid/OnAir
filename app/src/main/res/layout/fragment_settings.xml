@@ -58,7 +58,7 @@
                 android:clickable="true"
                 android:drawablePadding="10dp"
                 android:padding="16dp"
-                android:text="@string/extension"
+                android:text="@string/plugin"
                 android:textColor="@color/black"
                 android:textSize="18sp"
                 app:drawableStartCompat="@drawable/baseline_extension_24" />
